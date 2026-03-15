@@ -1,0 +1,6 @@
+@NidecHLMS_HostAddress = http://localhost:5270
+
+GET {{NidecHLMS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

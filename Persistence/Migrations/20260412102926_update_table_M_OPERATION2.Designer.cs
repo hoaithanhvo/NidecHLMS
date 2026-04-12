@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260412102926_update_table_M_OPERATION2")]
+    partial class update_table_M_OPERATION2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -372,21 +375,17 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OperationDetailNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("OperationDetailCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Operation_Id")
+                    b.Property<int>("OperationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OpertionStatus_Id")
+                    b.Property<int>("OpertionStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("TrainingContent")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -397,9 +396,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Operation_Id");
+                    b.HasIndex("OperationId");
 
-                    b.HasIndex("OpertionStatus_Id");
+                    b.HasIndex("OpertionStatus");
 
                     b.ToTable("OPERATION_DETAIL", (string)null);
                 });
@@ -966,13 +965,13 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
-                        .HasForeignKey("Operation_Id")
+                        .HasForeignKey("OperationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
                         .WithMany("Operation_Details")
-                        .HasForeignKey("OpertionStatus_Id")
+                        .HasForeignKey("OpertionStatus")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

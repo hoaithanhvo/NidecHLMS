@@ -10,12 +10,11 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class DivisionConfiguration : IEntityTypeConfiguration<Divisions>
+	public class M_DIVISION_Configuration : IEntityTypeConfiguration<M_DIVISION>
 	{
-		public void Configure(EntityTypeBuilder<Divisions> builder)
+		public void Configure(EntityTypeBuilder<M_DIVISION> builder)
 		{
-			builder.ToTable("Divisions");
-			builder.HasKey(d => d.Id);
+			builder.ToTable("M_DIVISION");
 			builder.Property(d => d.DivisionCd).HasMaxLength(20);
 			builder.Property(d=>d.DivisionName).HasMaxLength(200);
 		}

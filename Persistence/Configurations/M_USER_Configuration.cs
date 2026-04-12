@@ -10,16 +10,14 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class UserConfiguration : IEntityTypeConfiguration<Users>
+	public class M_USER_Configuration : IEntityTypeConfiguration<M_User>
 	{
-		public void Configure(EntityTypeBuilder<Users> builder)
+		public void Configure(EntityTypeBuilder<M_User> builder)
 		{
-			builder.ToTable("Users");
-			builder.HasKey( u=> u.Id);
+			builder.ToTable("M_USER");
 			builder.Property(u => u.FullName).HasMaxLength(200).IsRequired();
-			builder.Property(u => u.DivisionCd).HasMaxLength(20).IsRequired();
-			builder.Property(u => u.Position).HasMaxLength(100).IsRequired();
 			builder.Property(u => u.EmployeeId).HasMaxLength(50).IsRequired();
+			builder.HasOne(u=>u.Status).WithMany(s=>s.Users).HasForeignKey(u => u.StatusId);
 		}
 	}
 }

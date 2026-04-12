@@ -12,4 +12,10 @@
     <Folder Include="ValueObjects\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NidecSystemShared">
+      <HintPath>..\..\NidecSystemShared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

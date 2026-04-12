@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260412090328_add_table_M_OPERATION_DETAILS")]
+    partial class add_table_M_OPERATION_DETAILS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,20 +165,13 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Department_Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("OperationCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OperationName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OperationType_Id")
+                    b.Property<int?>("SkillTypesId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -187,9 +183,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Department_Id");
-
-                    b.HasIndex("OperationType_Id");
+                    b.HasIndex("SkillTypesId");
 
                     b.ToTable("M_OPERATION", (string)null);
                 });
@@ -372,21 +366,17 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OperationDetailNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("OperationDetailCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Operation_Id")
+                    b.Property<int>("OperationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OpertionStatus_Id")
+                    b.Property<int>("OpertionStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("TrainingContent")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -397,9 +387,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Operation_Id");
+                    b.HasIndex("OperationId");
 
-                    b.HasIndex("OpertionStatus_Id");
+                    b.HasIndex("OpertionStatus");
 
                     b.ToTable("OPERATION_DETAIL", (string)null);
                 });
@@ -934,21 +924,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
                 {
-                    b.HasOne("Domain.Entities.M_DEPARTMENT", "Department")
-                        .WithMany("M_Operations")
-                        .HasForeignKey("Department_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_OPERATION_TYPE", "Operation_Type")
-                        .WithMany("M_Operations")
-                        .HasForeignKey("OperationType_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Operation_Type");
+                    b.HasOne("Domain.Entities.SkillTypes", null)
+                        .WithMany("Operation")
+                        .HasForeignKey("SkillTypesId");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_User", b =>
@@ -966,13 +944,13 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
-                        .HasForeignKey("Operation_Id")
+                        .HasForeignKey("OperationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
                         .WithMany("Operation_Details")
-                        .HasForeignKey("OpertionStatus_Id")
+                        .HasForeignKey("OpertionStatus")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1077,11 +1055,6 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingRequest");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_DEPARTMENT", b =>
-                {
-                    b.Navigation("M_Operations");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
                 {
                     b.Navigation("OperationDetails");
@@ -1090,11 +1063,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
                 {
                     b.Navigation("Operation_Details");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_OPERATION_TYPE", b =>
-                {
-                    b.Navigation("M_Operations");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
@@ -1119,6 +1087,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.SkillTypes", b =>
                 {
+                    b.Navigation("Operation");
+
                     b.Navigation("RetrainingRule");
 
                     b.Navigation("SkillMapCriteria");

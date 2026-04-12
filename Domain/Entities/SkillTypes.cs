@@ -18,7 +18,6 @@ namespace Domain.Entities
 
 		public ICollection<SkillMapCriteria> SkillMapCriteria { get; set; }
 		public SkillGroups SkillGroup { get; set; }
-		public ICollection<Operations> Operation { get; set; }
 		public ICollection<RetrainingRules> RetrainingRule { get; set; }
 	}
 }

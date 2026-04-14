@@ -10,15 +10,16 @@ namespace Domain.Entities
 {
 	public class TRAINING_ATTENDEE_DETAIL : BaseEntity<int>
 	{
-		public int TrainingSessionId { get; set; }
-		public int LevelId { get; set; }
-		public int StatusId { get; set; }
-		public string 
+		public int LearningReportId { get; set; }	
 		public string Note { get; set; }
 
-
-
-		public TRAINING_ATTENDEE_SESSION TRAINING_SESSION { get; set; }
+		public int StatusId { get; set; }
 		public M_STATUS M_STATUS { get; set; }
+
+		public int AssessmentId { get; set; }
+		public ASSESSMENT Assessment { get; set; }
+
+		public int TrainingSessionId { get; set; }
+		public TRAINING_ATTENDEE_SESSION TrainingSession { get; set; }
 	}
 }

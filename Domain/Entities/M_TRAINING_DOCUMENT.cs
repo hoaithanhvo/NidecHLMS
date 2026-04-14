@@ -12,7 +12,7 @@ namespace Domain.Entities
 	{
 		public string? Code { get; set; }
 		public string? LearnReport { get; set; }
-		public ICollection<M_ASSESSMENT>? Assessments { get; set; }
+		public ICollection<ASSESSMENT>? Assessments { get; set; }
 		public ICollection<TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
 	}
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414114230_upgradeDatabasev5")]
+    partial class upgradeDatabasev5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace Persistence.Migrations
                     b.Property<int>("Scope")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainingDocumentId")
+                    b.Property<int>("TrainingDocument_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -78,7 +81,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TrainingDocumentId");
+                    b.HasIndex("TrainingDocument_Id");
 
                     b.ToTable("ASSESSMENT");
                 });
@@ -353,7 +356,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("Department_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("OperationCode")
@@ -366,7 +369,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("OperationTypeId")
+                    b.Property<int>("OperationType_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -378,9 +381,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("Department_Id");
 
-                    b.HasIndex("OperationTypeId");
+                    b.HasIndex("OperationType_Id");
 
                     b.ToTable("M_OPERATION", (string)null);
                 });
@@ -773,7 +776,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("M_STATUSId")
+                    b.Property<int>("M_STATUSId")
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
@@ -974,7 +977,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_TRAINING_DOCUMENT", "M_TRAINING_DOCUMENT")
                         .WithMany("Assessments")
-                        .HasForeignKey("TrainingDocumentId")
+                        .HasForeignKey("TrainingDocument_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1015,19 +1018,19 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_DEPARTMENT", "Department")
                         .WithMany("M_Operations")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("Department_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_OBJECT", "OperationType")
+                    b.HasOne("Domain.Entities.M_OBJECT", "Operation_Type")
                         .WithMany("M_Operations")
-                        .HasForeignKey("OperationTypeId")
+                        .HasForeignKey("OperationType_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Department");
 
-                    b.Navigation("OperationType");
+                    b.Navigation("Operation_Type");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_SKILLMAP_LEVEL", b =>
@@ -1084,7 +1087,9 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_STATUS", "M_STATUS")
                         .WithMany()
-                        .HasForeignKey("M_STATUSId");
+                        .HasForeignKey("M_STATUSId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
                         .WithMany("TrainingAttendees")
@@ -1137,7 +1142,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.TRAINING_ATTENDEE_SESSION", "TrainingSession")
+                    b.HasOne("Domain.Entities.TRAINING_ATTENDEE_SESSION", "TRAINING_SESSION")
                         .WithMany("TrainingAttendeeDetails")
                         .HasForeignKey("TrainingSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1147,7 +1152,7 @@ namespace Persistence.Migrations
 
                     b.Navigation("M_STATUS");
 
-                    b.Navigation("TrainingSession");
+                    b.Navigation("TRAINING_SESSION");
                 });
 
             modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE_SESSION", b =>

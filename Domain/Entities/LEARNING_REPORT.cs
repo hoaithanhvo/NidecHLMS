@@ -17,9 +17,5 @@ namespace Domain.Entities
 		public int OperationId { get; set; }
 		public M_USER M_Users { get; set; }
 		public M_OPERATION M_Operaions { get; set; }
-
-
-
-
 	}
 }

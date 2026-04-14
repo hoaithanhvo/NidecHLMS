@@ -17,8 +17,8 @@ namespace Persistence.Configurations
 			builder.ToTable("M_OPERATION");
 			builder.Property(o => o.OperationCode).HasMaxLength(10).IsRequired();
 			builder.Property(o=>o.OperationName).HasMaxLength(200).IsRequired();
-			builder.HasOne(o => o.Department).WithMany(d => d.M_Operations).HasForeignKey(o => o.Department_Id);
-			builder.HasOne(o=>o.Operation_Type).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.OperationType_Id);
+			builder.HasOne(o => o.Department).WithMany(d => d.M_Operations).HasForeignKey(o => o.DepartmentId);
+			builder.HasOne(o=>o.OperationType).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.OperationTypeId);
 		}
 	}
 }

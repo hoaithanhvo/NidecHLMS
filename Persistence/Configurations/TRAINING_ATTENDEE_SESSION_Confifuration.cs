@@ -13,8 +13,6 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<TRAINING_ATTENDEE_SESSION> builder)
 		{
-			builder.HasOne(ts=>ts.TRAINING_ATTENDEE).WithMany(ta=>ta.TrainingSessions).HasForeignKey(ts=>ts.TrainingAttendeeId);
-
 			builder.HasOne(ts => ts.M_SESSION_TYPE).WithMany(mst => mst.TrainingSessions).HasForeignKey(ts => ts.SessionTypeId);
 		}
 	}

@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_ASSESSMENT_Configuration : IEntityTypeConfiguration<M_ASSESSMENT>
+	public class ASSESSMENT_Configuration : IEntityTypeConfiguration<ASSESSMENT>
 	{
-		public void Configure(EntityTypeBuilder<M_ASSESSMENT> builder)
+		public void Configure(EntityTypeBuilder<ASSESSMENT> builder)
 		{
 			builder.Property(a => a.AssessmentCode).HasMaxLength(20);
 
-			builder.HasOne(a => a.M_TRAINING_DOCUMENT).WithMany(td => td.Assessments).HasForeignKey(a => a.TrainingDocument_Id);
+			builder.HasOne(a => a.M_TRAINING_DOCUMENT).WithMany(td => td.Assessments).HasForeignKey(a => a.TrainingDocumentId);
 		}
 	}
 }

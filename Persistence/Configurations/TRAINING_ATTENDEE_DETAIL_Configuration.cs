@@ -15,11 +15,11 @@ namespace Persistence.Configurations
 		{
 			builder.Property(tad => tad.Note).HasMaxLength(200);
 
-			builder.HasOne(tad => tad.M_OPERATION).WithMany(o => o.TrainingAttendeeDetails).HasForeignKey(tad => tad.OperationId);
-
-			builder.HasOne(tad => tad.M_LEVEL).WithMany(l => l.TrainingAttendeeDetails).HasForeignKey(tad => tad.LevelId);
-
 			builder.HasOne(tad => tad.M_STATUS).WithMany(s => s.TrainingAttendeeDetails).HasForeignKey(s => s.StatusId);
+
+			builder.HasOne(tad => tad.TrainingSession).WithMany(ts => ts.TrainingAttendeeDetails).HasForeignKey(s => s.TrainingSessionId);
+
+			builder.HasOne(tad => tad.Assessment).WithMany(ts => ts.TrainingAttendeeDetails).HasForeignKey(s => s.AssessmentId);
 		}
 	}
 }

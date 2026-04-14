@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_USER_Configuration : IEntityTypeConfiguration<M_User>
+	public class M_USER_Configuration : IEntityTypeConfiguration<M_USER>
 	{
-		public void Configure(EntityTypeBuilder<M_User> builder)
+		public void Configure(EntityTypeBuilder<M_USER> builder)
 		{
 			builder.ToTable("M_USER");
 			builder.Property(u => u.FullName).HasMaxLength(200).IsRequired();

@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_OPERATION_TYPE_Configuration : IEntityTypeConfiguration<M_OPERATION_TYPE>
+	public class M_OBJECT_Configuration : IEntityTypeConfiguration<M_OBJECT>
 	{
-		public void Configure(EntityTypeBuilder<M_OPERATION_TYPE> builder)
+		public void Configure(EntityTypeBuilder<M_OBJECT> builder)
 		{
-			builder.ToTable("OPERATION_TYPE");
+			builder.ToTable("M_OBJECT");
 			builder.Property(ot=>ot.Code).HasMaxLength(20).IsRequired();
 			builder.Property(ot=>ot.Name).HasMaxLength(100).IsRequired();
-
 		}
 	}
 }

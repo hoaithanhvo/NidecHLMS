@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-	public class M_User : BaseEntity<int>
+	public class M_USER : BaseEntity<int>
 	{
 		public int? IdmUserId { get; set; }
 		public string? FullName { get; set; }
 		public string? EmployeeId { get; set; }
 		public int StatusId { get; set; }	
 		public M_STATUS? Status { get; set; }
+
+		public ICollection<TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
+		public ICollection<LEARNING_REPORT>? LearningReports { get; set; }
+
 	}
 }

@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class SkillGroupsConfiguration : IEntityTypeConfiguration<SkillGroups>
+	public class M_TRAINING_DOCUMENT_Configuration : IEntityTypeConfiguration<M_TRAINING_DOCUMENT>
 	{
-		public void Configure(EntityTypeBuilder<SkillGroups> builder)
+		public void Configure(EntityTypeBuilder<M_TRAINING_DOCUMENT> builder)
 		{
-			builder.ToTable("SkillGroups");
-			builder.HasKey(x => x.Id);
-			builder.Property(SG => SG.Name).HasMaxLength(200).IsRequired();
+			builder.Property(td => td.Code).IsRequired().HasMaxLength(20);
+			builder.Property(td => td.LearnReport).IsRequired().HasMaxLength(50);
 		}
 	}
 }

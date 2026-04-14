@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class SkillMapAssessmentDetailConfiguration : IEntityTypeConfiguration<SkillMapAssessmentDetails>
+	public class M_SKILLMAP_LEVEL_Configuration : IEntityTypeConfiguration<M_SKILLMAP_LEVEL>
 	{
-		public void Configure(EntityTypeBuilder<SkillMapAssessmentDetails> builder)
+		public void Configure(EntityTypeBuilder<M_SKILLMAP_LEVEL> builder)
 		{
-			builder.HasOne(SMAD => SMAD.SkillMapAssessment).WithMany(SMA => SMA.SkillMapAssessmentDetails).HasForeignKey(SMAD => SMAD.SkillMapAssessmentId);
+			builder.HasOne(msl=>msl.OPERATION_DETAIL).WithMany(od=>od.M_Skillmap_Level).HasForeignKey(msl=>msl.OperationDetailId);
 		}
 	}
 }

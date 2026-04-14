@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413082507_designDatabasev1")]
+    partial class designDatabasev1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TrainingDocument_Id");
 
-                    b.ToTable("M_ASSESSMENT", (string)null);
+                    b.ToTable("M_ASSESSMENT");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_DEPARTMENT", b =>
@@ -130,90 +133,6 @@ namespace Persistence.Migrations
                     b.ToTable("M_DIVISION", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_HATTAG", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("HatTagCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("HatTagName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("LevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasMaxLength(20)
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LevelId");
-
-                    b.ToTable("M_HATTAG", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_LEVEL", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LevelCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LevelName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("M_LEVEL", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
                 {
                     b.Property<int>("Id")
@@ -261,42 +180,6 @@ namespace Persistence.Migrations
                     b.ToTable("M_OPERATION", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_OPERATION_LIFECYCLE", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("ConfirmRecurringOperation")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RetrainingFrequency")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("M_OPERATION_LIFECYCLE", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
                 {
                     b.Property<int>("Id")
@@ -327,7 +210,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_OPERATION_STATUS", (string)null);
+                    b.ToTable("M_OPERATION_STATUS");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_TYPE", b =>
@@ -365,52 +248,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OPERATION_TYPE", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_SKILLMAP", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Coefficient")
-                        .HasMaxLength(50)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EvaluationItemName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("OperationDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SkillMapCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OperationDetailId");
-
-                    b.ToTable("M_SKILLMAP", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
@@ -470,9 +307,7 @@ namespace Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -482,9 +317,7 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LearnReport")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -495,10 +328,10 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_TRAINING_DOCUMENT", (string)null);
+                    b.ToTable("M_TRAINING_DOCUMENT");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_USER", b =>
+            modelBuilder.Entity("Domain.Entities.M_User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -563,10 +396,10 @@ namespace Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("OperationId")
+                    b.Property<int>("Operation_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("OpertionStatusId")
+                    b.Property<int>("OpertionStatus_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("TrainingContent")
@@ -583,153 +416,11 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OperationId");
+                    b.HasIndex("Operation_Id");
 
-                    b.HasIndex("OpertionStatusId");
+                    b.HasIndex("OpertionStatus_Id");
 
                     b.ToTable("OPERATION_DETAIL", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("M_STATUSId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("OperationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Retraining")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrainingDocumentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("M_STATUSId");
-
-                    b.HasIndex("OperationId");
-
-                    b.HasIndex("TrainingDocumentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TRAINING_ATTENDEE", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE_DETAIL", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LevelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("OperationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LevelId");
-
-                    b.HasIndex("OperationId");
-
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("TRAINING_ATTENDEE_DETAIL", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entitises.M_HANDOVER_RECORD", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("HandOverRepordName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("HandoverRecordCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("M_HANDOVER_RECORD", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.M_ASSESSMENT", b =>
@@ -741,17 +432,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("M_TRAINING_DOCUMENT");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_HATTAG", b =>
-                {
-                    b.HasOne("Domain.Entities.M_LEVEL", "M_LEVEL")
-                        .WithMany("M_HATTAGs")
-                        .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("M_LEVEL");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
@@ -773,18 +453,7 @@ namespace Persistence.Migrations
                     b.Navigation("Operation_Type");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_SKILLMAP", b =>
-                {
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
-                        .WithMany("SkillMaps")
-                        .HasForeignKey("OperationDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OPERATION_DETAIL");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_USER", b =>
+            modelBuilder.Entity("Domain.Entities.M_User", b =>
                 {
                     b.HasOne("Domain.Entities.M_STATUS", "Status")
                         .WithMany("Users")
@@ -799,13 +468,13 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
-                        .HasForeignKey("OperationId")
+                        .HasForeignKey("Operation_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
                         .WithMany("Operation_Details")
-                        .HasForeignKey("OpertionStatusId")
+                        .HasForeignKey("OpertionStatus_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -814,83 +483,14 @@ namespace Persistence.Migrations
                     b.Navigation("Operation_Status");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE", b =>
-                {
-                    b.HasOne("Domain.Entities.M_STATUS", "M_STATUS")
-                        .WithMany()
-                        .HasForeignKey("M_STATUSId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
-                        .WithMany("TrainingAttendees")
-                        .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_TRAINING_DOCUMENT", "TRAINING_DOCUMENT")
-                        .WithMany("TrainingAttendees")
-                        .HasForeignKey("TrainingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_USER", "M_USER")
-                        .WithMany("TrainingAttendees")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("M_STATUS");
-
-                    b.Navigation("M_USER");
-
-                    b.Navigation("OPERATION_DETAIL");
-
-                    b.Navigation("TRAINING_DOCUMENT");
-                });
-
-            modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE_DETAIL", b =>
-                {
-                    b.HasOne("Domain.Entities.M_LEVEL", "M_LEVEL")
-                        .WithMany("TrainingAttendeeDetails")
-                        .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_OPERATION", "M_OPERATION")
-                        .WithMany("TrainingAttendeeDetails")
-                        .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_STATUS", "M_STATUS")
-                        .WithMany("TrainingAttendeeDetails")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("M_LEVEL");
-
-                    b.Navigation("M_OPERATION");
-
-                    b.Navigation("M_STATUS");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_DEPARTMENT", b =>
                 {
                     b.Navigation("M_Operations");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_LEVEL", b =>
-                {
-                    b.Navigation("M_HATTAGs");
-
-                    b.Navigation("TrainingAttendeeDetails");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
                 {
                     b.Navigation("OperationDetails");
-
-                    b.Navigation("TrainingAttendeeDetails");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
@@ -905,28 +505,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
-                    b.Navigation("TrainingAttendeeDetails");
-
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_DOCUMENT", b =>
                 {
                     b.Navigation("Assessments");
-
-                    b.Navigation("TrainingAttendees");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_USER", b =>
-                {
-                    b.Navigation("TrainingAttendees");
-                });
-
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
-                {
-                    b.Navigation("SkillMaps");
-
-                    b.Navigation("TrainingAttendees");
                 });
 #pragma warning restore 612, 618
         }

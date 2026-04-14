@@ -18,9 +18,9 @@ namespace Persistence.Configurations
 			builder.Property(od=>od.TrainingContent).IsRequired().HasMaxLength(200);
 			builder.Property(od=>od.OperationDetailNumber).IsRequired().HasMaxLength(50);
 
-			builder.HasOne(od=>od.Operation).WithMany(o=>o.OperationDetails).HasForeignKey(o=>o.Operation_Id);
+			builder.HasOne(od=>od.Operation).WithMany(o=>o.OperationDetails).HasForeignKey(o=>o.OperationId);
 
-			builder.HasOne(od => od.Operation_Status).WithMany(os => os.Operation_Details).HasForeignKey(od => od.OpertionStatus_Id);
+			builder.HasOne(od => od.Operation_Status).WithMany(os => os.Operation_Details).HasForeignKey(od => od.OpertionStatusId);
 		}
 	}
 }

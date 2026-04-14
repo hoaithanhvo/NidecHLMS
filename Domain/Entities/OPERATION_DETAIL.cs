@@ -12,9 +12,11 @@ namespace Domain.Entities
 	{
 		public string? OperationDetailNumber { get; set; }
 		public string? TrainingContent { get; set; }
-		public int Operation_Id { get; set; }
-		public int OpertionStatus_Id { get; set; }
+		public int OperationId { get; set; }
+		public int OpertionStatusId { get; set; }
 		public M_OPERATION? Operation { get; set; }
 		public M_OPERATION_STATUS? Operation_Status { get; set; }
+		public ICollection<TRAINING_ATTENDEE> TrainingAttendees { get; set; }
+		public ICollection<M_SKILLMAP_LEVEL> M_Skillmap_Level { get; set; }	
 	}
 }

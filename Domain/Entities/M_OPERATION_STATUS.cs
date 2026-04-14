@@ -12,5 +12,6 @@ namespace Domain.Entities
 		public string? OperationCode { get; set; }
 		public string? OperationName { get; set; }
 		public ICollection<OPERATION_DETAIL>? Operation_Details { get; set; }
+
 	}
 }

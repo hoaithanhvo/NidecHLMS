@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413122013_upgradeDatabasev3")]
+    partial class upgradeDatabasev3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TrainingDocument_Id");
 
-                    b.ToTable("M_ASSESSMENT", (string)null);
+                    b.ToTable("M_ASSESSMENT");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_DEPARTMENT", b =>
@@ -173,7 +176,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("M_HATTAG", (string)null);
+                    b.ToTable("M_HATTAG");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_LEVEL", b =>
@@ -211,7 +214,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_LEVEL", (string)null);
+                    b.ToTable("M_LEVEL");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION", b =>
@@ -294,7 +297,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_OPERATION_LIFECYCLE", (string)null);
+                    b.ToTable("M_OPERATION_LIFECYCLE");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
@@ -327,7 +330,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_OPERATION_STATUS", (string)null);
+                    b.ToTable("M_OPERATION_STATUS");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_TYPE", b =>
@@ -410,7 +413,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OperationDetailId");
 
-                    b.ToTable("M_SKILLMAP", (string)null);
+                    b.ToTable("M_SKILLMAP");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
@@ -495,7 +498,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_TRAINING_DOCUMENT", (string)null);
+                    b.ToTable("M_TRAINING_DOCUMENT");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_USER", b =>
@@ -632,9 +635,6 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("M_STATUSId");
@@ -643,9 +643,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TrainingDocumentId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TRAINING_ATTENDEE", (string)null);
+                    b.ToTable("TRAINING_ATTENDEE");
                 });
 
             modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE_DETAIL", b =>
@@ -692,7 +690,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("TRAINING_ATTENDEE_DETAIL", (string)null);
+                    b.ToTable("TRAINING_ATTENDEE_DETAIL");
                 });
 
             modelBuilder.Entity("Domain.Entitises.M_HANDOVER_RECORD", b =>
@@ -729,7 +727,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_HANDOVER_RECORD", (string)null);
+                    b.ToTable("M_HANDOVER_RECORD");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_ASSESSMENT", b =>
@@ -834,13 +832,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_USER", "M_USER")
-                        .WithMany("TrainingAttendees")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("M_STATUS");
-
-                    b.Navigation("M_USER");
 
                     b.Navigation("OPERATION_DETAIL");
 
@@ -914,11 +906,6 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("Assessments");
 
-                    b.Navigation("TrainingAttendees");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_USER", b =>
-                {
                     b.Navigation("TrainingAttendees");
                 });
 

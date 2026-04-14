@@ -16,6 +16,9 @@ namespace Domain.Entities
 		public int Department_Id { get; set; } = 1;
 		public M_DEPARTMENT? Department { get; set; }
 		public int OperationType_Id { get; set; } = 1;
-		public M_OPERATION_TYPE? Operation_Type{get;set;}
+		public M_OBJECT? Operation_Type{get;set;}
+		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
+		public ICollection<LEARNING_REPORT> LearningReports { get; set; }
+
 	}
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-	public class M_OPERATION_TYPE : BaseEntity<int>
+	public class M_OBJECT : BaseEntity<int>
 	{
 		public string? Code { get; set; }
 		public string? Name { get; set; }

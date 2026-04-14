@@ -14,8 +14,9 @@ namespace Domain.Entities
 		public string? Description { get; set; }
 		public string? Type { get; set; }	
 		public bool Edit { get; set; }
-		public ICollection<M_User>? Users { get; set; }
+		public ICollection<M_USER>? Users { get; set; }
 		public bool Execute { get; set; }
 		public bool View { get; set; }
+		public ICollection<TRAINING_ATTENDEE_DETAIL>? TrainingAttendeeDetails { get; set; }
 	}
 }

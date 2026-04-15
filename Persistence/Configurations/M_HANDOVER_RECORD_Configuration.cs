@@ -14,8 +14,8 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_HANDOVER_RECORD> builder)
 		{
-			builder.Property(hr => hr.HandoverRecordCode).IsRequired().HasMaxLength(20);
-			builder.Property(hr => hr.HandOverRepordName).IsRequired().HasMaxLength(50);
+			builder.HasOne(mhc => mhc.M_TrainingContent).WithMany(u => u.M_HandoverRecords).HasForeignKey(mhc => mhc.TrainingContentId);
+			builder.HasOne(mhc => mhc.M_Status).WithMany(u => u.M_HandoverRecords).HasForeignKey(mhc => mhc.StatusId);
 		}
 	}
 }

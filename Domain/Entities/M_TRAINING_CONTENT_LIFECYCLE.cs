@@ -12,7 +12,8 @@ namespace Domain.Entities
 		public bool IsRenew { get; set; }
 		public int RetrainingFrequency { get; set; }
 		public string? Description { get; set; }
-		public ICollection<M_TRAINING_CONTENT> M_TrainingContent { get; set; }
+		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }
+
 
 	}
 }

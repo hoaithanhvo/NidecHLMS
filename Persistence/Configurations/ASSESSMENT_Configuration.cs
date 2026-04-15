@@ -17,6 +17,10 @@ namespace Persistence.Configurations
 			builder.Property(a => a.AssessmentCode).HasMaxLength(20);
 
 			builder.HasOne(a => a.M_TRAINING_DOCUMENT).WithMany(td => td.Assessments).HasForeignKey(a => a.TrainingDocumentId);
+
+			//builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ConfirmBy);
+
+			//builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ApprovalBy);
 		}
 	}
 }

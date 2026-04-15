@@ -12,7 +12,7 @@ namespace Domain.Entities
 		public string SessionNameVI { get; set; }
 		public string SessionNameEN { get; set; }
 		public string SessionCode { get; set; }
-		public ICollection<TRAINING_ATTENDEE_SESSION> TrainingSessions { get; set; }
+		public ICollection<T_TRAINING_SESSION> TrainingSessions { get; set; }
 		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
 	}
 }

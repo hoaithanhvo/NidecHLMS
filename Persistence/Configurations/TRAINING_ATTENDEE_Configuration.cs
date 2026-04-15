@@ -17,9 +17,7 @@ namespace Persistence.Configurations
 
 			builder.HasOne(ta => ta.M_USER).WithMany(u => u.TrainingAttendees).HasForeignKey(ta => ta.UserId).IsRequired(false);
 
-			builder.HasOne(ta=>ta.TRAINING_DOCUMENT).WithMany(td=>td.TrainingAttendees).HasForeignKey(ta=>ta.TrainingDocumentId);
-
-			builder.HasOne(ta => ta.M_TRAINING_CONTENT).WithMany(od => od.TrainingAttendees).HasForeignKey(ta => ta.OperationId);
+			builder.HasOne(ta => ta.T_TrainingCourse).WithMany(u => u.TrainingAttendees).HasForeignKey(ta => ta.TrainingCourseId).IsRequired(false);
 		}
 	}
 }

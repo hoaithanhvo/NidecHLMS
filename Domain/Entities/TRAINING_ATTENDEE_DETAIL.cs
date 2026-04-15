@@ -20,6 +20,6 @@ namespace Domain.Entities
 		public ASSESSMENT Assessment { get; set; }
 
 		public int TrainingSessionId { get; set; }
-		public TRAINING_ATTENDEE_SESSION TrainingSession { get; set; }
+		public T_TRAINING_SESSION TrainingSession { get; set; }
 	}
 }

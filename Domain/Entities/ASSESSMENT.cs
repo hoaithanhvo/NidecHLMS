@@ -15,10 +15,12 @@ namespace Domain.Entities
 		public string ManagementNumber { get; set; }
 		public string FilePath { get; set; }
 		public M_TRAINING_DOCUMENT? M_TRAINING_DOCUMENT { get; set; }
-		public string ConfirmBy { get;set; }
+		public int ConfirmBy { get;set; }
 		public DateTime ConfirmDateTime { get; set; }
-		public string ApprovalBy { get; set; }
+		public int ApprovalBy { get; set; }
 		public DateTime ApprovalDateTime { get; set; }
 		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
+		public ICollection<T_SKILLMAP> Skillmaps { get; set; }
+		public ICollection<T_ASSESSMENT_RESULT> T_AssetssmentResults { get; set; }
 	}
 }

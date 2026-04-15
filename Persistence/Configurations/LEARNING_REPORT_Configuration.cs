@@ -15,7 +15,7 @@ namespace Persistence.Configurations
 		{
 			builder.Property(lr => lr.LeaningReportCode).IsRequired().HasMaxLength(20);
 			builder.Property(lr => lr.Trainer).IsRequired().HasMaxLength(50);
-			builder.Property(lr => lr.FilePath).IsRequired().HasMaxLength(20);
+			builder.Property(lr => lr.FilePath).IsRequired().HasMaxLength(200);
 			builder.Property(lr => lr.Note).HasMaxLength(200);
 
 			builder.HasOne(lr => lr.M_Users).WithMany(u => u.LearningReports).HasForeignKey(lr => lr.UserId);

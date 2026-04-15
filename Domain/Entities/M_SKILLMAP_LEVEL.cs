@@ -14,6 +14,5 @@ namespace Domain.Entities
 		public string? EnaluationCategoryEN { get; set; }
 		public string? EnaluationCategoryVI { get; set; }
 		public decimal Coefficient { get; set; }
-		public OPERATION_DETAIL  OPERATION_DETAIL { get; set; }
 	}
 }

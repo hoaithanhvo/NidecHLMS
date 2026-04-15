@@ -15,10 +15,9 @@ namespace Domain.Entities
 		public int StatusId {get;set;}
 		public string Note { get;set;}
 		public M_USER? M_USER {get;set;}	
-		public OPERATION_DETAIL? OPERATION_DETAIL {get;set;}
+		public M_TRAINING_CONTENT? M_TRAINING_CONTENT {get;set;}
 		public M_TRAINING_DOCUMENT? TRAINING_DOCUMENT {get;set;}	
 		public M_STATUS? M_STATUS {get;set;}
-		public ICollection<TRAINING_ATTENDEE_SESSION> Sessions { get; set; }
 		public ICollection<TRAINING_ATTENDEE_SESSION> TrainingSessions { get; set; }
 	}
 }

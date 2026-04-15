@@ -12,8 +12,8 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260412111125_update_table_M_OPERATION_DETAILS")]
-    partial class update_table_M_OPERATION_DETAILS
+    [Migration("20260412111125_update_table_M_M_TRAINING_CONTENTS")]
+    partial class update_table_M_M_TRAINING_CONTENTS
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -360,7 +360,7 @@ namespace Persistence.Migrations
                     b.ToTable("M_USER", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -404,7 +404,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OpertionStatus_Id");
 
-                    b.ToTable("OPERATION_DETAIL", (string)null);
+                    b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RetrainingRules", b =>
@@ -965,7 +965,7 @@ namespace Persistence.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
@@ -974,7 +974,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
-                        .WithMany("Operation_Details")
+                        .WithMany("M_TRAINING_CONTENTs")
                         .HasForeignKey("OpertionStatus_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1092,7 +1092,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
                 {
-                    b.Navigation("Operation_Details");
+                    b.Navigation("M_TRAINING_CONTENTs");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_TYPE", b =>

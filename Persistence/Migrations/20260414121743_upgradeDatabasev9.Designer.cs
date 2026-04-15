@@ -694,7 +694,7 @@ namespace Persistence.Migrations
                     b.Property<int>("OperationDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Operation_DetailId")
+                    b.Property<int?>("M_TRAINING_CONTENTId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -709,12 +709,12 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Operation_DetailId");
+                    b.HasIndex("M_TRAINING_CONTENTId");
 
                     b.ToTable("M_USER_SKILLMAP");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -758,7 +758,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OpertionStatusId");
 
-                    b.ToTable("OPERATION_DETAIL", (string)null);
+                    b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE", b =>
@@ -1035,13 +1035,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_SKILLMAP_LEVEL", b =>
                 {
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TRAINING_CONTENT")
                         .WithMany("M_Skillmap_Level")
                         .HasForeignKey("OperationDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OPERATION_DETAIL");
+                    b.Navigation("M_TRAINING_CONTENT");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_USER", b =>
@@ -1057,14 +1057,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_USER_SKILLMAP", b =>
                 {
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "Operation_Detail")
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TRAINING_CONTENT")
                         .WithMany()
-                        .HasForeignKey("Operation_DetailId");
+                        .HasForeignKey("M_TRAINING_CONTENTId");
 
-                    b.Navigation("Operation_Detail");
+                    b.Navigation("M_TRAINING_CONTENT");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
@@ -1073,7 +1073,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
-                        .WithMany("Operation_Details")
+                        .WithMany("M_TRAINING_CONTENTs")
                         .HasForeignKey("OpertionStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1089,7 +1089,7 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("M_STATUSId");
 
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TRAINING_CONTENT")
                         .WithMany("TrainingAttendees")
                         .HasForeignKey("OperationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1109,7 +1109,7 @@ namespace Persistence.Migrations
 
                     b.Navigation("M_USER");
 
-                    b.Navigation("OPERATION_DETAIL");
+                    b.Navigation("M_TRAINING_CONTENT");
 
                     b.Navigation("TRAINING_DOCUMENT");
                 });
@@ -1205,7 +1205,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
                 {
-                    b.Navigation("Operation_Details");
+                    b.Navigation("M_TRAINING_CONTENTs");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_SESSION_TYPE", b =>
@@ -1236,7 +1236,7 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingAttendees");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Navigation("M_Skillmap_Level");
 

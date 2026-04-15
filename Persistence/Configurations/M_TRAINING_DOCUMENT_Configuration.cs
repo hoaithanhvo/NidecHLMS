@@ -16,6 +16,7 @@ namespace Persistence.Configurations
 		{
 			builder.Property(td => td.Code).IsRequired().HasMaxLength(20);
 			builder.Property(td => td.LearnReport).IsRequired().HasMaxLength(50);
+			//builder.HasOne(mtd => mtd.M_TrainingContent).WithMany(tc => tc.M_TrainingDocuments).HasForeignKey(mtd => mtd.TrainingContentId);
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Persistence.Configurations
 
 			builder.HasOne(lr => lr.M_Users).WithMany(u => u.LearningReports).HasForeignKey(lr => lr.UserId);
 
-			builder.HasOne(lr => lr.M_Operaions).WithMany(mo => mo.LearningReports).HasForeignKey(lr => lr.OperationId);
+			builder.HasOne(lr => lr.M_TrainingDocument).WithMany(mo => mo.LearningReports).HasForeignKey(lr => lr.TrainingDocumentId);
 		}
 	}
 }

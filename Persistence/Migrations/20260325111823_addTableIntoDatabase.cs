@@ -44,7 +44,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OPERATION_DETAIL",
+                name: "M_TRAINING_CONTENT",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -63,7 +63,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OPERATION_DETAIL", x => x.Id);
+                    table.PrimaryKey("PK_M_TRAINING_CONTENT", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -79,7 +79,7 @@ namespace Persistence.Migrations
                 name: "M_OPERATION");
 
             migrationBuilder.DropTable(
-                name: "OPERATION_DETAIL");
+                name: "M_TRAINING_CONTENT");
 
             migrationBuilder.CreateTable(
                 name: "Operations",

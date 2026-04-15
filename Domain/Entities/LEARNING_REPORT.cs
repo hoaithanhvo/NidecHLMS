@@ -14,8 +14,8 @@ namespace Domain.Entities
 		public string? Note { get; set; }
 		public string FilePath { get; set; }	
 		public string Trainer { get; set; }
-		public int OperationId { get; set; }
+		public int TrainingDocumentId { get; set; }
 		public M_USER M_Users { get; set; }
-		public M_OPERATION M_Operaions { get; set; }
+		public M_TRAINING_DOCUMENT M_TrainingDocument { get; set; }
 	}
 }

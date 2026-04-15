@@ -12,32 +12,32 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_Operation_Id",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_Operation_Id",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatus_Id",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatus_Id",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.RenameColumn(
                 name: "OpertionStatus_Id",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "OpertionStatusId");
 
             migrationBuilder.RenameColumn(
                 name: "Operation_Id",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "OperationId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_OPERATION_DETAIL_OpertionStatus_Id",
-                table: "OPERATION_DETAIL",
-                newName: "IX_OPERATION_DETAIL_OpertionStatusId");
+                name: "IX_M_TRAINING_CONTENT_OpertionStatus_Id",
+                table: "M_TRAINING_CONTENT",
+                newName: "IX_M_TRAINING_CONTENT_OpertionStatusId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_OPERATION_DETAIL_Operation_Id",
-                table: "OPERATION_DETAIL",
-                newName: "IX_OPERATION_DETAIL_OperationId");
+                name: "IX_M_TRAINING_CONTENT_Operation_Id",
+                table: "M_TRAINING_CONTENT",
+                newName: "IX_M_TRAINING_CONTENT_OperationId");
 
             migrationBuilder.AlterColumn<string>(
                 name: "LearnReport",
@@ -136,9 +136,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_M_SKILLMAP", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_M_SKILLMAP_OPERATION_DETAIL_OperationDetailId",
+                        name: "FK_M_SKILLMAP_M_TRAINING_CONTENT_OperationDetailId",
                         column: x => x.OperationDetailId,
-                        principalTable: "OPERATION_DETAIL",
+                        principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -176,9 +176,9 @@ namespace Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TRAINING_ATTENDEE_OPERATION_DETAIL_OperationId",
+                        name: "FK_TRAINING_ATTENDEE_M_TRAINING_CONTENT_OperationId",
                         column: x => x.OperationId,
-                        principalTable: "OPERATION_DETAIL",
+                        principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -288,16 +288,16 @@ namespace Persistence.Migrations
                 column: "StatusId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_OperationId",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_OperationId",
+                table: "M_TRAINING_CONTENT",
                 column: "OperationId",
                 principalTable: "M_OPERATION",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatusId",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatusId",
+                table: "M_TRAINING_CONTENT",
                 column: "OpertionStatusId",
                 principalTable: "M_OPERATION_STATUS",
                 principalColumn: "Id",
@@ -308,12 +308,12 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_OperationId",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_OperationId",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatusId",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatusId",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropTable(
                 name: "M_HANDOVER_RECORD");
@@ -338,23 +338,23 @@ namespace Persistence.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "OpertionStatusId",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "OpertionStatus_Id");
 
             migrationBuilder.RenameColumn(
                 name: "OperationId",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "Operation_Id");
 
             migrationBuilder.RenameIndex(
-                name: "IX_OPERATION_DETAIL_OpertionStatusId",
-                table: "OPERATION_DETAIL",
-                newName: "IX_OPERATION_DETAIL_OpertionStatus_Id");
+                name: "IX_M_TRAINING_CONTENT_OpertionStatusId",
+                table: "M_TRAINING_CONTENT",
+                newName: "IX_M_TRAINING_CONTENT_OpertionStatus_Id");
 
             migrationBuilder.RenameIndex(
-                name: "IX_OPERATION_DETAIL_OperationId",
-                table: "OPERATION_DETAIL",
-                newName: "IX_OPERATION_DETAIL_Operation_Id");
+                name: "IX_M_TRAINING_CONTENT_OperationId",
+                table: "M_TRAINING_CONTENT",
+                newName: "IX_M_TRAINING_CONTENT_Operation_Id");
 
             migrationBuilder.AlterColumn<string>(
                 name: "LearnReport",
@@ -375,16 +375,16 @@ namespace Persistence.Migrations
                 oldMaxLength: 20);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_Operation_Id",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_Operation_Id",
+                table: "M_TRAINING_CONTENT",
                 column: "Operation_Id",
                 principalTable: "M_OPERATION",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatus_Id",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatus_Id",
+                table: "M_TRAINING_CONTENT",
                 column: "OpertionStatus_Id",
                 principalTable: "M_OPERATION_STATUS",
                 principalColumn: "Id",

@@ -14,7 +14,7 @@ namespace Domain.Entities
 
 		public string? Note { get; set; }
 
-		public OPERATION_DETAIL? Operation_Detail { get; set; }	
+		public M_TRAINING_CONTENT? M_TRAINING_CONTENT { get; set; }	
 		
 	}
 }

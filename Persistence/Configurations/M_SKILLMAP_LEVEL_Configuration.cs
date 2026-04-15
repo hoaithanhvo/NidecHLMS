@@ -14,7 +14,6 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_SKILLMAP_LEVEL> builder)
 		{
-			builder.HasOne(msl=>msl.OPERATION_DETAIL).WithMany(od=>od.M_Skillmap_Level).HasForeignKey(msl=>msl.OperationDetailId);
 		}
 	}
 }

@@ -215,9 +215,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_M_SKILLMAP_LEVEL", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_M_SKILLMAP_LEVEL_OPERATION_DETAIL_OperationDetailId",
+                        name: "FK_M_SKILLMAP_LEVEL_M_TRAINING_CONTENT_OperationDetailId",
                         column: x => x.OperationDetailId,
-                        principalTable: "OPERATION_DETAIL",
+                        principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -231,7 +231,7 @@ namespace Persistence.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     OperationDetailId = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Operation_DetailId = table.Column<int>(type: "int", nullable: true),
+                    M_TRAINING_CONTENTId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -241,9 +241,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_M_USER_SKILLMAP", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_M_USER_SKILLMAP_OPERATION_DETAIL_Operation_DetailId",
-                        column: x => x.Operation_DetailId,
-                        principalTable: "OPERATION_DETAIL",
+                        name: "FK_M_USER_SKILLMAP_M_TRAINING_CONTENT_M_TRAINING_CONTENTId",
+                        column: x => x.M_TRAINING_CONTENTId,
+                        principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id");
                 });
 
@@ -327,9 +327,9 @@ namespace Persistence.Migrations
                 column: "OperationDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_M_USER_SKILLMAP_Operation_DetailId",
+                name: "IX_M_USER_SKILLMAP_M_TRAINING_CONTENTId",
                 table: "M_USER_SKILLMAP",
-                column: "Operation_DetailId");
+                column: "M_TRAINING_CONTENTId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TRAINING_ATTENDEE_SESSION_SessionTypeId",
@@ -545,9 +545,9 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_M_SKILLMAP", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_M_SKILLMAP_OPERATION_DETAIL_OperationDetailId",
+                        name: "FK_M_SKILLMAP_M_TRAINING_CONTENT_OperationDetailId",
                         column: x => x.OperationDetailId,
-                        principalTable: "OPERATION_DETAIL",
+                        principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

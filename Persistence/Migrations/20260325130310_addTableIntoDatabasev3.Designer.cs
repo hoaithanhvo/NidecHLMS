@@ -287,7 +287,7 @@ namespace Persistence.Migrations
                     b.ToTable("M_USER", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -333,7 +333,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OPERATION_DETAIL", (string)null);
+                    b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RetrainingRules", b =>

@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class add_table_M_OPERATION_DETAILS : Migration
+    public partial class add_table_M_M_TRAINING_CONTENTS : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
                 name: "IsSkillRequired",
-                table: "OPERATION_DETAIL");
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropColumn(
                 name: "Note",
-                table: "OPERATION_DETAIL");
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropColumn(
                 name: "TestCode",
-                table: "OPERATION_DETAIL");
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropColumn(
                 name: "TrainingDocumentCode",
-                table: "OPERATION_DETAIL");
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropColumn(
                 name: "DepartmentId",
@@ -37,7 +37,7 @@ namespace Persistence.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "RetrainingFrequency",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "OpertionStatus");
 
             migrationBuilder.RenameColumn(
@@ -52,7 +52,7 @@ namespace Persistence.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "OperationId",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
@@ -76,26 +76,26 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OPERATION_DETAIL_OperationId",
-                table: "OPERATION_DETAIL",
+                name: "IX_M_TRAINING_CONTENT_OperationId",
+                table: "M_TRAINING_CONTENT",
                 column: "OperationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OPERATION_DETAIL_OpertionStatus",
-                table: "OPERATION_DETAIL",
+                name: "IX_M_TRAINING_CONTENT_OpertionStatus",
+                table: "M_TRAINING_CONTENT",
                 column: "OpertionStatus");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_OperationId",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_OperationId",
+                table: "M_TRAINING_CONTENT",
                 column: "OperationId",
                 principalTable: "M_OPERATION",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatus",
-                table: "OPERATION_DETAIL",
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatus",
+                table: "M_TRAINING_CONTENT",
                 column: "OpertionStatus",
                 principalTable: "M_OPERATION_STATUS",
                 principalColumn: "Id",
@@ -106,31 +106,31 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_OperationId",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_OperationId",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_OPERATION_DETAIL_M_OPERATION_STATUS_OpertionStatus",
-                table: "OPERATION_DETAIL");
+                name: "FK_M_TRAINING_CONTENT_M_OPERATION_STATUS_OpertionStatus",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropTable(
                 name: "M_OPERATION_STATUS");
 
             migrationBuilder.DropIndex(
-                name: "IX_OPERATION_DETAIL_OperationId",
-                table: "OPERATION_DETAIL");
+                name: "IX_M_TRAINING_CONTENT_OperationId",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropIndex(
-                name: "IX_OPERATION_DETAIL_OpertionStatus",
-                table: "OPERATION_DETAIL");
+                name: "IX_M_TRAINING_CONTENT_OpertionStatus",
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.DropColumn(
                 name: "OperationId",
-                table: "OPERATION_DETAIL");
+                table: "M_TRAINING_CONTENT");
 
             migrationBuilder.RenameColumn(
                 name: "OpertionStatus",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 newName: "RetrainingFrequency");
 
             migrationBuilder.RenameColumn(
@@ -145,27 +145,27 @@ namespace Persistence.Migrations
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsSkillRequired",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "Note",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 type: "nvarchar(500)",
                 maxLength: 500,
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "TestCode",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "TrainingDocumentCode",
-                table: "OPERATION_DETAIL",
+                table: "M_TRAINING_CONTENT",
                 type: "nvarchar(max)",
                 nullable: true);
 

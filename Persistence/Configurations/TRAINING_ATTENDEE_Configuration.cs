@@ -19,7 +19,7 @@ namespace Persistence.Configurations
 
 			builder.HasOne(ta=>ta.TRAINING_DOCUMENT).WithMany(td=>td.TrainingAttendees).HasForeignKey(ta=>ta.TrainingDocumentId);
 
-			builder.HasOne(ta => ta.OPERATION_DETAIL).WithMany(od => od.TrainingAttendees).HasForeignKey(ta => ta.OperationId);
+			builder.HasOne(ta => ta.M_TRAINING_CONTENT).WithMany(od => od.TrainingAttendees).HasForeignKey(ta => ta.OperationId);
 		}
 	}
 }

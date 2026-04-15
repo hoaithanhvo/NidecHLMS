@@ -546,7 +546,7 @@ namespace Persistence.Migrations
                     b.ToTable("M_USER", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -590,7 +590,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OpertionStatusId");
 
-                    b.ToTable("OPERATION_DETAIL", (string)null);
+                    b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TRAINING_ATTENDEE", b =>
@@ -773,13 +773,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_SKILLMAP", b =>
                 {
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TRAINING_CONTENT")
                         .WithMany("SkillMaps")
                         .HasForeignKey("OperationDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OPERATION_DETAIL");
+                    b.Navigation("M_TRAINING_CONTENT");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_USER", b =>
@@ -793,7 +793,7 @@ namespace Persistence.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.HasOne("Domain.Entities.M_OPERATION", "Operation")
                         .WithMany("OperationDetails")
@@ -802,7 +802,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION_STATUS", "Operation_Status")
-                        .WithMany("Operation_Details")
+                        .WithMany("M_TRAINING_CONTENTs")
                         .HasForeignKey("OpertionStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -820,7 +820,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.OPERATION_DETAIL", "OPERATION_DETAIL")
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TRAINING_CONTENT")
                         .WithMany("TrainingAttendees")
                         .HasForeignKey("OperationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -834,7 +834,7 @@ namespace Persistence.Migrations
 
                     b.Navigation("M_STATUS");
 
-                    b.Navigation("OPERATION_DETAIL");
+                    b.Navigation("M_TRAINING_CONTENT");
 
                     b.Navigation("TRAINING_DOCUMENT");
                 });
@@ -887,7 +887,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_STATUS", b =>
                 {
-                    b.Navigation("Operation_Details");
+                    b.Navigation("M_TRAINING_CONTENTs");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_OPERATION_TYPE", b =>
@@ -909,7 +909,7 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingAttendees");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OPERATION_DETAIL", b =>
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
                     b.Navigation("SkillMaps");
 

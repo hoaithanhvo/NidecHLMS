@@ -15,7 +15,6 @@ namespace Domain.Entities
 		public string? Type { get; set; }
 		public decimal Coefficient { get; set; }
 
-		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
 		public ICollection<M_HATTAG> M_Hattags { get; set; }
 		public ICollection<T_SKILLMAP> Skillmaps { get; set; }
 		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }

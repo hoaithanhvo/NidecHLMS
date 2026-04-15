@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-	public class TRAINING_ATTENDEE : BaseEntity<int>
+	public class T_TRAINING_ATTENDEE : BaseEntity<int>
 	{
 		public int UserId {get;set;}
 		public int TrainingCourseId { get;set;}	

@@ -16,7 +16,6 @@ namespace Domain.Entities
 		public M_DEPARTMENT? Department { get; set; }
 		public int ObjectId { get; set; }
 		public M_OBJECT? M_Object{get;set;}
-		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
 		public ICollection<M_TRAINING_CONTENT>? M_TrainingContents { get; set; }
 		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }
 	}

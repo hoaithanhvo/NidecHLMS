@@ -19,12 +19,13 @@ namespace Domain.Entities
 		public bool? IsTrainingCenter { get; set; }	
 		public bool? IsProductDepartment { get; set; }
 		public bool? QA_Department { get; set; }
-		public ICollection<TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
+		public ICollection<T_TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
 		public ICollection<LEARNING_REPORT>? LearningReports { get; set; }
 		public ICollection<T_SKILLMAP>? Skillmaps { get; set; }
 		public M_DEPARTMENT M_Departments { get; set; }
 		public ICollection<ASSESSMENT> Assessments { get; set; }
 		public ICollection<T_ASSESSMENT_RESULT> T_AssetssmentResults { get; set; }
+		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }
 
 	}
 }

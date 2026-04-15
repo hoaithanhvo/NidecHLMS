@@ -18,6 +18,10 @@ namespace Persistence.Configurations
 			builder.HasOne(ttr => ttr.M_Operation).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.OperationId);
 
 			builder.HasOne(ttr => ttr.M_Level).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.LevelId);
+
+			builder.HasOne(ttr => ttr.M_User).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.UserId);
+
+			builder.HasOne(ttr => ttr.M_Status).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.StatusId);
 		}
 	}
 }

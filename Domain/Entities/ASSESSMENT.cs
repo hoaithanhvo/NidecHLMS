@@ -19,7 +19,6 @@ namespace Domain.Entities
 		public DateTime ConfirmDateTime { get; set; }
 		public int ApprovalBy { get; set; }
 		public DateTime ApprovalDateTime { get; set; }
-		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
 		public ICollection<T_SKILLMAP> Skillmaps { get; set; }
 		public ICollection<T_ASSESSMENT_RESULT> T_AssetssmentResults { get; set; }
 	}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260415103725_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1059,8 +1062,6 @@ namespace Persistence.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.HasIndex("StatusId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("T_TRAINING_RESULT");
@@ -1393,12 +1394,6 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
-                        .WithMany("T_TrainingResult")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.M_USER", "M_User")
                         .WithMany("T_TrainingResult")
                         .HasForeignKey("UserId")
@@ -1408,8 +1403,6 @@ namespace Persistence.Migrations
                     b.Navigation("M_Level");
 
                     b.Navigation("M_Operation");
-
-                    b.Navigation("M_Status");
 
                     b.Navigation("M_User");
 
@@ -1497,8 +1490,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
                     b.Navigation("M_HandoverRecords");
-
-                    b.Navigation("T_TrainingResult");
 
                     b.Navigation("TrainingAttendees");
 

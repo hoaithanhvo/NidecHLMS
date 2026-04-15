@@ -15,9 +15,8 @@ namespace Domain.Entities
 		public int TrainerId { get; set; }
 		public int StatusId { get; set; }
 		public string Note { get; set; }
-		public ICollection<TRAINING_ATTENDEE_DETAIL> TrainingAttendeeDetails { get; set; }
 		public M_SESSION_TYPE? M_SESSION_TYPE { get; set; }
-		public TRAINING_ATTENDEE TrainingAttendees { get; set; }
+		public T_TRAINING_ATTENDEE TrainingAttendees { get; set; }
 		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }
 
 	}

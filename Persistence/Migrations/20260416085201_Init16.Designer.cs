@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260416085201_Init16")]
+    partial class Init16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -544,15 +547,15 @@ namespace Persistence.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LifecycleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ManagementNumber")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("OperationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingContentLifecycleId")
                         .HasColumnType("int");
 
                     b.Property<string>("TrainingContentName")
@@ -569,9 +572,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LifecycleId");
-
                     b.HasIndex("OperationId");
+
+                    b.HasIndex("TrainingContentLifecycleId");
 
                     b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
@@ -1596,15 +1599,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT", b =>
                 {
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", "M_TrainingContentLifecycle")
-                        .WithMany("M_TrainingContents")
-                        .HasForeignKey("LifecycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.M_OPERATION", "M_Operation")
                         .WithMany("M_TrainingContents")
                         .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", "M_TrainingContentLifecycle")
+                        .WithMany("M_TrainingContents")
+                        .HasForeignKey("TrainingContentLifecycleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

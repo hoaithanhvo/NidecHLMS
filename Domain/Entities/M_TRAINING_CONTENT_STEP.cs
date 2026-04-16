@@ -9,9 +9,9 @@ namespace Domain.Entities
 {
 	public class M_TRAINING_CONTENT_STEP : BaseEntity<int>
 	{
+		public string StepCode { get; set; }
 		public string StepName { get; set; }
-		public int OrderNo { get; set; }
-		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }
+		public int OrderNo { get; set; }	
 		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProcess { get; set; }
 
 	}

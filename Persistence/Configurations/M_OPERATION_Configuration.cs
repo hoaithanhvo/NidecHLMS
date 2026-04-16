@@ -15,11 +15,12 @@ namespace Persistence.Configurations
 		public void Configure(EntityTypeBuilder<M_OPERATION> builder)
 		{
 			builder.ToTable("M_OPERATION");
-			builder.Property(o => o.OperationCode).HasMaxLength(10).IsRequired();
+			builder.Property(o => o.OperationCode).HasMaxLength(20).IsRequired();
 			builder.Property(o=>o.OperationName).HasMaxLength(200).IsRequired();
+			builder.Property(o => o.ManagementNumber).HasMaxLength(50).IsRequired();
 			builder.HasOne(o => o.Department).WithMany(d => d.M_Operation).HasForeignKey(o => o.DepartmentId);
 			builder.HasOne(o=>o.M_Object).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.ObjectId);
-			builder.HasIndex(o => o.OperationCode).IsUnique();	
+			builder.HasIndex(o => new { o.OperationCode, o.OperationName, o.ManagementNumber }).IsUnique();
 		}
 	}
 }

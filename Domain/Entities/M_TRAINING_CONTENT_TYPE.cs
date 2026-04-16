@@ -12,6 +12,5 @@ namespace Domain.Entities
 	{
 		public string ContentTypeNameVI { get; set; }
 		public string ContentTypeNameEN { get; set; }
-		public ICollection<M_TRAINING_CONTENT> M_TrainingContent { get; set; }
 	}
 }

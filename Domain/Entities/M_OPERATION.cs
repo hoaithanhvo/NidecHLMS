@@ -14,6 +14,7 @@ namespace Domain.Entities
 		public string OperationName { get; set; }
 		public int DepartmentId { get; set; }
 		public int ObjectId { get; set; }
+		public string ManagementNumber { get; set; }
 		public M_DEPARTMENT Department { get; set; }
 		public M_OBJECT M_Object{get;set;}
 		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }

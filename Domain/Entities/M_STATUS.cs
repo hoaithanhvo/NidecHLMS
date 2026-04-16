@@ -12,7 +12,7 @@ namespace Domain.Entities
 	{
 		public string StatusName { get; set; }
 		public string Color { get; set; }
-		public string Description { get; set; }
+		public string? Description { get; set; }
 		public string Type { get; set; }	
 		public bool Edit { get; set; }
 		public ICollection<M_USER>? Users { get; set; }

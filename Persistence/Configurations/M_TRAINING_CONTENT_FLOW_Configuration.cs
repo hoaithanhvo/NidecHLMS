@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_DIVISION_Configuration : IEntityTypeConfiguration<M_DIVISION>
+	public class M_TRAINING_CONTENT_FLOW_Configuration : IEntityTypeConfiguration<M_TRAINING_CONTENT_FLOW>
 	{
-		public void Configure(EntityTypeBuilder<M_DIVISION> builder)
+		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_FLOW> builder)
 		{
-			builder.ToTable("M_DIVISION");
-			builder.Property(d => d.DivisionCd).HasMaxLength(20);
-			builder.Property(d=>d.DivisionName).HasMaxLength(200);
+			builder.HasOne(x => x.TrainingContent).WithMany(mtc => mtc.T_TrainingContentFlows).HasForeignKey(x => x.TrainingContentId);
 		}
 	}
 }

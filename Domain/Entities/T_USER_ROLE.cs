@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NidecSystemShared.Abstracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,6 @@ namespace Domain.Entities
     {
         public int UserId { get; set; }
         public int RoleId { get; set; }
-
         public M_USER User { get; set; }
         public M_ROLE Role { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,5 @@ namespace Domain.Entities
 		public string FilePath { get; set; }
 		public string Refid { get; set; }
 		public string RefType { get; set; }
-
 	}
 }

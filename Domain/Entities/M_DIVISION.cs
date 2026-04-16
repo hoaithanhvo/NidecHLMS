@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +12,12 @@ namespace Domain.Entities
 		/// <summary>
 		///Gets or sets the DivisionCd
 		/// </summary>
-		public string? DivisionCd { get; set; }
+		public string DivisionCd { get; set; }
 
 		/// <summary>
 		///  Gets or sets the DivisionName
 		/// </summary>
-		public string? DivisionName { get; set; }
+		public string DivisionName { get; set; }
 
 	}
 }

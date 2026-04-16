@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +12,7 @@ namespace Domain.Entities
 		public string StepName { get; set; }
 		public int OrderNo { get; set; }
 		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }
+		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProcess { get; set; }
+
 	}
 }

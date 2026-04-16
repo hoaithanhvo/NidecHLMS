@@ -17,7 +17,7 @@ namespace Persistence.Configurations
 			builder.Property(ht=>ht.TagName).IsRequired().HasMaxLength(50);
 			builder.Property(ht=>ht.Type).IsRequired().HasMaxLength(20);
 			//builder.HasOne(ht => ht.M_LEVEL).WithMany(l => l.M_HATTAGs).HasForeignKey(ht => ht.LevelId);
-
+			builder.HasIndex(ht => ht.TagCode).IsUnique();
 		}
 	}
 }

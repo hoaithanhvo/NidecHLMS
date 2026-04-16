@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace Domain.Entities
 {
 	public class M_DEPARTMENT : BaseEntity<int>
 	{
-		public string? Name { get; set; }
-		public string? Section { get; set; }
+		public string Name { get; set; }
+		public string Section { get; set; }
 		public ICollection<M_OPERATION>? M_Operation { get; set; }
 		public ICollection<M_USER>? M_User { get; set; }
 

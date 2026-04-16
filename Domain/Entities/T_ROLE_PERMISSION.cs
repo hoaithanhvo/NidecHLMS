@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NidecSystemShared.Abstracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -11,7 +12,6 @@ namespace Domain.Entities
     {
         public int RoleId { get; set; }
         public int PermissionId { get; set; }
-
         public M_ROLE Role { get; set; }
         public M_PERMISSION Permission { get; set; }
     }

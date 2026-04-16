@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +12,14 @@ namespace Domain.Entities
 		public int UserId { get; set; }
 		public int AssessmentId { get; set; }	
 		public int LevelId { get; set; }
-		public string? FilePath { get; set; }
+		public string FilePath { get; set; }
 		public int IssueBy { get; set; }
 		public int ApproveBy { get; set; }
 		public int ConfirmBy { get; set; }
 		public string? Note { get; set; }
-		public T_ASSESSMENT? Assessments { get; set; }
+		public bool? IsDeleted { get; set; }
+		public DateTime? DeleteDate { get; set; }
+		public T_ASSESSMENT Assessments { get; set; }
 		public M_USER M_Users{ get; set; }
 	}
 }

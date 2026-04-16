@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,8 @@ namespace Domain.Entities
 	{
 		public int OperationDetailId { get; set; }	
 		public int Standard { get;set; }
-		public string? EvaluationCategoryEN { get; set; }
-		public string? EvaluationCategoryVI { get; set; }
+		public string EvaluationCategoryEN { get; set; }
+		public string EvaluationCategoryVI { get; set; }
 		public decimal Coefficient { get; set; }
 	}
 }

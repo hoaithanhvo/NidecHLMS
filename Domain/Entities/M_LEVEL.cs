@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,6 @@ namespace Domain.Entities
 		public int Status { get; set; }
 		public string? Type { get; set; }
 		public decimal Coefficient { get; set; }
-
 		public ICollection<M_TAG> M_Tags { get; set; }
 		public ICollection<T_TRAINING_RESULT> T_TrainingResults { get; set; }
 	}

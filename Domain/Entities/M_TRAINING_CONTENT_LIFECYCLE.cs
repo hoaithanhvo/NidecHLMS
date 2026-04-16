@@ -1,4 +1,4 @@
-﻿//using NidecSystemShared.Abstracts;
+﻿using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,5 @@ namespace Domain.Entities
 		public int RetrainingFrequency { get; set; }
 		public string? Description { get; set; }
 		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }
-
-
 	}
 }

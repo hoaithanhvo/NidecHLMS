@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+﻿//using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Domain.Entities
 		public string Note { get; set; }
 		public M_SESSION_TYPE? M_SESSION_TYPE { get; set; }
 		public T_TRAINING_ATTENDEE TrainingAttendees { get; set; }
-		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }
+		public ICollection<T_TRAINING_RESULT> T_TrainingResults { get; set; }
 
 	}
 }

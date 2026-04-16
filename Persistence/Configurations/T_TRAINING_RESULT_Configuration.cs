@@ -13,15 +13,16 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_TRAINING_RESULT> builder)
 		{
-			builder.HasOne(ttr => ttr.T_TrainingSession).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.SessionId);
+			builder.HasOne(ttr => ttr.T_TrainingSession).WithMany(ts => ts.T_TrainingResults).HasForeignKey(ttr => ttr.SessionId);
 
-			builder.HasOne(ttr => ttr.M_Operation).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.OperationId);
+			builder.HasOne(ttr => ttr.M_Operation).WithMany(ts => ts.T_TrainingResults).HasForeignKey(ttr => ttr.OperationId);
 
-			builder.HasOne(ttr => ttr.M_Level).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.LevelId);
+			builder.HasOne(ttr => ttr.M_Level).WithMany(ts => ts.T_TrainingResults).HasForeignKey(ttr => ttr.LevelId);
 
-			builder.HasOne(ttr => ttr.M_User).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.UserId);
+			builder.HasOne(ttr => ttr.M_User).WithMany(ts => ts.T_TrainingResults).HasForeignKey(ttr => ttr.UserId);
 
-			builder.HasOne(ttr => ttr.M_Status).WithMany(ts => ts.T_TrainingResult).HasForeignKey(ttr => ttr.StatusId);
+			builder.HasOne(ttr => ttr.M_Status).WithMany(ts => ts.T_TrainingResults).HasForeignKey(ttr => ttr.StatusId);
+			builder.Property(trr => trr.UserId).IsRequired();
 		}
 	}
 }

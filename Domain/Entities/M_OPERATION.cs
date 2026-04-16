@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+﻿//using NidecSystemShared.Abstracts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +17,6 @@ namespace Domain.Entities
 		public int ObjectId { get; set; }
 		public M_OBJECT? M_Object{get;set;}
 		public ICollection<M_TRAINING_CONTENT>? M_TrainingContents { get; set; }
-		public ICollection<T_TRAINING_RESULT> T_TrainingResult { get; set; }
+		public ICollection<T_TRAINING_RESULT> T_TrainingResults { get; set; }
 	}
 }

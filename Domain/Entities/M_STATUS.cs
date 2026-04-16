@@ -1,5 +1,5 @@
 ﻿using Domain.Entitises;
-using NidecSystemShared.Abstracts;
+//using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Domain.Entities
 		public bool View { get; set; }
 		public ICollection<T_TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
 		public ICollection<M_HANDOVER_RECORD>? M_HandoverRecords { get; set; }
-		public ICollection<T_TRAINING_RESULT>? T_TrainingResult { get; set; }
+		public ICollection<T_TRAINING_RESULT>? T_TrainingResults { get; set; }
 
 
 	}

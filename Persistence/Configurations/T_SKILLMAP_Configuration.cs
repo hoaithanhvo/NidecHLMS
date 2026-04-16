@@ -15,8 +15,6 @@ namespace Persistence.Configurations
 		{
 			builder.HasOne(sm => sm.Assessments).WithMany(a => a.Skillmaps).HasForeignKey(sm => sm.AssessmentId);
 
-			builder.HasOne(sm => sm.M_Level).WithMany(a => a.Skillmaps).HasForeignKey(sm => sm.LevelId);
-
 			builder.HasOne(sm => sm.M_Users).WithMany(u => u.Skillmaps).HasForeignKey(sm => sm.IssueBy);
 
 			builder.HasOne(sm => sm.M_Users).WithMany(u => u.Skillmaps).HasForeignKey(sm => sm.ConfirmBy);

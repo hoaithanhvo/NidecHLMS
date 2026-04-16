@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class ASSESSMENT_Configuration : IEntityTypeConfiguration<ASSESSMENT>
+	public class T_ASSESSMENT_Configuration : IEntityTypeConfiguration<T_ASSESSMENT>
 	{
-		public void Configure(EntityTypeBuilder<ASSESSMENT> builder)
+		public void Configure(EntityTypeBuilder<T_ASSESSMENT> builder)
 		{
 			builder.Property(a => a.AssessmentCode).HasMaxLength(20);
 
 			builder.HasOne(a => a.M_TRAINING_DOCUMENT).WithMany(td => td.Assessments).HasForeignKey(a => a.TrainingDocumentId);
 
-			//builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ConfirmBy);
+			builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ConfirmBy);
 
-			//builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ApprovalBy);
+			builder.HasOne(a => a.M_Users).WithMany(td => td.Assessments).HasForeignKey(a => a.ApprovalBy);
 		}
 	}
 }

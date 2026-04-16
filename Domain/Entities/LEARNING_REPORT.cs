@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+﻿////using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,4 +18,6 @@ namespace Domain.Entities
 		public M_USER M_Users { get; set; }
 		public M_TRAINING_DOCUMENT M_TrainingDocument { get; set; }
 	}
+
+    
 }

@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+﻿//using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,7 @@ namespace Domain.Entities
 		public int ApproveBy { get; set; }
 		public int ConfirmBy { get; set; }
 		public string? Note { get; set; }
-		public M_LEVEL M_Level { get;set; }
-		public ASSESSMENT? Assessments { get; set; }
-
+		public T_ASSESSMENT? Assessments { get; set; }
 		public M_USER M_Users{ get; set; }
 	}
 }

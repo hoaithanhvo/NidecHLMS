@@ -19,6 +19,7 @@ namespace Persistence.Configurations
 			builder.Property(o=>o.OperationName).HasMaxLength(200).IsRequired();
 			builder.HasOne(o => o.Department).WithMany(d => d.M_Operation).HasForeignKey(o => o.DepartmentId);
 			builder.HasOne(o=>o.M_Object).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.ObjectId);
+			builder.HasIndex(o => o.OperationCode).IsUnique();	
 		}
 	}
 }

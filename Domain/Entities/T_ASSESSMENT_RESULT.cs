@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+﻿//using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Domain.Entities
 		public int LevelId { get; set;}
 		public int StatusId { get; set;}
 		public string Result { get; set; }
-		public ASSESSMENT Assessment { get; set; }
+		public T_ASSESSMENT Assessment { get; set; }
 		public M_USER M_User { get; set; }
 	}
 }

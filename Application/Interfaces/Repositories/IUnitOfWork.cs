@@ -1,4 +1,4 @@
-﻿using NidecSystemShared.Abstracts;
+using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +49,6 @@ namespace Application.Interfaces.Repositories
         /// </summary>
         /// <typeparam name="T">Is Entity, T: BaseEntity</typeparam>
         /// <returns></returns>
-        IGenericRepository<T, TKey> GenericRepository<T, TKey>() where T : BaseEntity<T>;
+        IGenericRepository<T, TKey> GenericRepository<T, TKey>() where T : BaseEntity<TKey>;
     }
 }

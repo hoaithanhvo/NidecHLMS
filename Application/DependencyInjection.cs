@@ -1,6 +1,5 @@
-﻿using FluentValidation;
-using Application.Common.Behaviors;
 using FluentValidation;
+using Application.Common.Behaviors;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -29,7 +28,10 @@ namespace Application
                 //Validation throw exception before handler if invalid
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-                //Transaction commit handler success
+                //Audit Log reads ChangeTracker before Commit (Inner)
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
+
+                //Transaction commit handler success (Outer)
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             });
             return services;

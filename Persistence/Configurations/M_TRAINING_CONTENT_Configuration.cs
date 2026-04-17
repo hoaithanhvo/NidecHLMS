@@ -16,7 +16,7 @@ namespace Persistence.Configurations
 			builder.ToTable("M_TRAINING_CONTENT");
 
 			builder.Property(od=>od.ManagementNumber).IsRequired().HasMaxLength(20);
-			builder.Property(od=>od.TrainingContentName).IsRequired().HasMaxLength(100);
+			builder.Property(od=>od.TrainingContentName).IsRequired().HasMaxLength(300);
 
 			builder.HasOne(mtc => mtc.M_Operation).WithMany(o => o.M_TrainingContents).HasForeignKey(mtc => mtc.OperationId);
 

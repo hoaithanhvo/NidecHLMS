@@ -33,4 +33,10 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NidecSystemShared">
+      <HintPath>C:\Users\ASUS\NidecSystemShared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

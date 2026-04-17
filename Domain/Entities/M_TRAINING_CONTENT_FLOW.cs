@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-	public class M_TRAINING_CONTENT_FLOW : BaseEntity<int>
+	public class M_TRAINING_CONTENT_FLOW : BaseEntity_Local<int>
 	{
 		public int TrainingContentId { get; set; }
 

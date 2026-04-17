@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260417124549_Init18")]
+    partial class Init18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -557,8 +560,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("TrainingContentName")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -588,11 +591,12 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -610,11 +614,12 @@ namespace Persistence.Migrations
                     b.Property<int>("TrainingContentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("UpdatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -808,8 +813,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -835,6 +840,9 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("TrainingContentId");
 
@@ -1469,9 +1477,6 @@ namespace Persistence.Migrations
                     b.Property<int>("TrainingContentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainingContentStepFlowId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TrainingContentStepId")
                         .HasColumnType("int");
 
@@ -1490,8 +1495,6 @@ namespace Persistence.Migrations
                     b.HasIndex("StatusId");
 
                     b.HasIndex("TrainingContentId");
-
-                    b.HasIndex("TrainingContentStepFlowId");
 
                     b.HasIndex("TrainingContentStepId");
 
@@ -1888,12 +1891,6 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", "M_TrainingContentFlowStep")
-                        .WithMany("T_UserTrainingProcess")
-                        .HasForeignKey("TrainingContentStepFlowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
                         .WithMany("T_UserTrainingProcess")
                         .HasForeignKey("TrainingContentStepId")
@@ -1909,8 +1906,6 @@ namespace Persistence.Migrations
                     b.Navigation("M_Status");
 
                     b.Navigation("M_TrainingContent");
-
-                    b.Navigation("M_TrainingContentFlowStep");
 
                     b.Navigation("M_TrainingContentStep");
 
@@ -2011,11 +2006,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_FLOW", b =>
                 {
                     b.Navigation("FlowSteps");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", b =>
-                {
-                    b.Navigation("T_UserTrainingProcess");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", b =>

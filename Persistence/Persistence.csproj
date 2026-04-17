@@ -25,12 +25,17 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NidecSystemShared">
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

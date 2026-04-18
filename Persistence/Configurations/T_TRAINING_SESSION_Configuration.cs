@@ -15,7 +15,6 @@ namespace Persistence.Configurations
 		{
 			builder.HasOne(ts => ts.M_SESSION_TYPE).WithMany(mst => mst.TrainingSessions).HasForeignKey(ts => ts.SessionTypeId);
 
-			builder.HasOne(ts => ts.TrainingAttendees).WithMany(mst => mst.TrainingSessions).HasForeignKey(ts => ts.TrainingAttendeeId);
 		}
 	}
 }

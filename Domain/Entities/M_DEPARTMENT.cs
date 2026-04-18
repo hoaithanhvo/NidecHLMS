@@ -11,6 +11,6 @@ namespace Domain.Entities
 	{
 		public string Name { get; set; }
 		public string Section { get; set; }
-		public ICollection<M_OPERATION>? M_Operation { get; set; }
+		public ICollection<M_OPERATION>? M_Operations { get; set; }
 	}
 }

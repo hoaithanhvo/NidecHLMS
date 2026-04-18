@@ -38,7 +38,7 @@ namespace Persistence.Migrations
                 column: "CurrentStepId",
                 principalTable: "M_TRAINING_CONTENT_STEP",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />

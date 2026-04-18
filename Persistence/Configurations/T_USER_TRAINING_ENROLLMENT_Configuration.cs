@@ -13,13 +13,11 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_USER_TRAINING_ENROLLMENT> builder)
 		{
-			builder.HasOne(tute => tute.M_Status).WithMany(u => u.T_UserTrainingEnrollment).HasForeignKey(tute => tute.StatusId);
-
-			builder.HasOne(tute => tute.M_TrainingContent).WithMany(u => u.T_UserTrainingEnrollment).HasForeignKey(tute => tute.TrainingContentId);
-
-			builder.HasOne(tute => tute.M_TrainingContentStep).WithMany(u => u.T_UserTrainingEnrollment).HasForeignKey(tute => tute.CurrentStepId);
-
-			builder.HasOne(tute => tute.M_TrainingContentFlowStep).WithMany(u => u.T_UserTrainingEnrollment).HasForeignKey(tute => tute.CurrentFlowStepId);
-		}
-	}
+			builder.HasOne(tute => tute.M_Status).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.StatusId);
+			builder.HasOne(tute => tute.M_TrainingContent).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentId);
+			builder.HasOne(tute => tute.M_TrainingContentFlow).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentFlowId);
+			builder.HasOne(tute => tute.T_TrainingParticipant).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.ParticipantId);
+			builder.HasIndex(tute => tute.EnrollmentCode).IsUnique();
+        }
+    }
 }

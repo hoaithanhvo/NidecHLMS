@@ -18,11 +18,9 @@ namespace Domain.Entities
 		public ICollection<M_USER>? Users { get; set; }
 		public bool Execute { get; set; }
 		public bool View { get; set; }
-		public ICollection<T_TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
-		public ICollection<M_HANDOVER_RECORD>? M_HandoverRecords { get; set; }
 		public ICollection<T_TRAINING_RESULT>? T_TrainingResults { get; set; }
 		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
-		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollment { get; set; }
+		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
 		public ICollection<T_TRAINING_PARTICIPANT> T_TrainingParticipants { get; set; }
 		
 

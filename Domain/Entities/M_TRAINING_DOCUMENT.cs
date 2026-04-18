@@ -14,9 +14,6 @@ namespace Domain.Entities
 		public int TrainingContentId { get; set; }
 		public bool? IsDeleted { get; set; }
 		public DateTime? DeleteDate { get; set; }
-		public ICollection<T_ASSESSMENT> Assessments { get; set; }
-		public ICollection<LEARNING_REPORT> LearningReports { get; set; }
 		public M_TRAINING_CONTENT M_TrainingContent { get; set; }
-		
 	}
 }

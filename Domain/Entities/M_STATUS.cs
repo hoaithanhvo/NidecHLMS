@@ -21,6 +21,10 @@ namespace Domain.Entities
 		public ICollection<T_TRAINING_ATTENDEE>? TrainingAttendees { get; set; }
 		public ICollection<M_HANDOVER_RECORD>? M_HandoverRecords { get; set; }
 		public ICollection<T_TRAINING_RESULT>? T_TrainingResults { get; set; }
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProcess { get; set; }
+		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
+		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollment { get; set; }
+		public ICollection<T_TRAINING_PARTICIPANT> T_TrainingParticipants { get; set; }
+		
+
 	}
 }

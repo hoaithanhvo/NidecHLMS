@@ -19,7 +19,5 @@ namespace Domain.Entities
 		public DateTime? DeleteDate { get; set; }
 		public ICollection<T_TRAINING_SESSION> TrainingSessions { get; set; }
 		public T_TRAINING_COURSE T_TrainingCourse { get; set; }	
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
-
 	}
 }

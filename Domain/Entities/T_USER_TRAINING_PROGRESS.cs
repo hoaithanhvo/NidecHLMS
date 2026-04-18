@@ -12,11 +12,12 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int ParticipantId { get; set; }
         public int TrainingContentId { get; set; }
-        public int StepId { get; set; }
+        public int CurrentStepId { get; set; }
         public int StatusId { get; set; }
         public DateTime ActionDate { get; set; }
         public DateTime? DeleteDate { get; set; }
-		public M_USER M_User { get;set;}
+		public T_TRAINING_PARTICIPANT T_TrainingParticipant { get; set; }
+        public M_TRAINING_CONTENT_STEP M_TrainingContentStep { get; set; }
 		public M_STATUS M_Status { get;set;}	
 	}
 }

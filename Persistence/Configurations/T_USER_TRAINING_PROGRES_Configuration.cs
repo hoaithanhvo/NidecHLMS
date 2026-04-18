@@ -14,7 +14,11 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_USER_TRAINING_PROGRESS> builder)
 		{
-			builder.HasOne(tutp => tutp.M_Status).WithMany(u => u.T_UserTrainingProcess).HasForeignKey(tutp => tutp.StatusId);
+			builder.HasOne(tutp => tutp.M_Status).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.StatusId);
+
+			builder.HasOne(tutp => tutp.T_TrainingParticipant).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.ParticipantId);
+
+			builder.HasOne(tutp => tutp.M_TrainingContentStep).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.CurrentStepId);
 		}
 	}
 }

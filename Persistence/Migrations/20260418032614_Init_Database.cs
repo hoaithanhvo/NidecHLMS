@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Init_Database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,24 +27,6 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_M_DEPARTMENT", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "M_DIVISION",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DivisionCd = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DivisionName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_M_DIVISION", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +94,7 @@ namespace Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -170,7 +153,7 @@ namespace Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StatusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Edit = table.Column<bool>(type: "bit", nullable: false),
                     Execute = table.Column<bool>(type: "bit", nullable: false),
@@ -191,13 +174,18 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsRenew = table.Column<bool>(type: "bit", nullable: false),
                     RetrainingFrequency = table.Column<int>(type: "int", nullable: false),
+                    FrequencyUnit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderNo = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -210,6 +198,7 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    StepCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StepName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderNo = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -290,10 +279,11 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OperationCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    OperationCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     OperationName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     ObjectId = table.Column<int>(type: "int", nullable: false),
+                    ManagementNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -356,9 +346,8 @@ namespace Persistence.Migrations
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     EmployeeId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -367,12 +356,6 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_M_USER", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_M_USER_M_DEPARTMENT_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "M_DEPARTMENT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_M_USER_M_STATUS_StatusId",
                         column: x => x.StatusId,
@@ -388,13 +371,11 @@ namespace Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ManagementNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    TrainingContentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    TrainingContentStepId = table.Column<int>(type: "int", nullable: false),
-                    TrainingContentTypeId = table.Column<int>(type: "int", nullable: false),
+                    TrainingContentName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     OperationId = table.Column<int>(type: "int", nullable: false),
-                    TrainingContentLifecycleId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LifecycleId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -410,21 +391,9 @@ namespace Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_M_TRAINING_CONTENT_M_TRAINING_CONTENT_LIFECYCLE_TrainingContentLifecycleId",
-                        column: x => x.TrainingContentLifecycleId,
+                        name: "FK_M_TRAINING_CONTENT_M_TRAINING_CONTENT_LIFECYCLE_LifecycleId",
+                        column: x => x.LifecycleId,
                         principalTable: "M_TRAINING_CONTENT_LIFECYCLE",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_M_TRAINING_CONTENT_M_TRAINING_CONTENT_STEP_TrainingContentStepId",
-                        column: x => x.TrainingContentStepId,
-                        principalTable: "M_TRAINING_CONTENT_STEP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_M_TRAINING_CONTENT_M_TRAINING_CONTENT_TYPE_TrainingContentTypeId",
-                        column: x => x.TrainingContentTypeId,
-                        principalTable: "M_TRAINING_CONTENT_TYPE",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -439,8 +408,8 @@ namespace Persistence.Migrations
                     TrainingCourseId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -463,6 +432,33 @@ namespace Persistence.Migrations
                         name: "FK_T_TRAINING_ATTENDEE_T_TRAINING_COURSE_TrainingCourseId",
                         column: x => x.TrainingCourseId,
                         principalTable: "T_TRAINING_COURSE",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "T_TRAINING_PARTICIPANT",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SourceType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_TRAINING_PARTICIPANT", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_T_TRAINING_PARTICIPANT_M_USER_UserId",
+                        column: x => x.UserId,
+                        principalTable: "M_USER",
                         principalColumn: "Id");
                 });
 
@@ -561,15 +557,44 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "M_TRAINING_CONTENT_FLOW",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TrainingContentId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_M_TRAINING_CONTENT_FLOW", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_M_TRAINING_CONTENT_FLOW_M_TRAINING_CONTENT_TrainingContentId",
+                        column: x => x.TrainingContentId,
+                        principalTable: "M_TRAINING_CONTENT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "M_TRAINING_DOCUMENT",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TrainingContentId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -617,53 +642,6 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "T_USER_TRAINING_PROGRESS",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    TrainingContentId = table.Column<int>(type: "int", nullable: false),
-                    TrainingContentStepId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    CompleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_T_USER_TRAINING_PROGRESS", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_T_USER_TRAINING_PROGRESS_M_STATUS_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "M_STATUS",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_STEP_TrainingContentStepId",
-                        column: x => x.TrainingContentStepId,
-                        principalTable: "M_TRAINING_CONTENT_STEP",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_TrainingContentId",
-                        column: x => x.TrainingContentId,
-                        principalTable: "M_TRAINING_CONTENT",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_T_USER_TRAINING_PROGRESS_M_USER_UserId",
-                        column: x => x.UserId,
-                        principalTable: "M_USER",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "T_TRAINING_SESSION",
                 columns: table => new
                 {
@@ -675,8 +653,8 @@ namespace Persistence.Migrations
                     TrainerId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -700,6 +678,39 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "M_TRAINING_CONTENT_FLOW_STEP",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TrainingContentFlowId = table.Column<int>(type: "int", nullable: false),
+                    TrainingContentStepId = table.Column<int>(type: "int", nullable: false),
+                    OrderNo = table.Column<int>(type: "int", nullable: false),
+                    IsMandatory = table.Column<bool>(type: "bit", nullable: false),
+                    DurationDays = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_M_TRAINING_CONTENT_FLOW_STEP", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_M_TRAINING_CONTENT_FLOW_STEP_M_TRAINING_CONTENT_FLOW_TrainingContentFlowId",
+                        column: x => x.TrainingContentFlowId,
+                        principalTable: "M_TRAINING_CONTENT_FLOW",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_M_TRAINING_CONTENT_FLOW_STEP_M_TRAINING_CONTENT_STEP_TrainingContentStepId",
+                        column: x => x.TrainingContentStepId,
+                        principalTable: "M_TRAINING_CONTENT_STEP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LEARNING_REPORT",
                 columns: table => new
                 {
@@ -711,8 +722,8 @@ namespace Persistence.Migrations
                     FilePath = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Trainer = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TrainingDocumentId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -750,8 +761,8 @@ namespace Persistence.Migrations
                     ConfirmDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ApprovalBy = table.Column<int>(type: "int", nullable: false),
                     ApprovalDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -786,8 +797,8 @@ namespace Persistence.Migrations
                     Score = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -829,6 +840,117 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "T_USER_TRAINING_ENROLLMENT",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false),
+                    TrainingContentId = table.Column<int>(type: "int", nullable: false),
+                    CurrentStepId = table.Column<int>(type: "int", nullable: false),
+                    CurrentFlowStepId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    CompleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProgressPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_USER_TRAINING_ENROLLMENT", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_ENROLLMENT_M_STATUS_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "M_STATUS",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_ENROLLMENT_M_TRAINING_CONTENT_FLOW_STEP_CurrentFlowStepId",
+                        column: x => x.CurrentFlowStepId,
+                        principalTable: "M_TRAINING_CONTENT_FLOW_STEP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_ENROLLMENT_M_TRAINING_CONTENT_STEP_CurrentStepId",
+                        column: x => x.CurrentStepId,
+                        principalTable: "M_TRAINING_CONTENT_STEP",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_ENROLLMENT_M_TRAINING_CONTENT_TrainingContentId",
+                        column: x => x.TrainingContentId,
+                        principalTable: "M_TRAINING_CONTENT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "T_USER_TRAINING_PROGRESS",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false),
+                    TrainingContentId = table.Column<int>(type: "int", nullable: false),
+                    StepId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    ActionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    M_TRAINING_CONTENTId = table.Column<int>(type: "int", nullable: true),
+                    M_TRAINING_CONTENT_FLOW_STEPId = table.Column<int>(type: "int", nullable: true),
+                    M_TRAINING_CONTENT_STEPId = table.Column<int>(type: "int", nullable: true),
+                    M_USERId = table.Column<int>(type: "int", nullable: true),
+                    T_TRAINING_ATTENDEEId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_USER_TRAINING_PROGRESS", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_M_STATUS_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "M_STATUS",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_FLOW_STEP_M_TRAINING_CONTENT_FLOW_STEPId",
+                        column: x => x.M_TRAINING_CONTENT_FLOW_STEPId,
+                        principalTable: "M_TRAINING_CONTENT_FLOW_STEP",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_M_TRAINING_CONTENTId",
+                        column: x => x.M_TRAINING_CONTENTId,
+                        principalTable: "M_TRAINING_CONTENT",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_STEP_M_TRAINING_CONTENT_STEPId",
+                        column: x => x.M_TRAINING_CONTENT_STEPId,
+                        principalTable: "M_TRAINING_CONTENT_STEP",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_M_USER_M_USERId",
+                        column: x => x.M_USERId,
+                        principalTable: "M_USER",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_T_TRAINING_ATTENDEE_T_TRAINING_ATTENDEEId",
+                        column: x => x.T_TRAINING_ATTENDEEId,
+                        principalTable: "T_TRAINING_ATTENDEE",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_T_USER_TRAINING_PROGRESS_T_TRAINING_PARTICIPANT_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "T_TRAINING_PARTICIPANT",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "T_ASSESSMENT_RESULT",
                 columns: table => new
                 {
@@ -840,8 +962,8 @@ namespace Persistence.Migrations
                     LevelId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -876,8 +998,8 @@ namespace Persistence.Migrations
                     ApproveBy = table.Column<int>(type: "int", nullable: false),
                     ConfirmBy = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    DeleteDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -931,9 +1053,9 @@ namespace Persistence.Migrations
                 column: "ObjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_M_OPERATION_OperationCode",
+                name: "IX_M_OPERATION_OperationCode_OperationName_ManagementNumber",
                 table: "M_OPERATION",
-                column: "OperationCode",
+                columns: new[] { "OperationCode", "OperationName", "ManagementNumber" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -960,40 +1082,34 @@ namespace Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_M_TRAINING_CONTENT_LifecycleId",
+                table: "M_TRAINING_CONTENT",
+                column: "LifecycleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_M_TRAINING_CONTENT_OperationId",
                 table: "M_TRAINING_CONTENT",
                 column: "OperationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_M_TRAINING_CONTENT_TrainingContentLifecycleId",
-                table: "M_TRAINING_CONTENT",
-                column: "TrainingContentLifecycleId");
+                name: "IX_M_TRAINING_CONTENT_FLOW_TrainingContentId",
+                table: "M_TRAINING_CONTENT_FLOW",
+                column: "TrainingContentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_M_TRAINING_CONTENT_TrainingContentStepId",
-                table: "M_TRAINING_CONTENT",
+                name: "IX_M_TRAINING_CONTENT_FLOW_STEP_TrainingContentFlowId",
+                table: "M_TRAINING_CONTENT_FLOW_STEP",
+                column: "TrainingContentFlowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_M_TRAINING_CONTENT_FLOW_STEP_TrainingContentStepId",
+                table: "M_TRAINING_CONTENT_FLOW_STEP",
                 column: "TrainingContentStepId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_M_TRAINING_CONTENT_TrainingContentTypeId",
-                table: "M_TRAINING_CONTENT",
-                column: "TrainingContentTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_M_TRAINING_DOCUMENT_Code",
-                table: "M_TRAINING_DOCUMENT",
-                column: "Code",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_M_TRAINING_DOCUMENT_TrainingContentId",
                 table: "M_TRAINING_DOCUMENT",
                 column: "TrainingContentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_M_USER_DepartmentId",
-                table: "M_USER",
-                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_M_USER_EmployeeId",
@@ -1072,6 +1188,17 @@ namespace Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_T_TRAINING_PARTICIPANT_Code",
+                table: "T_TRAINING_PARTICIPANT",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_TRAINING_PARTICIPANT_UserId",
+                table: "T_TRAINING_PARTICIPANT",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_T_TRAINING_RESULT_LevelId",
                 table: "T_TRAINING_RESULT",
                 column: "LevelId");
@@ -1127,24 +1254,59 @@ namespace Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_ENROLLMENT_CurrentFlowStepId",
+                table: "T_USER_TRAINING_ENROLLMENT",
+                column: "CurrentFlowStepId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_ENROLLMENT_CurrentStepId",
+                table: "T_USER_TRAINING_ENROLLMENT",
+                column: "CurrentStepId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_ENROLLMENT_StatusId",
+                table: "T_USER_TRAINING_ENROLLMENT",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_ENROLLMENT_TrainingContentId",
+                table: "T_USER_TRAINING_ENROLLMENT",
+                column: "TrainingContentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_FLOW_STEPId",
+                table: "T_USER_TRAINING_PROGRESS",
+                column: "M_TRAINING_CONTENT_FLOW_STEPId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENT_STEPId",
+                table: "T_USER_TRAINING_PROGRESS",
+                column: "M_TRAINING_CONTENT_STEPId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_PROGRESS_M_TRAINING_CONTENTId",
+                table: "T_USER_TRAINING_PROGRESS",
+                column: "M_TRAINING_CONTENTId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_PROGRESS_M_USERId",
+                table: "T_USER_TRAINING_PROGRESS",
+                column: "M_USERId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_USER_TRAINING_PROGRESS_ParticipantId",
+                table: "T_USER_TRAINING_PROGRESS",
+                column: "ParticipantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_T_USER_TRAINING_PROGRESS_StatusId",
                 table: "T_USER_TRAINING_PROGRESS",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_USER_TRAINING_PROGRESS_TrainingContentId",
+                name: "IX_T_USER_TRAINING_PROGRESS_T_TRAINING_ATTENDEEId",
                 table: "T_USER_TRAINING_PROGRESS",
-                column: "TrainingContentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_USER_TRAINING_PROGRESS_TrainingContentStepId",
-                table: "T_USER_TRAINING_PROGRESS",
-                column: "TrainingContentStepId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_USER_TRAINING_PROGRESS_UserId",
-                table: "T_USER_TRAINING_PROGRESS",
-                column: "UserId");
+                column: "T_TRAINING_ATTENDEEId");
         }
 
         /// <inheritdoc />
@@ -1154,13 +1316,13 @@ namespace Persistence.Migrations
                 name: "LEARNING_REPORT");
 
             migrationBuilder.DropTable(
-                name: "M_DIVISION");
-
-            migrationBuilder.DropTable(
                 name: "M_HANDOVER_RECORD");
 
             migrationBuilder.DropTable(
                 name: "M_SKILLMAP_LEVEL");
+
+            migrationBuilder.DropTable(
+                name: "M_TRAINING_CONTENT_TYPE");
 
             migrationBuilder.DropTable(
                 name: "T_ASSESSMENT_RESULT");
@@ -1184,6 +1346,9 @@ namespace Persistence.Migrations
                 name: "T_USER_TAG");
 
             migrationBuilder.DropTable(
+                name: "T_USER_TRAINING_ENROLLMENT");
+
+            migrationBuilder.DropTable(
                 name: "T_USER_TRAINING_PROGRESS");
 
             migrationBuilder.DropTable(
@@ -1202,6 +1367,12 @@ namespace Persistence.Migrations
                 name: "M_TAG");
 
             migrationBuilder.DropTable(
+                name: "M_TRAINING_CONTENT_FLOW_STEP");
+
+            migrationBuilder.DropTable(
+                name: "T_TRAINING_PARTICIPANT");
+
+            migrationBuilder.DropTable(
                 name: "M_TRAINING_DOCUMENT");
 
             migrationBuilder.DropTable(
@@ -1214,7 +1385,10 @@ namespace Persistence.Migrations
                 name: "M_LEVEL");
 
             migrationBuilder.DropTable(
-                name: "M_TRAINING_CONTENT");
+                name: "M_TRAINING_CONTENT_FLOW");
+
+            migrationBuilder.DropTable(
+                name: "M_TRAINING_CONTENT_STEP");
 
             migrationBuilder.DropTable(
                 name: "M_USER");
@@ -1223,19 +1397,16 @@ namespace Persistence.Migrations
                 name: "T_TRAINING_COURSE");
 
             migrationBuilder.DropTable(
+                name: "M_TRAINING_CONTENT");
+
+            migrationBuilder.DropTable(
+                name: "M_STATUS");
+
+            migrationBuilder.DropTable(
                 name: "M_OPERATION");
 
             migrationBuilder.DropTable(
                 name: "M_TRAINING_CONTENT_LIFECYCLE");
-
-            migrationBuilder.DropTable(
-                name: "M_TRAINING_CONTENT_STEP");
-
-            migrationBuilder.DropTable(
-                name: "M_TRAINING_CONTENT_TYPE");
-
-            migrationBuilder.DropTable(
-                name: "M_STATUS");
 
             migrationBuilder.DropTable(
                 name: "M_DEPARTMENT");

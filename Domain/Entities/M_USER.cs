@@ -25,6 +25,6 @@ namespace Domain.Entities
 		public ICollection<T_TRAINING_RESULT> T_TrainingResults { get; set; }
 		public ICollection<T_USER_TAG> T_UserTags { get; set; }
         public ICollection<T_USER_ROLE> UserRoles { get; set; }
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProcess { get; set; }
+		public ICollection<T_TRAINING_PARTICIPANT> T_TrainingParticipants { get; set; }
 	}
 }

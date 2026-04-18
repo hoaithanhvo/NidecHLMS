@@ -22,7 +22,7 @@ namespace Domain.Entities
 		public M_TRAINING_CONTENT_LIFECYCLE M_TrainingContentLifecycle { get; set; }
 		public ICollection<M_HANDOVER_RECORD>? M_HandoverRecords { get; set; }
 		public ICollection<T_COURSE_CONTENT> T_CourseContents { get; set; }
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProcess { get; set; }
 		public ICollection<M_TRAINING_CONTENT_FLOW> T_TrainingContentFlows { get; set; }
+		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollment { get; set; }
 	}
 }

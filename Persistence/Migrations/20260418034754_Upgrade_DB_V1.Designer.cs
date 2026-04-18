@@ -12,8 +12,8 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260417124549_Init18")]
-    partial class Init18
+    [Migration("20260418034754_Upgrade_DB_V1")]
+    partial class Upgrade_DB_V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -426,6 +426,45 @@ namespace Persistence.Migrations
                     b.ToTable("M_SKILLMAP_LEVEL");
                 });
 
+            modelBuilder.Entity("Domain.Entities.M_SOURCE", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("M_SOURCE");
+                });
+
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
                     b.Property<int>("Id")
@@ -560,8 +599,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("TrainingContentName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -591,12 +630,11 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -614,12 +652,11 @@ namespace Persistence.Migrations
                     b.Property<int>("TrainingContentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -813,8 +850,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -840,9 +877,6 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
 
                     b.HasIndex("TrainingContentId");
 
@@ -1253,6 +1287,63 @@ namespace Persistence.Migrations
                     b.ToTable("T_TRAINING_COURSE");
                 });
 
+            modelBuilder.Entity("Domain.Entities.T_TRAINING_PARTICIPANT", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("SourceId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("T_TRAINING_PARTICIPANT");
+                });
+
             modelBuilder.Entity("Domain.Entities.T_TRAINING_RESULT", b =>
                 {
                     b.Property<int>("Id")
@@ -1447,6 +1538,62 @@ namespace Persistence.Migrations
                     b.ToTable("T_USER_TAG");
                 });
 
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CompleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentFlowStepId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentStepId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ProgressPercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingContentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrentFlowStepId");
+
+                    b.HasIndex("CurrentStepId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TrainingContentId");
+
+                    b.ToTable("T_USER_TRAINING_ENROLLMENT");
+                });
+
             modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
                 {
                     b.Property<int>("Id")
@@ -1455,7 +1602,7 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CompleteDate")
+                    b.Property<DateTime>("ActionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
@@ -1468,16 +1615,31 @@ namespace Persistence.Migrations
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<int?>("M_TRAINING_CONTENTId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("M_TRAINING_CONTENT_FLOW_STEPId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("M_TRAINING_CONTENT_STEPId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("M_USERId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainingContentId")
+                    b.Property<int>("StepId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainingContentStepId")
+                    b.Property<int?>("T_TRAINING_ATTENDEEId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingContentId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -1487,18 +1649,21 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("M_TRAINING_CONTENTId");
+
+                    b.HasIndex("M_TRAINING_CONTENT_FLOW_STEPId");
+
+                    b.HasIndex("M_TRAINING_CONTENT_STEPId");
+
+                    b.HasIndex("M_USERId");
+
+                    b.HasIndex("ParticipantId");
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("TrainingContentId");
-
-                    b.HasIndex("TrainingContentStepId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("T_TRAINING_ATTENDEEId");
 
                     b.ToTable("T_USER_TRAINING_PROGRESS");
                 });
@@ -1777,6 +1942,31 @@ namespace Persistence.Migrations
                     b.Navigation("T_TrainingCourse");
                 });
 
+            modelBuilder.Entity("Domain.Entities.T_TRAINING_PARTICIPANT", b =>
+                {
+                    b.HasOne("Domain.Entities.M_SOURCE", "M_Sources")
+                        .WithMany("T_TrainingParticipants")
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
+                        .WithMany("T_TrainingParticipants")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.M_USER", "M_User")
+                        .WithMany("T_TrainingParticipants")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("M_Sources");
+
+                    b.Navigation("M_Status");
+
+                    b.Navigation("M_User");
+                });
+
             modelBuilder.Entity("Domain.Entities.T_TRAINING_RESULT", b =>
                 {
                     b.HasOne("Domain.Entities.M_LEVEL", "M_Level")
@@ -1877,29 +2067,29 @@ namespace Persistence.Migrations
                     b.Navigation("M_User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT", b =>
                 {
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", "M_TrainingContentFlowStep")
+                        .WithMany("T_UserTrainingEnrollment")
+                        .HasForeignKey("CurrentFlowStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
+                        .WithMany("T_UserTrainingEnrollment")
+                        .HasForeignKey("CurrentStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
-                        .WithMany("T_UserTrainingProcess")
+                        .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
-                        .WithMany("T_UserTrainingProcess")
+                        .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
-                        .WithMany("T_UserTrainingProcess")
-                        .HasForeignKey("TrainingContentStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_USER", "M_User")
-                        .WithMany("T_UserTrainingProcess")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1907,9 +2097,48 @@ namespace Persistence.Migrations
 
                     b.Navigation("M_TrainingContent");
 
-                    b.Navigation("M_TrainingContentStep");
+                    b.Navigation("M_TrainingContentFlowStep");
 
-                    b.Navigation("M_User");
+                    b.Navigation("M_TrainingContentStep");
+                });
+
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
+                {
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT", null)
+                        .WithMany("T_UserTrainingProcess")
+                        .HasForeignKey("M_TRAINING_CONTENTId");
+
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", null)
+                        .WithMany("T_UserTrainingProcess")
+                        .HasForeignKey("M_TRAINING_CONTENT_FLOW_STEPId");
+
+                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", null)
+                        .WithMany("T_UserTrainingProcess")
+                        .HasForeignKey("M_TRAINING_CONTENT_STEPId");
+
+                    b.HasOne("Domain.Entities.M_USER", null)
+                        .WithMany("T_UserTrainingProcess")
+                        .HasForeignKey("M_USERId");
+
+                    b.HasOne("Domain.Entities.T_TRAINING_PARTICIPANT", "T_TrainingParticipant")
+                        .WithMany("T_UserTrainingProgress")
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
+                        .WithMany("T_UserTrainingProgress")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.T_TRAINING_ATTENDEE", null)
+                        .WithMany("T_UserTrainingProgress")
+                        .HasForeignKey("T_TRAINING_ATTENDEEId");
+
+                    b.Navigation("M_Status");
+
+                    b.Navigation("T_TrainingParticipant");
                 });
 
             modelBuilder.Entity("Domain.Entitises.M_HANDOVER_RECORD", b =>
@@ -1972,13 +2201,22 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingSessions");
                 });
 
+            modelBuilder.Entity("Domain.Entities.M_SOURCE", b =>
+                {
+                    b.Navigation("T_TrainingParticipants");
+                });
+
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
                     b.Navigation("M_HandoverRecords");
 
+                    b.Navigation("T_TrainingParticipants");
+
                     b.Navigation("T_TrainingResults");
 
-                    b.Navigation("T_UserTrainingProcess");
+                    b.Navigation("T_UserTrainingEnrollment");
+
+                    b.Navigation("T_UserTrainingProgress");
 
                     b.Navigation("TrainingAttendees");
 
@@ -2000,12 +2238,21 @@ namespace Persistence.Migrations
 
                     b.Navigation("T_TrainingContentFlows");
 
+                    b.Navigation("T_UserTrainingEnrollment");
+
                     b.Navigation("T_UserTrainingProcess");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_FLOW", b =>
                 {
                     b.Navigation("FlowSteps");
+                });
+
+            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", b =>
+                {
+                    b.Navigation("T_UserTrainingEnrollment");
+
+                    b.Navigation("T_UserTrainingProcess");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", b =>
@@ -2016,6 +2263,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_STEP", b =>
                 {
                     b.Navigation("FlowSteps");
+
+                    b.Navigation("T_UserTrainingEnrollment");
 
                     b.Navigation("T_UserTrainingProcess");
                 });
@@ -2037,6 +2286,8 @@ namespace Persistence.Migrations
 
                     b.Navigation("T_AssetssmentResults");
 
+                    b.Navigation("T_TrainingParticipants");
+
                     b.Navigation("T_TrainingResults");
 
                     b.Navigation("T_UserTags");
@@ -2057,6 +2308,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.T_TRAINING_ATTENDEE", b =>
                 {
+                    b.Navigation("T_UserTrainingProgress");
+
                     b.Navigation("TrainingSessions");
                 });
 
@@ -2065,6 +2318,11 @@ namespace Persistence.Migrations
                     b.Navigation("T_CourseContents");
 
                     b.Navigation("TrainingAttendees");
+                });
+
+            modelBuilder.Entity("Domain.Entities.T_TRAINING_PARTICIPANT", b =>
+                {
+                    b.Navigation("T_UserTrainingProgress");
                 });
 
             modelBuilder.Entity("Domain.Entities.T_TRAINING_SESSION", b =>

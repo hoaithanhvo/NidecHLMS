@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Application.Common.Exceptions
 {
     /// <summary>
-    /// 404 — Entity not found.
-    /// Usage: throw new NotFoundException(nameof(T_TRAINING_COURSE), id);
+    /// 404 — Entity not found
+    /// throw new NotFoundException
     /// </summary>
     public class NotFoundException : AppException
     {

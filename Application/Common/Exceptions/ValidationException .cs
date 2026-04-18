@@ -11,8 +11,8 @@ namespace Application.Common.Exceptions
 {
     /// <summary>
     /// 400 — FluentValidation failures.
-    /// Thrown automatically by ValidationBehaviour — never throw manually.
-    /// Carries structured field-level errors for the API response.
+    /// Thrown automatically by ValidationBehaviour — never throw manually
+    /// Carries structured field-level errors for the API response
     /// </summary>
     public class ValidationException: AppException
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class T_TRAINING_SESSION_Confifuration : IEntityTypeConfiguration<T_TRAINING_SESSION>
+	public class T_TRAINING_SESSION_Configuration : IEntityTypeConfiguration<T_TRAINING_SESSION>
 	{
 		public void Configure(EntityTypeBuilder<T_TRAINING_SESSION> builder)
 		{

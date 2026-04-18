@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entitises
+namespace Domain.Entities
 {
 	public class M_HANDOVER_RECORD : BaseEntity<int>
 	{

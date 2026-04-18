@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ namespace Persistence.Specifications
             // modify the IQueryable using the specification's criteria expression
             if (specification == null) return query;
 
-            if (specification.AddCriteria != null)
+            if (specification.Criteria != null)
             {
                 query = query.Where(specification.Criteria);
             }

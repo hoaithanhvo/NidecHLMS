@@ -5,8 +5,8 @@ using System.Diagnostics;
 namespace Application.Common.Behaviors;
 
 /// <summary>
-/// Automatically logs every MediatR request: entry, exit, elapsed time, and errors.
-/// No handler ever needs to write these logs manually.
+/// Automatically logs every MediatR request: entry, exit, elapsed time, and errors
+/// No handler ever needs to write these logs manually
 /// </summary>
 public class LoggingBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>

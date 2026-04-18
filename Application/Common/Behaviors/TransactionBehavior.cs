@@ -5,13 +5,13 @@ using MediatR;
 namespace Application.Common.Behaviors;
 
 /// <summary>
-/// Commits the Unit of Work after every ICommand handler succeeds.
-/// FLOW:
-///   Handler runs → modifies entities via IUnitOfWork →
-///   This behaviour calls CommitAsync() → AppDbContext.SaveChangesAsync fires →
+/// Commits the Unit of Work after every ICommand handler succeeds
+/// FLOW
+///   Handler runs => modifies entities via IUnitOfWork =>
+///   This behavior calls CommitTransactionAsync() → AppDbContext.SaveChangesAsync  =>
 ///   Audit fields stamped → transaction committed to DB.
-/// If the handler throws, next() throws before CommitAsync() is called.
-/// No data is saved. No rollback code needed — EF handles it automatically.
+/// If the handler throws, next() throws before CommitTransactionAsync() is called
+/// No data is saved. No rollback code needed — EF handles it automatically
 /// </summary>
 public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICommand<TResponse>
 {
@@ -30,7 +30,7 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
         //run the handler
         var response = await next();
         //commit only on success
-        //await _unitOfWork.CommitAsync(cancellationToken);      
+        await _unitOfWork.CommitTransactionAsync(cancellationToken);
         return response;
     }
 }

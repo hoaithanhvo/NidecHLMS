@@ -1,4 +1,4 @@
-﻿using Domain.Specifications;
+using Domain.Specifications;
 using Microsoft.IdentityModel.Tokens;
 using NidecSystemShared.Abstracts;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IGenericRepository<T, TKey> where T : BaseEntity<T>
+    public interface IGenericRepository<T, TKey> : ICommandRepository<T, TKey> where T : BaseEntity<TKey>
 
     {
         /// <summary>
@@ -37,26 +37,6 @@ namespace Application.Interfaces.Repositories
         Task<T> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
 
         Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// WRITE OPERATION to database
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default);
-
-        Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default);
-
-        Task<T> DeleteAsync(T entity, CancellationToken cancellationToken = default);
-
-        Task<bool> DeleteHardAsync(T entity, CancellationToken cancellationToken = default);
-
-        Task<bool> ChangeStatusAsync(object entity, int status, CancellationToken cancellationToken = default, 
-            List<Dictionary<string, int>>? listObjectNotChange = null);
-
-        Task<bool> ChangeStatusAsync(List<object> entities, int status, CancellationToken cancellationToken = default,
-            List<Dictionary<string, int>>? listObjectNotChange = null);
 
         /// <summary>
 		/// Gets the queryable asynchronous

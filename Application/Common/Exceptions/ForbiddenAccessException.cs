@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Application.Common.Exceptions
 {
     /// <summary>
-    /// 403 — Authenticated but not authorized for this action.
-    /// Usage: throw new ForbiddenAccessException();
+    /// 403 — Authenticated but not authorized for this action
+    /// ForbiddenAccessException();
     /// </summary>
     public class ForbiddenAccessException : AppException
     {

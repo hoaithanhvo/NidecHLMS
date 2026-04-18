@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Exceptions
 {
-    public class ConflictException : Exception
+    public class ConflictException : AppException
     {
         /// <summary>
-        /// 409 — Duplicate record or unique constraint conflict.
-        /// Usage: throw new ConflictException("Course code 'TC-001' already exists.");
+        /// 409 — Duplicate record or unique constraint conflict
+        /// throw new ConflictException
         /// </summary>
         public ConflictException(string message) : base(message)  
         {

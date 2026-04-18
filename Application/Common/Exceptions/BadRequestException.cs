@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Application.Common.Exceptions
 {
     /// <summary>
-    /// 400 — Business rule violation that isn't a field validation error.
-    /// Usage: throw new BadRequestException("Cannot delete a course with active attendees.");
+    /// 400 — Business rule violation that is not a field validation error
+    /// throw new BadRequestException
     /// </summary>
     public class BadRequestException : AppException
     {

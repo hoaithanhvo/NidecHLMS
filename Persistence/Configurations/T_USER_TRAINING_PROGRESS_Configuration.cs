@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class T_USER_TRAINING_PROGRES_Configuration : IEntityTypeConfiguration<T_USER_TRAINING_PROGRESS>
+	public class T_USER_TRAINING_PROGRESS_Configuration : IEntityTypeConfiguration<T_USER_TRAINING_PROGRESS>
 	{
 		public void Configure(EntityTypeBuilder<T_USER_TRAINING_PROGRESS> builder)
 		{

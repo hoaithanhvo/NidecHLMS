@@ -13,7 +13,7 @@ namespace Persistence.Context
     {
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<AUDITLOG> AuditLogs => Set<AUDITLOG>();
+        public DbSet<LOG_AUDIT> AuditLogs => Set<LOG_AUDIT>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

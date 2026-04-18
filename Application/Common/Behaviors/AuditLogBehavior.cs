@@ -30,19 +30,19 @@ namespace Application.Common.Behaviors
         {
             var response = await next();
 
-            var auditLogs = new List<AUDITLOG>();
+            var auditLogs = new List<LOG_AUDIT>();
 
             var entries = _context.ChangeTracker.Entries()
-                .Where(e => e.Entity is not AUDITLOG &&
+                .Where(e => e.Entity is not LOG_AUDIT &&
                             e.State != EntityState.Detached &&
                             e.State != EntityState.Unchanged)
                 .ToList();
 
             foreach (var entry in entries)
             {
-                var audit = new AUDITLOG
-                {
-                    Entity = entry.Entity.GetType().Name,
+                var audit = new LOG_AUDIT
+				{
+                    EntityName = entry.Entity.GetType().Name,
                     Action = entry.State.ToString()
                 };
 

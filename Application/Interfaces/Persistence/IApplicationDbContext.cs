@@ -11,7 +11,7 @@ namespace Application.Interfaces.Persistence
 {
     public interface IApplicationDbContext
     {
-        DbSet<AUDITLOG> AuditLogs { get; }
+        DbSet<LOG_AUDIT> AuditLogs { get; }
         ChangeTracker ChangeTracker { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

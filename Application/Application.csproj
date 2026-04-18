@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

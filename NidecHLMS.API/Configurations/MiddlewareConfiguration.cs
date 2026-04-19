@@ -1,4 +1,4 @@
-﻿using NidecHLMS.API.Middlewares.Exceptions;
+using NidecHLMS.API.Middlewares.Exceptions;
 using Serilog;
 
 namespace NidecHLMS.API.Configurations
@@ -30,6 +30,7 @@ namespace NidecHLMS.API.Configurations
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            app.MapControllers();
 
             return app;
         }

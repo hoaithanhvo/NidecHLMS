@@ -1,19 +1,37 @@
 using NidecHLMS.API.Configurations;
+using Serilog;
+using Serilog.Events;
 
-var builder = WebApplication.CreateBuilder(args);
+// Captures fatal errors that happen BEFORE UseSerilog() is configured
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-// Add services to the container.
-// Serilog Configuration
-builder.AddSerilogConfig();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-// Service Registrations (API, Application, Persistence, Infrastructure)
-builder.Services.AddApiServices(builder.Configuration);
+    // Serilog (replaces default Microsoft logging)
+    builder.AddSerilogConfig();
 
-var app = builder.Build();
+    // All service registrations (API + Application + Persistence + Infrastructure)
+    builder.Services.AddApiServices(builder.Configuration);
 
-// Configure the HTTP request pipeline (Middlewares, Serilog, Swagger, etc.)
-app.UseApiMiddlewares();
+    var app = builder.Build();
 
-app.MapControllers();
+    // All middleware pipeline configuration
+    app.UseApiMiddlewares();
 
-app.Run();
+    app.Run();
+}
+catch (Exception ex) when (ex is not HostAbortedException)
+{
+    // HostAbortedException is thrown intentionally by .NET during EF migrations
+    // or test host teardown — do not treat it as a crash
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    await Log.CloseAndFlushAsync();
+}

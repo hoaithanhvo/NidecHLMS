@@ -1,5 +1,4 @@
 using Domain.Specifications;
-using Microsoft.IdentityModel.Tokens;
 using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
@@ -32,16 +31,8 @@ namespace Application.Interfaces.Repositories
 
         Task<T> GetAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
-        Task<bool> CheckIsExistAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
-
         Task<T> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
 
         Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default);
-
-        /// <summary>
-		/// Gets the queryable asynchronous
-		/// </summary>
-		/// <returns></returns>
-        IQueryable<T> GetQueryable();
     }
 }

@@ -1,3 +1,4 @@
+using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -20,35 +21,38 @@ namespace Persistence.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _dbContext;
-
-        private readonly ConcurrentDictionary<string, object> _repositories = new();
+        private readonly IAuditLogCollector _auditLogCollector;
+        private readonly ConcurrentDictionary<(Type EntityType, Type KeyType), object> _repositories = new();
 
         // Transaction state
         private IDbContextTransaction? _currentTransaction;
+        private int _transactionDepth;
         private bool _disposed;
 
-        public UnitOfWork(AppDbContext dbContext)
+        public UnitOfWork(AppDbContext dbContext, IAuditLogCollector auditLogCollector)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _auditLogCollector = auditLogCollector ?? throw new ArgumentNullException(nameof(auditLogCollector));
         }
 
         #region transaction state
 
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public bool IsTransactionOwner { get; private set; }
+        // Owner means this scope is at the outermost transaction layer.
+        public bool IsTransactionOwner => _currentTransaction != null && _transactionDepth == 1;
 
         #endregion
 
         #region repository factory 
 
         /// <summary>
-        /// Returns a cached GenericRepository for the given entity type.
-        /// Creates one if it doesn't exist (lazy, thread-safe).
+        /// Returns a cached GenericRepository for the given entity type
+        /// Creates one if it does not exist (lazy, thread-safe)
         /// </summary>
         public IGenericRepository<T, TKey> GenericRepository<T, TKey>() where T : BaseEntity<TKey>
         {
-            var key = $"{typeof(T).Name}_{typeof(TKey).Name}";
+            var key = (typeof(T), typeof(TKey));
 
             return (IGenericRepository<T, TKey>)_repositories.GetOrAdd(key, _ =>
                 new GenericRepository<T, TKey>(_dbContext));
@@ -56,50 +60,59 @@ namespace Persistence.Repositories
 
         #endregion
 
-        #region Persistence 
-
-        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        public async Task<int> Complete(CancellationToken cancellationToken = default)
-        {
-            return await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        #endregion
+        // No public SaveChangesAsync() or Complete() methods
+        // Only CommitTransactionAsync() triggers SaveChanges enforced by TransactionBehavior
+        // This prevents handlers from accidentally bypassing the pipeline
 
         #region transaction management
 
         /// <summary>
-        /// Starts a new transaction.
-        /// If a transaction is already active, the caller is marked as NOT the owner
+        /// Starts a new transaction scope.
+        /// Only the outermost scope opens the physical transaction.
         /// </summary>
         public async Task BeginTransaction(CancellationToken cancellationToken = default)
         {
-            if (_currentTransaction != null)
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(UnitOfWork));
+
+            if (_currentTransaction == null)
             {
-                // Nested call — this caller is NOT the transaction owner
-                IsTransactionOwner = false;
-                return;
+                _currentTransaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
             }
 
-            _currentTransaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-            IsTransactionOwner = true;
+            _transactionDepth++;
         }
 
         /// <summary>
-        /// SaveChanges + Commit. Auto-rollback on failure.
+        /// Commits the current transaction scope.
+        /// Only the outermost scope executes SaveChanges + Commit.
         /// </summary>
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
+            if (_currentTransaction == null || _transactionDepth == 0)
+                throw new InvalidOperationException("No active transaction to commit.");
+
+            if (_transactionDepth > 1)
+            {
+                // Nested scope: only decrement; outermost scope commits.
+                _transactionDepth--;
+                return;
+            }
+
             try
             {
+                // 1) Persist business data first so identity keys are generated.
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                if (_currentTransaction != null)
-                    await _currentTransaction.CommitAsync(cancellationToken);
+                // 2) Materialize and stage audit rows using final key values.
+                var stagedAuditCount = await _auditLogCollector.FlushAsync(cancellationToken);
+                if (stagedAuditCount > 0)
+                {
+                    // 3) Persist audit rows in the same transaction.
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+
+                await _currentTransaction.CommitAsync(cancellationToken);
             }
             catch
             {
@@ -108,17 +121,16 @@ namespace Persistence.Repositories
             }
             finally
             {
-                await DisposeTransaction();
+                await DisposeTransactionAsync();
             }
         }
 
         /// <summary>
-        /// Rollback current transaction. Only the transaction owner can rollback
-        /// — prevents nested handlers from accidentally rolling back parent transaction.
+        /// Rolls back the physical transaction and clears all nested scopes.
         /// </summary>
         public async Task RollBackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_currentTransaction == null || !IsTransactionOwner) return;
+            if (_currentTransaction == null || _transactionDepth == 0) return;
 
             try
             {
@@ -126,7 +138,8 @@ namespace Persistence.Repositories
             }
             finally
             {
-                await DisposeTransaction();
+                _transactionDepth = 0;
+                await DisposeTransactionAsync();
             }
         }
 
@@ -134,24 +147,26 @@ namespace Persistence.Repositories
 
         #region dispose
 
-        private async Task DisposeTransaction()
+        private async Task DisposeTransactionAsync()
         {
             if (_currentTransaction != null)
             {
                 await _currentTransaction.DisposeAsync();
                 _currentTransaction = null;
-                IsTransactionOwner = false;
             }
+
+            _transactionDepth = 0;
         }
 
         public void Dispose()
         {
             if (_disposed) return;
             _disposed = true;
+            _repositories.Clear();
 
             _currentTransaction?.Dispose();
             _currentTransaction = null;
-            IsTransactionOwner = false;
+            _transactionDepth = 0;
         }
 
         public async ValueTask DisposeAsync()
@@ -163,8 +178,10 @@ namespace Persistence.Repositories
             {
                 await _currentTransaction.DisposeAsync();
                 _currentTransaction = null;
-                IsTransactionOwner = false;
             }
+
+            _repositories.Clear();
+            _transactionDepth = 0;
         }
 
         #endregion

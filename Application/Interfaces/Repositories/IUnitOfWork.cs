@@ -7,48 +7,49 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
+    /// <summary>
+    /// Unit of Work — coordinates transaction lifecycle and repository access.
+    /// Scoped lifetime (one per HTTP request).
+    /// 
+    /// IMPORTANT: Only CommitTransactionAsync triggers SaveChanges.
+    /// Handlers should NEVER call save directly — TransactionBehavior handles it.
+    /// </summary>
     public interface IUnitOfWork : IDisposable, IAsyncDisposable
     {
         /// <summary>
-        /// Save change all activity
+        /// Begins a new database transaction scope.
+        /// Supports nested scopes; only the outermost scope opens the physical transaction.
         /// </summary>
-        /// <returns></returns>
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Begin trấnction in activity
-        /// </summary>
-        /// <returns></returns>
         Task BeginTransaction(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Commit change all activity
+        /// Commits the current transaction scope.
+        /// Only the outermost scope executes SaveChanges + Commit.
         /// </summary>
-        /// <returns></returns>
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Rollback activity when has error
+        /// Rolls back the current physical transaction and clears all nested scopes.
         /// </summary>
-        /// <returns></returns>
         Task RollBackTransactionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Complete activity
+        /// Whether a database transaction is currently active.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<int> Complete(CancellationToken cancellationToken = default);
+        bool HasActiveTransaction { get; }
 
-        bool HasActiveTransaction {  get; }
-
+        /// <summary>
+        /// Whether the current scope is the outermost active transaction scope.
+        /// </summary>
         bool IsTransactionOwner { get; }
 
         /// <summary>
-        /// GenericRepository
+        /// Returns a cached GenericRepository for the given entity type.
+        /// Creates one lazily if it doesn't exist.
         /// </summary>
-        /// <typeparam name="T">Is Entity, T: BaseEntity</typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">Entity type, must extend BaseEntity&lt;TKey&gt;</typeparam>
+        /// <typeparam name="TKey">Primary key type</typeparam>
         IGenericRepository<T, TKey> GenericRepository<T, TKey>() where T : BaseEntity<TKey>;
     }
 }
+

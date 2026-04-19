@@ -1,24 +1,55 @@
-﻿using Application;
-using Persistence;
+using Application;
+using Application.Interfaces.Common;
 using Infrastructure;
+using NidecHLMS.API.Middlewares.Exceptions;
+using Persistence;
 
-namespace NidecHLMS.API.Configurations
+namespace NidecHLMS.API.Configurations;
+
+public static class ServiceConfiguration
 {
-    public static class ServiceConfiguration
+    public const string CorsPolicyName = "NidecHLMSCorsPolicy";
+
+    public static IServiceCollection AddApiServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static IServiceCollection AddApiServices(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        services.AddControllers();
+        services.AddGrpc(options =>
         {
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            options.EnableDetailedErrors = true;
+            options.Interceptors.Add<GrpcExceptionMiddleware>();
+        });
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 
-            services.AddApplication();
-            services.AddPersistence(configuration);
-            services.AddInfrastructure();
+        services.AddCors(options =>
+        {
+            options.AddPolicy(CorsPolicyName, policy =>
+            {
+                var allowedOrigins = configuration
+                    .GetSection("Cors:AllowedOrigins")
+                    .Get<string[]>();
 
-            return services;
-        }
+                if (allowedOrigins is { Length: > 0 })
+                    policy.WithOrigins(allowedOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                else
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+            });
+        });
+
+        // Each layer reads its own config internally, now we pass IConfiguration
+        services.AddApplication();
+        services.AddPersistence(configuration);      
+        services.AddInfrastructure(configuration);
+
+        return services;
     }
 }

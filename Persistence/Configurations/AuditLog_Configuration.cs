@@ -28,6 +28,8 @@ namespace Persistence.Configurations
 
             builder.Property(x => x.NewData)
                    .HasColumnType("nvarchar(max)");
+
+            builder.HasIndex(x => new { x.Entity, x.RecordId });
         }
     }
 }

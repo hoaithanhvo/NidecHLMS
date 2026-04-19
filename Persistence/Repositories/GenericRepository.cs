@@ -1,16 +1,18 @@
 using Application.Interfaces.Repositories;
 using Domain.Specifications;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NidecSystemShared.Abstracts;
 using Persistence.Context;
 using Persistence.Specifications;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Persistence.Repositories
@@ -23,17 +25,22 @@ namespace Persistence.Repositories
     public class GenericRepository<T, TKey> : IGenericRepository<T, TKey> where T : BaseEntity<TKey>
     {
         private readonly AppDbContext _dbContext;
+        private static readonly ConcurrentDictionary<Type, EntityGraphMetadata> EntityGraphMetadataCache = new();
 
         public GenericRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        #region READ OPERATIONS (AsNoTracking for performance
+        #region READ OPERATIONS with AsNoTracking for increase performance
 
         public async Task<T> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<T>().FindAsync(new object[] { id! }, cancellationToken);
+            var entity = await _dbContext.Set<T>().FindAsync(new object[] { id! }, cancellationToken);
+            if (entity != null)
+                _dbContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
         }
 
         public async Task<T> GetAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
@@ -77,51 +84,46 @@ namespace Persistence.Repositories
             return await _dbContext.Set<T>().AnyAsync(predicate, cancellationToken);
         }
 
-        public async Task<bool> CheckIsExistAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
-        {
-            return await ApplySpecification(specification).AnyAsync(cancellationToken);
-        }
-
-        public IQueryable<T> GetQueryable()
-        {
-            return _dbContext.Set<T>().AsQueryable();
-        }
-
         #endregion
 
-        #region WRITE OPERATIONS do not save changes here — UnitOfWork handles it
+        #region WRITE OPERATIONS do not save changes here let UnitOfWork handles it
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(entity);
             await _dbContext.Set<T>().AddAsync(entity, cancellationToken);
             return entity;
         }
 
         public Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(entity);
+
             var entry = _dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
                 _dbContext.Set<T>().Attach(entity);
             entry.State = EntityState.Modified;
 
-            // Protect original audit fields from being overwritten
-            entry.Property("CreatedDate").IsModified = false;
-            entry.Property("CreatedBy").IsModified = false;
+            ProtectImmutableAuditFields(entry);
 
             return Task.FromResult(entity);
         }
 
         /// <summary>
-        /// Soft-delete: sets IsDeleted = true + DeleteDate if entity supports it.
-        /// Falls back to hard-delete if entity has no IsDeleted property.
+        /// Hard-delete only.
+        /// TODO: Add a dedicated soft-delete strategy when domain scope requires it.
         /// </summary>
         public Task<T> DeleteAsync(T entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(entity);
+
+            _dbContext.Set<T>().Remove(entity);
+            return Task.FromResult(entity);
         }
 
         public Task<bool> DeleteHardAsync(T entity, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(entity);
             _dbContext.Set<T>().Remove(entity);
             return Task.FromResult(true);
         }
@@ -137,8 +139,8 @@ namespace Persistence.Repositories
             if (entity == null) return Task.FromResult(false);
 
             listObjectNotChange ??= new List<Dictionary<string, int>>();
-
-            ChangeStatusImpl(entity, status, listObjectNotChange);
+            var visitedKeys = BuildVisitedKeys(listObjectNotChange);
+            ChangeStatusImpl(entity, status, visitedKeys);
 
             return Task.FromResult(true);
         }
@@ -154,11 +156,11 @@ namespace Persistence.Repositories
             if (entities == null || entities.Count == 0) return Task.FromResult(false);
 
             listObjectNotChange ??= new List<Dictionary<string, int>>();
+            var visitedKeys = BuildVisitedKeys(listObjectNotChange);
 
             foreach (var entity in entities)
             {
-                ChangeStatusImpl(entity, status, listObjectNotChange);
-                _dbContext.Entry(entity).State = EntityState.Modified;
+                ChangeStatusImpl(entity, status, visitedKeys);
             }
 
             return Task.FromResult(true);
@@ -177,88 +179,151 @@ namespace Persistence.Repositories
         }
 
         /// <summary>
-        /// Recursively traverses entity's navigation properties and sets StatusId on each.
-        /// Uses checkedObject to track already-visited entities and prevent infinite loops.
-        /// Adapted from Downtime project pattern — no Console.Write, no SaveChanges.
+        /// Recursively traverses loaded navigation graph and sets StatusId/UpdatedDate when available.
+        /// Reflection metadata is cached per type to avoid repeated GetProperties() scans.
         /// </summary>
-        private void ChangeStatusImpl(object entity, int status, List<Dictionary<string, int>> checkedObject)
+        private void ChangeStatusImpl(object entity, int status, HashSet<string> visitedKeys)
         {
-            // Track this entity to prevent revisiting
-            var idProp = entity.GetType().GetProperty("Id");
-            if (idProp != null)
-            {
-                var objectState = new Dictionary<string, int>
-                {
-                    { entity.GetType().Name, (int)idProp.GetValue(entity)! }
-                };
+            var metadata = GetEntityGraphMetadata(entity.GetType());
+            var visitedKey = BuildVisitedKey(entity, metadata.IdProperty);
 
-                if (!checkedObject.Any(x =>
-                    x.Keys.SequenceEqual(objectState.Keys) &&
-                    (x.Values.SequenceEqual(new[] { 0 }) || x.Values.SequenceEqual(objectState.Values))))
-                {
-                    checkedObject.Add(objectState);
-                }
-                else
-                {
-                    return; // Already processed
-                }
+            if (!visitedKeys.Add(visitedKey))
+                return;
+
+            ApplyStatusAndUpdatedDate(entity, metadata, status);
+
+            foreach (var referenceNav in metadata.ReferenceNavigations)
+            {
+                var navValue = referenceNav.GetValue(entity);
+                if (navValue == null) continue;
+                ChangeStatusImpl(navValue, status, visitedKeys);
             }
 
-            foreach (var property in entity.GetType().GetProperties())
+            foreach (var collectionNav in metadata.CollectionNavigations)
             {
-                if (property.PropertyType.IsClass &&
-                    property.GetValue(entity) != null &&
-                    property.PropertyType != typeof(string))
-                {
-                    // Handle collections (List<>, HashSet<>)
-                    if (property.PropertyType.IsGenericType)
-                    {
-                        var genericType = property.PropertyType.GetGenericTypeDefinition();
-                        if (genericType == typeof(List<>) || genericType == typeof(HashSet<>))
-                        {
-                            var collection = (IEnumerable)property.GetValue(entity)!;
-                            foreach (var item in collection)
-                            {
-                                if (item != null && item.GetType().IsClass)
-                                {
-                                    ChangeStatusImpl(item, status, checkedObject);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Handle single navigation properties
-                        var navValue = property.GetValue(entity)!;
-                        var navIdProp = navValue.GetType().GetProperty("Id");
-                        if (navIdProp == null) continue;
+                if (collectionNav.GetValue(entity) is not IEnumerable collection) continue;
 
-                        var navId = (int)navIdProp.GetValue(navValue)!;
-                        bool alreadyChecked = checkedObject.Any(x =>
-                            x.ContainsKey(property.Name) &&
-                            (x.Values.Contains(0) || x.Values.Contains(navId)));
-
-                        if (!alreadyChecked)
-                        {
-                            checkedObject.Add(new Dictionary<string, int>
-                            {
-                                { property.Name, navId }
-                            });
-                            ChangeStatusImpl(navValue, status, checkedObject);
-                        }
-                    }
-                }
-                else
+                foreach (var item in collection)
                 {
-                    // Set StatusId and UpdatedDate on the entity itself
-                    if (property.Name == "StatusId")
-                        property.SetValue(entity, status);
-                    else if (property.Name == "UpdatedDate")
-                        property.SetValue(entity, DateTime.UtcNow);
+                    if (item == null) continue;
+                    ChangeStatusImpl(item, status, visitedKeys);
                 }
             }
 
             _dbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        private static void ProtectImmutableAuditFields(EntityEntry entry)
+        {
+            if (HasProperty(entry, EntityPropertyNames.CreatedDate))
+                entry.Property(EntityPropertyNames.CreatedDate).IsModified = false;
+            if (HasProperty(entry, EntityPropertyNames.CreatedBy))
+                entry.Property(EntityPropertyNames.CreatedBy).IsModified = false;
+            if (HasProperty(entry, EntityPropertyNames.CreatedAt))
+                entry.Property(EntityPropertyNames.CreatedAt).IsModified = false;
+        }
+
+        private static bool HasProperty(EntityEntry entry, string propertyName)
+            => entry.Metadata.FindProperty(propertyName) != null;
+
+        private static HashSet<string> BuildVisitedKeys(List<Dictionary<string, int>> checkedObjects)
+        {
+            var visitedKeys = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var map in checkedObjects)
+            {
+                foreach (var item in map)
+                {
+                    visitedKeys.Add($"{item.Key}:{item.Value}");
+                }
+            }
+
+            return visitedKeys;
+        }
+
+        private static EntityGraphMetadata GetEntityGraphMetadata(Type entityType)
+        {
+            return EntityGraphMetadataCache.GetOrAdd(entityType, type =>
+            {
+                var allProperties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+                return new EntityGraphMetadata(
+                    allProperties.FirstOrDefault(x => x.Name == EntityPropertyNames.Id),
+                    allProperties.FirstOrDefault(x => x.Name == EntityPropertyNames.StatusId),
+                    allProperties.FirstOrDefault(x =>
+                        x.Name == EntityPropertyNames.UpdatedDate ||
+                        x.Name == EntityPropertyNames.UpdatedAt),
+                    allProperties.Where(IsReferenceNavigationProperty).ToArray(),
+                    allProperties.Where(IsCollectionNavigationProperty).ToArray());
+            });
+        }
+
+        private static bool IsReferenceNavigationProperty(PropertyInfo property)
+        {
+            var propertyType = property.PropertyType;
+            return propertyType.IsClass
+                   && propertyType != typeof(string)
+                   && !typeof(IEnumerable).IsAssignableFrom(propertyType)
+                   && propertyType.GetProperty(EntityPropertyNames.Id) != null;
+        }
+
+        private static bool IsCollectionNavigationProperty(PropertyInfo property)
+        {
+            if (property.PropertyType == typeof(string)) return false;
+            if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType)) return false;
+            if (!property.PropertyType.IsGenericType) return false;
+
+            var genericType = property.PropertyType.GetGenericArguments().FirstOrDefault();
+            return genericType != null
+                   && genericType.IsClass
+                   && genericType != typeof(string)
+                   && genericType.GetProperty(EntityPropertyNames.Id) != null;
+        }
+
+        private static string BuildVisitedKey(object entity, PropertyInfo? idProperty)
+        {
+            var idValue = idProperty?.GetValue(entity)?.ToString();
+            return idValue != null
+                ? $"{entity.GetType().FullName}:{idValue}"
+                : $"{entity.GetType().FullName}:ref:{RuntimeHelpers.GetHashCode(entity)}";
+        }
+
+        private static void ApplyStatusAndUpdatedDate(object entity, EntityGraphMetadata metadata, int status)
+        {
+            if (metadata.StatusProperty?.CanWrite == true)
+                metadata.StatusProperty.SetValue(entity, status);
+
+            if (metadata.UpdatedDateProperty?.CanWrite == true)
+                metadata.UpdatedDateProperty.SetValue(entity, DateTime.UtcNow);
+        }
+
+        private sealed record EntityGraphMetadata(
+            PropertyInfo? IdProperty,
+            PropertyInfo? StatusProperty,
+            PropertyInfo? UpdatedDateProperty,
+            PropertyInfo[] ReferenceNavigations,
+            PropertyInfo[] CollectionNavigations);
+
+        private sealed class EntityConventionProperties
+        {
+            public int Id { get; set; }
+            public int StatusId { get; set; }
+            public DateTime UpdatedDate { get; set; }
+            public DateTime UpdatedAt { get; set; }
+            public DateTime CreatedDate { get; set; }
+            public DateTime CreatedAt { get; set; }
+            public string CreatedBy { get; set; } = string.Empty;
+        }
+
+        private static class EntityPropertyNames
+        {
+            public const string Id = nameof(EntityConventionProperties.Id);
+            public const string StatusId = nameof(EntityConventionProperties.StatusId);
+            public const string UpdatedDate = nameof(EntityConventionProperties.UpdatedDate);
+            public const string UpdatedAt = nameof(EntityConventionProperties.UpdatedAt);
+            public const string CreatedDate = nameof(EntityConventionProperties.CreatedDate);
+            public const string CreatedAt = nameof(EntityConventionProperties.CreatedAt);
+            public const string CreatedBy = nameof(EntityConventionProperties.CreatedBy);
         }
 
         #endregion

@@ -12,27 +12,36 @@ namespace Application
         {
             var assembly = Assembly.GetExecutingAssembly();
             
-            // AutoMapper — discovers all Profile classes in this assembly
+            // mapper discovers all Profile classes in this assembly
             services.AddAutoMapper(assembly);
 
             services.AddValidatorsFromAssembly(assembly);
 
-            //MediatR + pipeline behaviors
+            // mediatR + pipeline behaviors
+            // 
+            //  registration order = outermost → innermost      
+            //                                                          
+            //  Logging  > Validation > Transaction > Audit > Handler  
+            //  (outer)                                      (inner)   
+            //                                                         
+            //  transaction begins BEFORE handler, commits AFTER audit 
+            //  audit reads ChangeTracker AFTER handler, BEFORE commit 
+            // 
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(assembly);
 
-                //logging wrap everything, log entry/exit/error
+                // 1. Logging (outermost) — logs entry/exit/elapsed/errors for every request
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
-                //Validation throw exception before handler if invalid
+                // 2. Validation — throws ValidationException before handler if invalid
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-                //Audit Log reads ChangeTracker before Commit (Inner)
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
-
-                //Transaction commit handler success (Outer)
+                // 3. Transaction (outer) — begins transaction, commits on success with audit included
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+
+                // 4. Audit (inner) — reads ChangeTracker AFTER handler, adds AUDITLOG rows BEFORE commit
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
             });
             return services;
         }

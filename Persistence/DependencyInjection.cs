@@ -1,22 +1,52 @@
+using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Auditing;
 using Persistence.Context;
 using Persistence.Repositories;
 
-namespace Persistence
+namespace Persistence;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+        services.AddDbContextSetup(configuration);
+        services.AddRepositories();
+        return services;
+    }
+
+    // DbContext 
+    private static void AddDbContextSetup(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "Connection string 'DefaultConnection' not found in appsettings.json.");
+
+        services.AddDbContext<AppDbContext>(options =>
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("Default")));
+            options.UseSqlServer(connectionString, sql =>
+            {
+                sql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+                sql.CommandTimeout(60);
+                sql.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null);
+            });
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
+        });
+    }
 
-            return services;
-        }
+    // Repositories 
+    private static void AddRepositories(this IServiceCollection services)
+    {
+        //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IAuditLogCollector, AuditLogCollector>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

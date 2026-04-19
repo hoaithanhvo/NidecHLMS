@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Persistence.Configurations
 {
-    internal class T_TRAINEE
+    public class M_SKILLMAP_CRITERIA_Configuration
     {
     }
 }

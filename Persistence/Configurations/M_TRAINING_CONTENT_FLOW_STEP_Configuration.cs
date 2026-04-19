@@ -17,6 +17,8 @@ namespace Persistence.Configurations
 			builder.HasOne(x => x.TrainingContentFlow).WithMany(tcf => tcf.FlowSteps).HasForeignKey(x => x.TrainingContentFlowId);
 
 			builder.HasOne(x => x.TrainingContentStep).WithMany(tcf => tcf.FlowSteps).HasForeignKey(x => x.TrainingContentStepId);
+			
+			builder.HasIndex(x =>new { x.TrainingContentFlowId, x.TrainingContentStepId, x.OrderNo }).IsUnique();
 		}
 	}
 }

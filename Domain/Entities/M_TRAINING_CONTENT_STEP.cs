@@ -12,8 +12,7 @@ namespace Domain.Entities
 		public string StepCode { get; set; }
 		public string StepName { get; set; }
 		public int OrderNo { get; set; }	
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
+		public string StepType { get; set; }	
         public ICollection<M_TRAINING_CONTENT_FLOW_STEP> FlowSteps { get; set; }
-		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollment { get; set; }
 	}
 }

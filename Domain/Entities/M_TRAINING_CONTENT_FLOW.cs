@@ -27,5 +27,8 @@ namespace Domain.Entities
 		// ===== Navigation =====
 		public M_TRAINING_CONTENT TrainingContent { get; set; }
 		public ICollection<M_TRAINING_CONTENT_FLOW_STEP> FlowSteps { get; set; }
-	}
+		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
+        public ICollection<T_TRAINING_FILE> T_TrainingFiles { get; set; }
+
+    }
 }

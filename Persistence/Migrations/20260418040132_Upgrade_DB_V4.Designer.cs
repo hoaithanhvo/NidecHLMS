@@ -1696,13 +1696,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_DOCUMENT", "M_TrainingDocument")
                         .WithMany("LearningReports")
                         .HasForeignKey("TrainingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_USER", "M_Users")
                         .WithMany("LearningReports")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_TrainingDocument");
@@ -1715,13 +1715,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_DEPARTMENT", "Department")
                         .WithMany("M_Operation")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OBJECT", "M_Object")
                         .WithMany("M_Operations")
                         .HasForeignKey("ObjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -1741,13 +1741,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", "M_TrainingContentLifecycle")
                         .WithMany("M_TrainingContents")
                         .HasForeignKey("LifecycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION", "M_Operation")
                         .WithMany("M_TrainingContents")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Operation");
@@ -1760,7 +1760,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "TrainingContent")
                         .WithMany("T_TrainingContentFlows")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("TrainingContent");
@@ -1771,13 +1771,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW", "TrainingContentFlow")
                         .WithMany("FlowSteps")
                         .HasForeignKey("TrainingContentFlowId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "TrainingContentStep")
                         .WithMany("FlowSteps")
                         .HasForeignKey("TrainingContentStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("TrainingContentFlow");
@@ -1790,7 +1790,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
                         .WithMany("M_TrainingDocuments")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_TrainingContent");
@@ -1801,7 +1801,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_STATUS", "Status")
                         .WithMany("Users")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Status");
@@ -1812,13 +1812,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_USER", "M_Users")
                         .WithMany("Assessments")
                         .HasForeignKey("ApprovalBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_DOCUMENT", "M_TRAINING_DOCUMENT")
                         .WithMany("Assessments")
                         .HasForeignKey("TrainingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_TRAINING_DOCUMENT");
@@ -1846,13 +1846,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.T_TRAINING_COURSE", "T_TrainingCourse")
                         .WithMany("T_CourseContents")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
                         .WithMany("T_CourseContents")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_TrainingContent");
@@ -1865,13 +1865,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_PERMISSION", "Permission")
                         .WithMany("RolePermissions")
                         .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_ROLE", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Permission");
@@ -1884,13 +1884,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_USER", "M_Users")
                         .WithMany("Skillmaps")
                         .HasForeignKey("ApproveBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.T_ASSESSMENT", "Assessments")
                         .WithMany("Skillmaps")
                         .HasForeignKey("AssessmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Assessments");
@@ -1924,13 +1924,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_SOURCE", "M_Sources")
                         .WithMany("T_TrainingParticipants")
                         .HasForeignKey("SourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
                         .WithMany("T_TrainingParticipants")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_USER", "M_User")
@@ -1949,31 +1949,31 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_LEVEL", "M_Level")
                         .WithMany("T_TrainingResults")
                         .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_OPERATION", "M_Operation")
                         .WithMany("T_TrainingResults")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.T_TRAINING_SESSION", "T_TrainingSession")
                         .WithMany("T_TrainingResults")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
                         .WithMany("T_TrainingResults")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_USER", "M_User")
                         .WithMany("T_TrainingResults")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Level");
@@ -1992,13 +1992,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_SESSION_TYPE", "M_SESSION_TYPE")
                         .WithMany("TrainingSessions")
                         .HasForeignKey("SessionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.T_TRAINING_ATTENDEE", "TrainingAttendees")
                         .WithMany("TrainingSessions")
                         .HasForeignKey("TrainingAttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_SESSION_TYPE");
@@ -2011,13 +2011,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_ROLE", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_USER", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -2030,13 +2030,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TAG", "M_Tag")
                         .WithMany("T_UserTags")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_USER", "M_User")
                         .WithMany("T_UserTags")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Tag");
@@ -2049,25 +2049,25 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", "M_TrainingContentFlowStep")
                         .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("CurrentFlowStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
                         .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("CurrentStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
                         .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
                         .WithMany("T_UserTrainingEnrollment")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Status");
@@ -2084,19 +2084,19 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("CurrentStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.T_TRAINING_PARTICIPANT", "T_TrainingParticipant")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("ParticipantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Status");
@@ -2111,13 +2111,13 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Entities.M_STATUS", "M_Status")
                         .WithMany("M_HandoverRecords")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
                         .WithMany("M_HandoverRecords")
                         .HasForeignKey("TrainingContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("M_Status");

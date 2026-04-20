@@ -16,7 +16,7 @@ namespace NidecHLMS.API.Configurations
 
             services.AddApplication();
             services.AddPersistence(configuration);
-            services.AddInfrastructure();
+            services.AddInfrastructure(configuration);
 
             return services;
         }

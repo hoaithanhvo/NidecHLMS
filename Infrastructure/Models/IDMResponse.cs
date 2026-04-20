@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.UserDTO.Requests
+namespace Infrastructure.Models
 {
-    public class UserRequest
-    {
-    }
+	internal class IDMResponse
+	{
+	}
 }

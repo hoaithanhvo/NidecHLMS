@@ -129,7 +129,7 @@ namespace Persistence.Repositories
         }
 
         /// <summary>
-        /// Changes the StatusId on a single entity and recursively cascades to navigation properties.
+        /// Changes the StatusId on a single entity and recursively Restricts to navigation properties.
         /// </summary>
         public Task<bool> ChangeStatusAsync(
             object entity, int status,
@@ -146,7 +146,7 @@ namespace Persistence.Repositories
         }
 
         /// <summary>
-        /// Changes the StatusId on multiple entities and recursively cascades to navigation properties.
+        /// Changes the StatusId on multiple entities and recursively Restricts to navigation properties.
         /// </summary>
         public Task<bool> ChangeStatusAsync(
             List<object> entities, int status,

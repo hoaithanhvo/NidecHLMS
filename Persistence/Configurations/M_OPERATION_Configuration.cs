@@ -18,8 +18,9 @@ namespace Persistence.Configurations
 			builder.Property(o => o.OperationCode).HasMaxLength(20).IsRequired();
 			builder.Property(o=>o.OperationName).HasMaxLength(200).IsRequired();
 			builder.Property(o => o.ManagementNumber).HasMaxLength(50).IsRequired();
-			builder.HasOne(o => o.Department).WithMany(d => d.M_Operation).HasForeignKey(o => o.DepartmentId);
+			builder.HasOne(o => o.Department).WithMany(d => d.M_Operations).HasForeignKey(o => o.DepartmentId);
 			builder.HasOne(o=>o.M_Object).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.ObjectId);
+			builder.HasOne(o=>o.SkillmapTemplate).WithMany(ot=>ot.M_Operations).HasForeignKey(o=>o.SkillmapTemplateId);
 			builder.HasIndex(o => new { o.OperationCode, o.OperationName, o.ManagementNumber }).IsUnique();
 		}
 	}

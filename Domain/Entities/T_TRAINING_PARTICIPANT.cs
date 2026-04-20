@@ -17,8 +17,9 @@ namespace Domain.Entities
         public int SourceId { get; set; } // Internal / Import / External
         public int StatusId { get; set; }   
 		public M_USER M_User { get; set; } 
-        public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
         public M_SOURCE M_Sources { get; set; }
         public M_STATUS M_Status { get; set; }
+        public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
+        public ICollection<T_USER_TAG> T_UserTags { get; set; }
 	}
 }

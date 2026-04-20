@@ -11,6 +11,11 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpClient();
+
+			// Example services
+			services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
+			services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
             services.AddScoped<GrpcClientExceptionInterceptor>();
             services.AddGrpcUserClient(configuration);
             services.AddScoped<IUserGrpcService, UserGrpcService>();

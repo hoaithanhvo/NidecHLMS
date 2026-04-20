@@ -42,7 +42,7 @@ namespace Persistence.Migrations
                         column: x => x.ActionBy,
                         principalTable: "M_USER",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

@@ -14,6 +14,8 @@ namespace Application
             
             // mapper discovers all Profile classes in this assembly
             services.AddAutoMapper(assembly);
+            // AutoMapper — discovers all Profile classes in this assembly
+            //services.AddAutoMapper(assembly);
 
             services.AddValidatorsFromAssembly(assembly);
 

@@ -18,8 +18,6 @@ namespace Domain.Entities
 		public bool? IsDeleted { get; set; }
 		public DateTime? DeleteDate { get; set; }
 		public M_SESSION_TYPE? M_SESSION_TYPE { get; set; }
-		public T_TRAINING_ATTENDEE TrainingAttendees { get; set; }
 		public ICollection<T_TRAINING_RESULT> T_TrainingResults { get; set; }
-
 	}
 }

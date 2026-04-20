@@ -38,7 +38,7 @@ namespace Persistence.Migrations
                 column: "ActionBy",
                 principalTable: "M_USER",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
@@ -72,7 +72,7 @@ namespace Persistence.Migrations
                 column: "ActionBy",
                 principalTable: "M_USER",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

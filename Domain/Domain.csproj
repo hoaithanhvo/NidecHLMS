@@ -14,12 +14,12 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
-    <Folder Include="ValueObjects\" />
+    <Folder Include="Rules\" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>C:\Users\ASUS\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

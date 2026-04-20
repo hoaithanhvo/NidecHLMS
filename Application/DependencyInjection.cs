@@ -40,7 +40,7 @@ namespace Application
                 // 3. Transaction (outer) — begins transaction, commits on success with audit included
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
-                // 4. Audit (inner) — reads ChangeTracker AFTER handler, adds AUDITLOG rows BEFORE commit
+                // 4. Audit (inner) — reads ChangeTracker AFTER handler, adds LOG_AUDIT rows BEFORE commit
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
             });
             return services;

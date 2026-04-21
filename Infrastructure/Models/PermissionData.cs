@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.UserDTO.Responses
+namespace Infrastructure.Models
 {
-    public class UserResponse
-    {
-    }
+	internal class PermissionData
+	{
+	}
 }

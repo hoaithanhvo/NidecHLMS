@@ -100,7 +100,7 @@ namespace Application.Common.Behaviors
 
             if (auditLogs.Any())
             {
-                await _context.AuditLogs.AddRangeAsync(auditLogs, cancellationToken);
+                //await _context.AuditLogs.AddRangeAsync(auditLogs, cancellationToken);
             }
 
             return response;

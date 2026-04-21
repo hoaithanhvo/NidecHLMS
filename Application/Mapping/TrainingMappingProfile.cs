@@ -13,7 +13,7 @@ namespace Application.Mapping
 	{
 		public TrainingMappingProfile()
 		{
-			CreateMap<M_TRAINING_CONTENT, TrainingContentDto>();
+			//CreateMap<M_TRAINING_CONTENT, TrainingContentDto>();
 		}
 	}
 }

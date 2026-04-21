@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\Requests\**" />
     <Compile Remove="Features\Commands\**" />
     <Compile Remove="Features\Queries\**" />
+    <EmbeddedResource Remove="DTOs\Requests\**" />
     <EmbeddedResource Remove="Features\Commands\**" />
     <EmbeddedResource Remove="Features\Queries\**" />
+    <None Remove="DTOs\Requests\**" />
     <None Remove="Features\Commands\**" />
     <None Remove="Features\Queries\**" />
   </ItemGroup>
@@ -24,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Requests\" />
+    <Folder Include="Common\Queries\" />
     <Folder Include="Features\AuditLogs\Commands\CreateLog\" />
     <Folder Include="Features\AuditLogs\Queries\GetLogs\" />
     <Folder Include="Features\Common\Exceptions\" />
@@ -71,7 +74,7 @@
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>..\..\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

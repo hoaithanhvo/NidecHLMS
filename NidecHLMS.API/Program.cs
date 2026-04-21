@@ -1,4 +1,3 @@
-using Application.Features.Trainings.Commands.Create;
 using Application.Mapping;
 using FluentValidation;
 using Infrastructure.GrpcClient.Services;
@@ -25,7 +24,12 @@ try
     builder.Services.AddApiServices(builder.Configuration);
 
 	//AutoMapper
-	builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
+	//builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
+
+    //AutoMapper
+    builder.Services.AddAutoMapper(cfg => { }, 
+    typeof(Program).Assembly, 
+    typeof(TrainingMappingProfile).Assembly);
 
 	//GRPC 
 	builder.Services.AddGrpc();

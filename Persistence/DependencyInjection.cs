@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Auditing;
 using Persistence.Context;
-using Persistence.Repositories;
 
 namespace Persistence;
 
@@ -14,7 +13,6 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContextSetup(configuration);
-        services.AddRepositories();
         return services;
     }
 
@@ -40,13 +38,5 @@ public static class DependencyInjection
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
         });
-    }
-
-    // Repositories 
-    private static void AddRepositories(this IServiceCollection services)
-    {
-        //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped<IAuditLogCollector, AuditLogCollector>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace NidecHLMS.API.DTOs.Trainings.Responses
+﻿namespace NidecHLMS.API.DTOs.Trainings.GetDetail
 {
 	public class TrainingContentDetailReponse
 	{

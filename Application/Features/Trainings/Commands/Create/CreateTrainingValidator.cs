@@ -23,7 +23,7 @@ namespace Application.Features.Trainings.Commands.Create
 			RuleFor(x => x.LifecycleId)
 				.GreaterThan(0);
 
-		RuleFor(x => x.CreatedBy).NotEmpty().NotNull().WithMessage("CreatedBy is requied");
+			RuleFor(x => x.CreatedBy).NotEmpty().NotNull().WithMessage("CreatedBy is requied");
 
 			RuleFor(x => x.UpdatedBy).NotEmpty().NotEmpty().WithMessage("UpdatedBy is requied");
 		}

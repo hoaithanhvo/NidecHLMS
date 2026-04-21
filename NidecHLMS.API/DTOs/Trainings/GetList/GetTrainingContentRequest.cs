@@ -1,6 +1,6 @@
 ﻿using Application.Common.Paging;
 
-namespace NidecHLMS.API.DTOs.Trainings.Requests
+namespace NidecHLMS.API.DTOs.Trainings.GetList
 {
 	public class GetTrainingContentRequest
 	{

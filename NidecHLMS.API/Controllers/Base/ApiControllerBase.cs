@@ -1,48 +1,74 @@
 using Application.Common.Models;
-using MediatR;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace NidecHLMS.API.Controllers.Base
 {
     /// <summary>
-    /// Base API Controller following modern CQRS .NET 
-    /// Provides a lazy-loaded MediatR ISender No need to inject it in every controller constructor
-    /// Provides strongly typed success/failure response wrappers using ApiResponse<T>
+    /// Shared base controller for standardized API response envelopes.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public abstract class ApiControllerBase : ControllerBase
     {
-        private ISender? _mediator;
+        private const string RequestStopwatchItemKey = "RequestStopwatch";
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        // Lazy load ISender to avoid constructor injection clutter in derived classes
-        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
-
-        /// <summary>
-        /// Wraps the result in an Ok 200 response with standard ApiResponse format
-        /// </summary>
-        protected IActionResult OkResponse<T>(T data, string message = "Success.")
+        protected ApiControllerBase(IHttpContextAccessor contextAccessor)
         {
-            return Ok(ApiResponse<T>.Ok(data, message));
+            _contextAccessor = contextAccessor;
         }
 
-        /// <summary>
-        /// Wraps the result in a Created (201) response with standard ApiResponse format
-        /// </summary>
-        protected IActionResult CreatedResponse<T>(string uri, T data, string message = "Resource created successfully.")
+        protected ApiResponse<T> CreateResponse<T>(T data, string? message = null, int statusCode = 200)
         {
-            return Created(uri, ApiResponse<T>.Ok(data, message));
+            return ApiResponse<T>.Ok(
+                data,
+                message,
+                statusCode,
+                GetApiVersion(),
+                GetPath(),
+                GetTraceId(),
+                GetRequestElapsed());
         }
 
-        /// <summary>
-        /// Wraps manual failures though ExceptionHandlingMiddleware should catch most of them
-        /// </summary>
-        protected IActionResult ErrorResponse<T>(string message, int statusCode = 400)
+        protected ApiResponse<T> CreateErrorResponse<T>(string message, int statusCode = 400)
         {
-            var traceId = HttpContext.TraceIdentifier; 
-            var response = ApiResponse<T>.Fail(message, null, traceId);
+            return ApiResponse<T>.Fail(
+                message,
+                null,
+                statusCode,
+                GetApiVersion(),
+                GetPath(),
+                GetTraceId(),
+                GetRequestElapsed());
+        }
 
-            return StatusCode(statusCode, response);
+        private string GetTraceId()
+            => string.IsNullOrWhiteSpace(_contextAccessor.HttpContext?.TraceIdentifier)
+                ? Guid.NewGuid().ToString("N")
+                : _contextAccessor.HttpContext!.TraceIdentifier;
+
+        private string GetApiVersion()
+        {
+            return _contextAccessor.HttpContext?.GetRequestedApiVersion()?.ToString() ?? "1.0";
+        }
+
+        private string GetPath()
+        {
+            return _contextAccessor.HttpContext?.Request.Path.ToString() ?? string.Empty;
+        }
+
+        private string GetRequestElapsed()
+        {
+            if (_contextAccessor.HttpContext?.Items.TryGetValue(RequestStopwatchItemKey, out var stopwatchObj) == true &&
+                stopwatchObj is Stopwatch stopwatch)
+            {
+                return stopwatch.Elapsed.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
+            }
+
+            return TimeSpan.Zero.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
         }
     }
 }

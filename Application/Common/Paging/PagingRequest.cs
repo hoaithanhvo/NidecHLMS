@@ -10,12 +10,12 @@ namespace Application.Common.Paging
     {
         private const int MaxPageSize = 1000;
         private int _pageSize = 10;
-        private int _pageIndex = 0;
+        private int _pageIndex = 1;
 
         public int PageIndex 
         {
             get => _pageIndex;
-            set => _pageIndex = Math.Max(0, value);
+            set => _pageIndex = Math.Max(1, value);
         }
 
         public int PageSize

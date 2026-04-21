@@ -1,13 +1,15 @@
 using Application.Common.Exceptions;
 using Application.Common.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Server.IIS;
+using Asp.Versioning;
+using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 
 namespace NidecHLMS.API.Middlewares.Exceptions
 {
     public class ExceptionHandlingMiddleware
     {
+        private const string RequestStopwatchItemKey = "RequestStopwatch";
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
@@ -25,6 +27,9 @@ namespace NidecHLMS.API.Middlewares.Exceptions
 
         public async Task InvokeAsync(HttpContext context)
         {
+            var stopwatch = Stopwatch.StartNew();
+            context.Items[RequestStopwatchItemKey] = stopwatch;
+
             try
             {
                 // Pass the request to the next middleware in the pipeline
@@ -33,14 +38,20 @@ namespace NidecHLMS.API.Middlewares.Exceptions
             catch (Exception e)
             {
                 //any middleware or controller throws an exception, catch it here
-                await HandleExceptionAsync(context, e);
+                await HandleExceptionAsync(context, e, stopwatch);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, Stopwatch stopwatch)
         {
             //Map the exception type to specific HTTP status codes and messages
             var (statusCode, message, errors) = MapException(exception);
+            var traceId = string.IsNullOrWhiteSpace(context.TraceIdentifier)
+                ? Guid.NewGuid().ToString("N")
+                : context.TraceIdentifier;
+            var version = context.GetRequestedApiVersion()?.ToString() ?? "1.0";
+            var path = context.Request.Path.ToString();
+            var timeSpan = stopwatch.Elapsed.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
 
             if (statusCode >= 500)
                 _logger.LogError(exception,
@@ -59,7 +70,11 @@ namespace NidecHLMS.API.Middlewares.Exceptions
             var response = ApiResponse<object>.Fail(
                 message,
                 errors,
-                context.TraceIdentifier
+                statusCode,
+                version,
+                path,
+                traceId,
+                timeSpan
             );
 
             //Serialize and write the response back to the client

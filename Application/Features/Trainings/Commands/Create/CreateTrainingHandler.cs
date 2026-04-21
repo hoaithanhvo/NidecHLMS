@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Interfaces.Repositories;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -11,9 +11,9 @@ namespace Application.Features.Trainings.Commands.Create
 {
 	public class CreateTrainingHandler : IRequestHandler<CreateTrainingCommand, int>
 	{
-		private readonly ICommandRepository<M_TRAINING_CONTENT> _repo;
+		private readonly ICommandRepository<M_TRAINING_CONTENT, int> _repo;
 
-		public CreateTrainingHandler(ICommandRepository<M_TRAINING_CONTENT> repo)
+		public CreateTrainingHandler(ICommandRepository<M_TRAINING_CONTENT, int> repo)
 		{
 			_repo = repo;
 		}
@@ -25,11 +25,13 @@ namespace Application.Features.Trainings.Commands.Create
 				TrainingContentName = request.TrainingContentName,
 				OperationId = request.OperationId,
 				LifecycleId = request.LifecycleId,
+				CreatedBy = request.CreatedBy,
+				UpdatedBy = request.UpdatedBy,
 				CreatedDate = DateTime.UtcNow,
 				UpdatedDate = DateTime.UtcNow
 			};
 
-			await _repo.AddAsync(entity);
+			await _repo.CreateAsync(entity, cancellationToken);
 
 			return entity.Id;
 		}

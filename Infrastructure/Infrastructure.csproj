@@ -34,4 +34,10 @@
     <Protobuf Include="GrpcClient\ProtosFile\user.proto" GrpcServices="Both" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NidecSystemShared">
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,13 +1,14 @@
-using Application.Common.Interfaces;
+using Application.Interfaces.Persistence;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Infrastructure.GrpcClient.Interceptors;
 using Infrastructure.GrpcClient.ProtosFile;
-
 //using Infrastructure.GrpcClient.ProtosFile;
 using Infrastructure.GrpcClient.Services;
-using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Auditing;
+using Persistence.Repositories;
 
 namespace Infrastructure
 {
@@ -16,14 +17,13 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpClient();
-
-			// Example services
-			services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
-			services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
-
+            services.AddRepositories();
+            // Example services
+           
             services.AddScoped<GrpcClientExceptionInterceptor>();
             services.AddGrpcUserClient(configuration);
             services.AddScoped<IUserGrpcService, UserGrpcService>();
+
             return services;
         }
 
@@ -49,6 +49,14 @@ namespace Infrastructure
             });
 
             return services;
+        }
+        // Repositories 
+        private static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(ICommandRepository<,>), typeof(GenericRepository<,>));
+            services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+            services.AddScoped<IAuditLogCollector, AuditLogCollector>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

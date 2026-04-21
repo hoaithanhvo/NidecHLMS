@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Application.Interfaces.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Trainings.Commands.Create
 {
-	public class CreateTrainingCommand : IRequest<int>
+	public class CreateTrainingCommand : ICommand<int>
 	{
 		public string ManagementNumber { get; set; }
 		public string TrainingContentName { get; set; }

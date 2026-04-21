@@ -1,7 +1,11 @@
+using Application.Common.Interfaces;
 using Application.Interfaces.Services;
 using Infrastructure.GrpcClient.Interceptors;
 using Infrastructure.GrpcClient.ProtosFile;
+
+//using Infrastructure.GrpcClient.ProtosFile;
 using Infrastructure.GrpcClient.Services;
+using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +20,7 @@ namespace Infrastructure
 			// Example services
 			services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
 			services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
+
             services.AddScoped<GrpcClientExceptionInterceptor>();
             services.AddGrpcUserClient(configuration);
             services.AddScoped<IUserGrpcService, UserGrpcService>();

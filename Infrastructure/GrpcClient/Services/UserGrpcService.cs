@@ -1,4 +1,4 @@
-﻿using Application.DTOs.UserDTO.Responses;
+﻿using Application.DTOs.Responses;
 using Application.Interfaces.Services;
 using Infrastructure.GrpcClient.ProtosFile;
 
@@ -29,7 +29,7 @@ public class UserGrpcService : IUserGrpcService
         var request = new UserIdsRequest();
         request.UserIds.Add(userIds.Where(x => !string.IsNullOrWhiteSpace(x)));
 
-        if (request.UserIds.Count == 0)
+        if(request.UserIds.Count == 0)
             return [];
 
         var users = await _serviceClient.GetUsersByUserIdsAsync(request);

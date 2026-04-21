@@ -13,7 +13,7 @@ namespace Application
             var assembly = Assembly.GetExecutingAssembly();
             
             // mapper discovers all Profile classes in this assembly
-            services.AddAutoMapper(assembly);
+            //services.AddAutoMapper(assembly);
             // AutoMapper — discovers all Profile classes in this assembly
             //services.AddAutoMapper(assembly);
 

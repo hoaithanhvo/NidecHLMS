@@ -4,40 +4,16 @@ package user;
 
 option csharp_namespace = "Infrastructure.GrpcClient.ProtosFile";
 
+// ==========================================================
+// SERVICE DEFINITIONS
+// ==========================================================
+
+
 service ServiceGetUser {
   rpc GetUserByUserId (UserIdRequest) returns (GetUserByUserIdResponse);
+
   rpc GetUsersByUserIds (UserIdsRequest) returns (GetUsersByUserIdsResponse);
-}
 
-message UserIdRequest {
-  string user_id = 1;
-}
-
-message UserIdsRequest {
-  repeated string user_ids = 1;
-}
-
-message GetUserByUserIdResponse {
-  string user_id = 1;
-  string fullName = 2;
-  string email = 3;
-  string phone_number = 4;
-  string user_name = 5;
-  string profile_picture_url = 6;
-  SectionGrpcResponse section = 7;
-}
-
-message GetUsersByUserIdsResponse {
-  repeated GetUserByUserIdResponse users = 1;
-}
-
-message SectionGrpcResponse {
-  string name = 1;
-  DepartmentGprcResponse department = 2;
-}
-
-message DepartmentGprcResponse {
-  string name = 1;
 }
 
 // ==========================================================

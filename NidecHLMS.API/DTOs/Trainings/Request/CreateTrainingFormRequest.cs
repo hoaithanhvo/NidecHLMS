@@ -1,6 +1,6 @@
-﻿namespace NidecHLMS.API.DTOs.Trainings.Create
+﻿namespace NidecHLMS.API.DTOs.Trainings.Request
 {
-	public class CreateTrainingRequest
+	public class CreateTrainingFormRequest
 	{
 		public string ManagementNumber { get; set; }
 		public string TrainingContentName { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_OPERATION_LIFECYCLE_Configuration : IEntityTypeConfiguration<M_TRAINING_CONTENT_LIFECYCLE>
+	public class M_TRAINING_CONTENT_LIFECYCLE_Configuration : IEntityTypeConfiguration<M_TRAINING_CONTENT_LIFECYCLE>
 	{
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_LIFECYCLE> builder)
 		{

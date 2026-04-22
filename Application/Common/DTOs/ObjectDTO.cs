@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Trainings.Queries.GetById
+namespace Application.Common.DTOs
 {
-	internal class TrainingDto
+	public class ObjectDTO
 	{
+
 	}
 }

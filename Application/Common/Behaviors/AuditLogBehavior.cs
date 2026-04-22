@@ -6,7 +6,6 @@ using MediatR;
 namespace Application.Common.Behaviors
 {
     public class AuditBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
     {
         private readonly IAuditLogCollector _auditLogCollector;
         private readonly ICurrentUserContext _currentUserContext;
@@ -26,9 +25,13 @@ namespace Application.Common.Behaviors
         {
             var response = await next();
 
-            _auditLogCollector.Capture(_currentUserContext.UserId);
+			// ✅ chỉ audit command
+			if(request is ICommand<TResponse>)
+			{
+				_auditLogCollector.Capture(_currentUserContext.UserId);
+			}
 
-            return response;
+			return response;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common.Paging;
+using Application.DTOs.Responses.Trainings;
 using Application.Features.Trainings.Commands.Create;
 using Application.Features.Trainings.Queries.GetList;
 using Asp.Versioning;
@@ -7,8 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NidecHLMS.API.Controllers.Base;
-using NidecHLMS.API.DTOs.Trainings.Create;
-using NidecHLMS.API.DTOs.Trainings.GetList;
+using NidecHLMS.API.DTOs.Trainings.Request;
 
 namespace NidecHLMS.API.Controllers.v1
 {
@@ -28,7 +28,7 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTrainingRequest request)
+        public async Task<IActionResult> Create(CreateTrainingFormRequest request)
         {
             var command = _mapper.Map<CreateTrainingCommand>(request);
             var result = await _sender.Send(command);
@@ -36,14 +36,14 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpGet("GetAllTrainingContent")]
-        public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentRequest request)
+        public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentFormRequest request)
         {
             var query = _mapper.Map<GetTrainingListQuery>(request);
             var result = await _sender.Send(query);
 
-            var response = new PagedResult<TrainingContentListItemResponse>
+            var response = new PagedResult<TrainingListResponse>
             {
-                Items = _mapper.Map<List<TrainingContentListItemResponse>>(result.Items),
+                Items = result.Items,
                 PageIndex = result.PageIndex,
                 PageSize = result.PageSize,
                 TotalCount = result.TotalCount

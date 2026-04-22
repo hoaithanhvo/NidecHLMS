@@ -1,6 +1,7 @@
 using Application.Interfaces.Command;
 using Application.Interfaces.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Behaviors;
@@ -17,7 +18,7 @@ namespace Application.Common.Behaviors;
 /// ON FAILURE:
 ///   next() throws > RollbackTransaction > nothing is saved > exception propagates to LoggingBehavior
 /// </summary>
-public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICommand<TResponse>
+public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
@@ -28,30 +29,38 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
         _logger = logger;
     }
 
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
-    {
-        // Begin transaction if one is already active (nested command), UoW handles 
-        await _unitOfWork.BeginTransaction(cancellationToken);
+	public async Task<TResponse> Handle(
+	TRequest request,
+	RequestHandlerDelegate<TResponse> next,
+	CancellationToken cancellationToken)
+	{
+		// chỉ apply cho command
+		if(request is not ICommand<TResponse>)
+			return await next();
 
-        try
-        {
-            // Run pipeline: AuditBehavior > Handler
-            // After this, ChangeTracker has entity changes + audit log entries — NOT yet saved
-            var response = await next();
+		var strategy = _unitOfWork.CreateExecutionStrategy();
 
-            // Commit: SaveChanges + Commit (entities + audit logs in one atomic operation)
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+		return await strategy.ExecuteAsync(async () =>
+		{
+			await _unitOfWork.BeginTransaction(cancellationToken);
 
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Transaction rolling back for {RequestName}", typeof(TRequest).Name);
-            await _unitOfWork.RollBackTransactionAsync(cancellationToken);
-            throw;
-        }
-    }
+			try
+			{
+				var response = await next();
+
+				await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+				return response;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogWarning(ex,
+					"Transaction rolling back for {RequestName}",
+					typeof(TRequest).Name);
+
+				await _unitOfWork.RollBackTransactionAsync(cancellationToken);
+				throw;
+			}
+		});
+	}
 }

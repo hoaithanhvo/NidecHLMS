@@ -1,4 +1,6 @@
 ﻿using Application.Common.Paging;
+using Application.DTOs.Responses.Trainings;
+using Application.Interfaces.Queries;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Trainings.Queries.GetList
 {
-	public class GetTrainingListQuery : PagingRequest, IRequest<PagedResult<TrainingContentDto>>
+	public class GetTrainingListQuery : PagingRequest, IQuery<PagedResult<TrainingListResponse>>
 	{
 		public string ManagementNumber { get; set; } = string.Empty;
 		public string TrainingContentName { get; set; } = string.Empty;

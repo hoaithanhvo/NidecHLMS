@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Storage;
 using NidecSystemShared.Abstracts;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,8 @@ namespace Application.Interfaces.Repositories
         /// <typeparam name="T">Entity type, must extend BaseEntity&lt;TKey&gt;</typeparam>
         /// <typeparam name="TKey">Primary key type</typeparam>
         IGenericRepository<T, TKey> GenericRepository<T, TKey>() where T : BaseEntity<TKey>;
-    }
+
+		IExecutionStrategy CreateExecutionStrategy();
+	}
 }
 

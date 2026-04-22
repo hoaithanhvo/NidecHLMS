@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Trainings.Queries.GetList
+namespace Application.Common.DTOs
 {
-	public class TrainingContentDto
+	public class TrainingContentDTO
 	{
 		public int Id { get; set; }
 		public string ManagementNumber { get; set; }

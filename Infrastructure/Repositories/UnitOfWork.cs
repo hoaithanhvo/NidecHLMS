@@ -184,6 +184,11 @@ namespace Persistence.Repositories
             _transactionDepth = 0;
         }
 
-        #endregion
-    }
+		#endregion
+
+		public IExecutionStrategy CreateExecutionStrategy()
+		{
+			return _dbContext.Database.CreateExecutionStrategy();
+		}
+	}
 }

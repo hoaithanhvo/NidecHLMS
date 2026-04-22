@@ -7,7 +7,5 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Queries
 {
-    public interface IQuery<out TResponse> : IRequest<TResponse>
-    {
-    }
+    public interface IQuery<out TResponse> : IRequest<TResponse>{}
 }

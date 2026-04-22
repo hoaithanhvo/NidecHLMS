@@ -110,13 +110,13 @@ namespace Persistence.Migrations
                         column: x => x.StatusId,
                         principalTable: "M_STATUS",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_M_HANDOVER_RECORD_M_TRAINING_CONTENT_TrainingContentId",
                         column: x => x.TrainingContentId,
                         principalTable: "M_TRAINING_CONTENT",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -135,7 +135,7 @@ namespace Persistence.Migrations
                 column: "UserId",
                 principalTable: "M_USER",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

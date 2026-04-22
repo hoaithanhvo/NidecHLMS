@@ -14,6 +14,7 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_USER_TRAINING_PROGRESS> builder)
 		{
+			builder.ToTable("T_USER_TRAINING_PROGRESS");
 			builder.HasOne(tutp => tutp.M_Status).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.StatusId);
 			builder.HasOne(tutp => tutp.T_UserTrainingEnrollment).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.UserTrainingEnrollmentId);
 			builder.HasOne(tutp => tutp.M_TrainingContentFlowStep).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.TrainingContentFlowStepId);

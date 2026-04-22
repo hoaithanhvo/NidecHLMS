@@ -13,6 +13,7 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_TRAINING_SESSION> builder)
 		{
+			builder.ToTable("T_TRAINING_SESSION");
 			builder.HasOne(ts => ts.M_SESSION_TYPE).WithMany(mst => mst.TrainingSessions).HasForeignKey(ts => ts.SessionTypeId);
 
 		}

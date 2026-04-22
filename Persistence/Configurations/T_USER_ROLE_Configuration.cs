@@ -13,7 +13,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<T_USER_ROLE> builder)
         {
-            builder.HasOne(tur => tur.Role).WithMany(r => r.UserRoles).HasForeignKey(tur => tur.RoleId);
+			builder.ToTable("T_USER_ROLE");
+			builder.HasOne(tur => tur.Role).WithMany(r => r.UserRoles).HasForeignKey(tur => tur.RoleId);
             builder.HasOne(tur => tur.User).WithMany(r => r.UserRoles).HasForeignKey(tur => tur.UserId);
         }
     }

@@ -5,6 +5,7 @@ using Infrastructure.GrpcClient.Interceptors;
 using Infrastructure.GrpcClient.ProtosFile;
 //using Infrastructure.GrpcClient.ProtosFile;
 using Infrastructure.GrpcClient.Services;
+using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Auditing;
@@ -18,13 +19,12 @@ namespace Infrastructure
         {
             services.AddHttpClient();
             services.AddRepositories();
-            // Example services
-           
-            services.AddScoped<GrpcClientExceptionInterceptor>();
+			// Example services
+			services.AddScoped<GrpcClientExceptionInterceptor>();
             services.AddGrpcUserClient(configuration);
             services.AddScoped<IUserGrpcService, UserGrpcService>();
-
-            return services;
+			services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+			return services;
         }
 
         private static IServiceCollection AddGrpcUserClient(this IServiceCollection services, IConfiguration configuration)

@@ -43,7 +43,7 @@ namespace Application
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
                 // 4. Audit (inner) — reads ChangeTracker AFTER handler, adds LOG_AUDIT rows BEFORE commit
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
+                //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
             });
             return services;
         }

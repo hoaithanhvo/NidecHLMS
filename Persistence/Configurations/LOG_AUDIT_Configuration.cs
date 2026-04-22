@@ -9,7 +9,6 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<LOG_AUDIT> builder)
         {
             builder.ToTable("LOG_AUDIT");
-            
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.EntityName)

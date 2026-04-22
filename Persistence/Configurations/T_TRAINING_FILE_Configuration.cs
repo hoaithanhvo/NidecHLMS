@@ -13,7 +13,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<T_TRAINING_FILE> builder)
         {
-            builder.HasOne(ttf => ttf.T_UserTrainingEnrollment).WithMany(ute => ute.T_TrainingFiles).HasForeignKey(ttf => ttf.EnrollmentId);
+			builder.ToTable("T_TRAINING_FILE");
+			builder.HasOne(ttf => ttf.T_UserTrainingEnrollment).WithMany(ute => ute.T_TrainingFiles).HasForeignKey(ttf => ttf.EnrollmentId);
             builder.HasOne(ttf => ttf.M_TrainingContentFlow).WithMany(ute => ute.T_TrainingFiles).HasForeignKey(ttf => ttf.TrainingContentFlowId);
             builder.HasOne(ttf => ttf.M_TrainingContentFlowStep).WithMany(ute => ute.T_TrainingFiles).HasForeignKey(ttf => ttf.TrainingContentFlowStepId);
         }

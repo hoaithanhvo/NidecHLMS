@@ -14,6 +14,8 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_FLOW> builder)
 		{
+			builder.ToTable("M_TRAINING_CONTENT_FLOW");
+
 			builder.HasOne(x => x.TrainingContent).WithMany(mtc => mtc.T_TrainingContentFlows).HasForeignKey(x => x.TrainingContentId);
 		}
 	}

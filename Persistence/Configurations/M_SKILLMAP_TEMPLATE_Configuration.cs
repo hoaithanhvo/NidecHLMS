@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-	public class M_TRAINING_CONTENT_STEP_Configuration : IEntityTypeConfiguration<M_TRAINING_CONTENT_STEP>
+	public class M_SKILLMAP_TEMPLATE_Configuration : IEntityTypeConfiguration<M_SKILLMAP_TEMPLATE>
 	{
-		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_STEP> builder)
+		public void Configure(EntityTypeBuilder<M_SKILLMAP_TEMPLATE> builder)
 		{
-			builder.ToTable("M_TRAINING_CONTENT_STEP");
+			builder.ToTable("M_SKILLMAP_TEMPLATEs");
 		}
 	}
 }

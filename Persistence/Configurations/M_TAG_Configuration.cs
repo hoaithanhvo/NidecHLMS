@@ -13,6 +13,8 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_TAG> builder)
 		{
+			builder.ToTable("M_TAG");
+
 			builder.Property(ht => ht.TagCode).IsRequired().HasMaxLength(20);
 			builder.Property(ht=>ht.TagName).IsRequired().HasMaxLength(50);
 			builder.Property(ht=>ht.Type).IsRequired().HasMaxLength(20);

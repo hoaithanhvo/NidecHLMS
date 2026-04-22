@@ -14,7 +14,6 @@ namespace Persistence.Configurations
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_LIFECYCLE> builder)
 		{
 			builder.ToTable("M_TRAINING_CONTENT_LIFECYCLE");
-
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_SESSION_TYPE> builder)
 		{
+			builder.ToTable("M_SESSION_TYPE");
 			builder.Property(mst => mst.SessionNameVI).IsRequired().HasMaxLength(50);
 			builder.Property(mst => mst.SessionNameEN).IsRequired().HasMaxLength(50);
 			builder.Property(mst => mst.SessionCode).IsRequired().HasMaxLength(20);

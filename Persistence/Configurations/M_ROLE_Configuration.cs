@@ -12,7 +12,8 @@ namespace Domain.Entities
     {
         public void Configure(EntityTypeBuilder<M_ROLE> builder)
         {
-            builder.HasIndex(mr=>mr.RoleCode).IsUnique();
+			builder.ToTable("M_ROLE");
+			builder.HasIndex(mr=>mr.RoleCode).IsUnique();
         }
     }
 }

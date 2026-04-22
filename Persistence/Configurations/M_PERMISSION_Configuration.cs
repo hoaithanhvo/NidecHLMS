@@ -13,7 +13,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<M_PERMISSION> builder)
         {
-            builder.HasIndex(mp=>mp.PermissionCode).IsUnique();
+			builder.ToTable("M_PERMISSION");
+			builder.HasIndex(mp=>mp.PermissionCode).IsUnique();
         }
     }
 }

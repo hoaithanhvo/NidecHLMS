@@ -13,7 +13,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<T_SKILLMAP_DETAIL> builder)
         {
-            builder.HasOne(tsd=>tsd.T_SkillmapResult).WithMany(tsr=>tsr.T_SkillmapDetails).HasForeignKey(tsd=>tsd.SkillmapResultId);
+			builder.ToTable("T_SKILLMAP_DETAIL");
+			builder.HasOne(tsd=>tsd.T_SkillmapResult).WithMany(tsr=>tsr.T_SkillmapDetails).HasForeignKey(tsd=>tsd.SkillmapResultId);
             builder.HasOne(tsd=>tsd.M_SkillmapCriteria).WithMany(tsr=>tsr.T_SkillmapDetails).HasForeignKey(tsd=>tsd.CriteriaId);
         }
     }

@@ -13,6 +13,9 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_TYPE> builder)
 		{
+
+			builder.ToTable("M_TRAINING_CONTENT_TYPE");
+
 			builder.Property(mtct => mtct.ContentTypeNameVI).IsRequired().HasMaxLength(50);
 			builder.Property(mtct => mtct.ContentTypeNameEN).IsRequired().HasMaxLength(50);
 		}

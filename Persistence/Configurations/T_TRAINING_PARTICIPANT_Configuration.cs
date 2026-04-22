@@ -14,6 +14,7 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<T_TRAINING_PARTICIPANT> builder)
 		{
+			builder.ToTable("T_TRAINING_PARTICIPANT");
 			builder.Property(ttp => ttp.Code).IsRequired().HasMaxLength(50);
 
 			builder.HasIndex(ttp => ttp.Code).IsUnique();

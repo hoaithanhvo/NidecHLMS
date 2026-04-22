@@ -13,7 +13,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<T_USER_TAG> builder)
         {
-            builder.HasOne(tut => tut.M_Tag).WithMany(u => u.T_UserTags).HasForeignKey(tut => tut.TagId);
+			builder.ToTable("T_USER_TAG");
+			builder.HasOne(tut => tut.M_Tag).WithMany(u => u.T_UserTags).HasForeignKey(tut => tut.TagId);
             builder.HasOne(tut => tut.T_TrainingParticipant).WithMany(u => u.T_UserTags).HasForeignKey(tut => tut.ParticipantId);
             builder.HasOne(tut => tut.T_UserTrainingEnrollment).WithMany(u => u.T_UserTags).HasForeignKey(tut => tut.UserTrainingEnrollmentId);
         }

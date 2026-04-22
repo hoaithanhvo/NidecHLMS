@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260422114021_Upgrade_DB_V17")]
+    partial class Upgrade_DB_V17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -468,7 +471,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_SKILLMAP_TEMPLATEs", (string)null);
+                    b.ToTable("SkillmapTemplates");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_SKILLMAP_TEMPLATE_DETAIL", b =>
@@ -550,7 +553,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("M_SOURCE", (string)null);
+                    b.ToTable("Sources");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>

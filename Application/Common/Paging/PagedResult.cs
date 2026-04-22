@@ -18,10 +18,10 @@ namespace Application.Common.Paging
 			(int)Math.Ceiling((double)TotalCount / PageSize);
 
 		public bool HasNext =>
-			PageIndex < TotalPages - 1;
+			PageIndex < TotalPages;
 
 		public bool HasPrevious =>
-			PageIndex > 0;
+			PageIndex > 1;
 
 		// ===== ADD THIS: Deconstruct =====
 		public void Deconstruct(

@@ -13,7 +13,7 @@ namespace Application.DTOs.Responses.Trainings
 		public string ManagementNumber { get; set; }
 		public string TrainingContentName { get; set; }
 		public OperationDTO Operation { get; set; }
-		public TrainingContentLifecycleDTO Lifecycle { get; set; }
+		public TrainingContentLifeCycleDTO Lifecycle { get; set; }
 		public string UpdatedBy { get; set; } = string.Empty;
 		public string CreatedBy { get; set; } = string.Empty;
 	}

@@ -1,5 +1,6 @@
 using Application.Common.Paging;
 using Application.DTOs.Responses.Trainings;
+using Application.Features.Trainings.Queries.GetList;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Trainings.Queries.GetList
+namespace Application.Features.Trainings.Queries.Specs
 {
 	public class GetTrainingListQueryHandler
 	: IRequestHandler<GetTrainingListQuery, PagedResult<TrainingListResponse>>
@@ -28,10 +29,11 @@ namespace Application.Features.Trainings.Queries.GetList
 		GetTrainingListQuery request,
 		CancellationToken cancellationToken)
 		{
-            var trainningContentSpec = new TrainingContentByKeywordSpec(request);
+            var countSpec = new TrainingContentByKeywordSpec(request, false);
+            var totalCount = await _repository.CountAsync(countSpec, cancellationToken);
 
-            var items = await _repository.ToListAsync(trainningContentSpec, cancellationToken);
-            var totalCount = await _repository.CountAsync(trainningContentSpec, cancellationToken);
+            var listSpec = new TrainingContentByKeywordSpec(request, true);
+            var items = await _repository.ToListAsync(listSpec, cancellationToken);
 
             return new PagedResult<TrainingListResponse>
             {

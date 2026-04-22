@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Features.Trainings.Queries.GetById.DTOs;
+using MediatR;
 
 namespace Application.Features.Trainings.Queries.GetById
 {
-	internal class GetTrainingByIdQuery
-	{
+	public class GetTrainingByIdQuery : IRequest<TrainingContentByIdDTO>
+    {
+		public int Id { get; set; }
 	}
 }

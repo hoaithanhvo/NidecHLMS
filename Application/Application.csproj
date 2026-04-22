@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Queries\" />
+    <Folder Include="DTOs\Requests\" />
     <Folder Include="Features\AuditLogs\Commands\CreateLog\" />
     <Folder Include="Features\AuditLogs\Queries\GetLogs\" />
     <Folder Include="Features\Common\Exceptions\" />
@@ -71,7 +72,7 @@
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>..\..\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

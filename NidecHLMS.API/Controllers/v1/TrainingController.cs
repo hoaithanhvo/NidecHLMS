@@ -1,9 +1,8 @@
-﻿using Application.Common.Paging;
-using Application.DTOs.Responses.Trainings;
-using Application.Features.Trainings.Commands.Create;
+﻿using Application.Features.Trainings.Commands.Create;
+using Application.Features.Trainings.Queries.GetAll;
+using Application.Features.Trainings.Queries.GetById;
 using Application.Features.Trainings.Queries.GetList;
 using Asp.Versioning;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,38 +17,64 @@ namespace NidecHLMS.API.Controllers.v1
     public class TrainingController : ApiControllerBase
     {
         private readonly ISender _sender;
-        private readonly IMapper _mapper;
 
-        public TrainingController(IHttpContextAccessor contextAccessor, ISender sender, IMapper mapper)
+        public TrainingController(IHttpContextAccessor contextAccessor, ISender sender)
             : base(contextAccessor)
         {
             _sender = sender;
-            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateTrainingFormRequest request)
         {
-            var command = _mapper.Map<CreateTrainingCommand>(request);
+            var command = new CreateTrainingCommand
+            {
+                ManagementNumber = request.ManagementNumber,
+                TrainingContentName = request.TrainingContentName,
+                OperationId = request.OperationId,
+                LifecycleId = request.LifecycleId,
+                //CreatedBy = userId,
+                //UpdatedBy = userId
+            };
+
             var result = await _sender.Send(command);
             return Ok(CreateResponse(result, "Training created successfully."));
         }
 
-        [HttpGet("GetAllTrainingContent")]
+        [HttpGet("GetTrainingContentByKeyWord")]
         public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentFormRequest request)
         {
-            var query = _mapper.Map<GetTrainingListQuery>(request);
-            var result = await _sender.Send(query);
-
-            var response = new PagedResult<TrainingListResponse>
+            var query = new GetTrainingListQuery
             {
-                Items = result.Items,
-                PageIndex = result.PageIndex,
-                PageSize = result.PageSize,
-                TotalCount = result.TotalCount
+                PageIndex = request.Paging.PageIndex,
+                PageSize = request.Paging.PageSize,
+                Keyword = request.Keyword
             };
 
-            return Ok(CreateResponse(response, "Training content retrieved successfully."));
+            var result = await _sender.Send(query);
+            return Ok(CreateResponse(result, "Training content retrieved successfully."));
+        }
+
+        [HttpGet("GetAllTrainingContent")]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllTrainingContentFormRequest request)
+        {
+            var query = new GetAllTrainingQuery
+            {
+                PageIndex = request.Paging.PageIndex,
+                PageSize = request.Paging.PageSize
+            };
+
+            var result = await _sender.Send(query);
+            return Ok(CreateResponse(result, "All training content retrieved successfully."));
+        }
+
+        [HttpGet("GetById/{id:int}")]
+        public async Task<IActionResult> GetTrainingContentById(int id)
+        {
+            var query = new GetTrainingByIdQuery { Id = id };
+            var result = await _sender.Send(query);
+
+            return Ok(CreateResponse(result, "Training content detail retrieved successfully."));
         }
     }
 }

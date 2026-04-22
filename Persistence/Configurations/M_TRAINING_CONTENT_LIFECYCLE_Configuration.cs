@@ -13,7 +13,6 @@ namespace Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_LIFECYCLE> builder)
 		{
-			
-		}
+        }
 	}
 }

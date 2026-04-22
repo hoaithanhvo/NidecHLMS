@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Common.DTOs
 {
-	public class TrainingContentLifecycleDTO
-	{
-		public int Id { get; set; }
+	public class TrainingContentLifeCycleDTO
+    {
 		public string Code { get; set; }
 		public string Name { get; set; }
 		public bool IsRenew { get; set; }

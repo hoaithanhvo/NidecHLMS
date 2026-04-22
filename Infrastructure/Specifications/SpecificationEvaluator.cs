@@ -56,7 +56,7 @@ namespace Persistence.Specifications
             {
                 query = query.OrderByDescending(x => x.UpdatedDate);
             }
-
+           
             //GroupBy
             if (specification.GroupBy != null)
             {

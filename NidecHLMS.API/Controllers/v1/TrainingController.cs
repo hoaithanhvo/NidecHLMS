@@ -38,7 +38,7 @@ namespace NidecHLMS.API.Controllers.v1
             };
 
             var result = await _sender.Send(command);
-            return Ok(CreateResponse(result, "Training created successfully."));
+            return OkResponse(result, "Training created successfully.");
         }
 
         [HttpGet("GetTrainingContentByKeyWord")]
@@ -52,7 +52,7 @@ namespace NidecHLMS.API.Controllers.v1
             };
 
             var result = await _sender.Send(query);
-            return Ok(CreateResponse(result, "Training content retrieved successfully."));
+            return OkResponse(result, "Training content retrieved successfully.");
         }
 
         [HttpGet("GetAllTrainingContent")]
@@ -65,7 +65,7 @@ namespace NidecHLMS.API.Controllers.v1
             };
 
             var result = await _sender.Send(query);
-            return Ok(CreateResponse(result, "All training content retrieved successfully."));
+            return OkResponse(result, "All training content retrieved successfully.");
         }
 
         [HttpGet("GetById/{id:int}")]
@@ -74,7 +74,7 @@ namespace NidecHLMS.API.Controllers.v1
             var query = new GetTrainingByIdQuery { Id = id };
             var result = await _sender.Send(query);
 
-            return Ok(CreateResponse(result, "Training content detail retrieved successfully."));
+            return OkResponse(result, "Training content detail retrieved successfully.");
         }
     }
 }

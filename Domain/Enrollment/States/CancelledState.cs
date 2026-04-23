@@ -17,7 +17,7 @@ namespace Domain.Enrollment.States
 		public Task EnrollAsync(EnrollmentContext context)
 			=> throw new Exception("Đã cancel");
 
-		public Task StartAsync(EnrollmentContext context)
+		public Task InprocessAsync(EnrollmentContext context)
 			=> throw new Exception("Đã cancel");
 
 		public Task CompleteAsync(EnrollmentContext context)

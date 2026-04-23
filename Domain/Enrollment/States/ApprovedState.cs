@@ -15,10 +15,15 @@ namespace Domain.Enrollment.States
 			return Task.CompletedTask;
 		}
 
+		public Task CancelAsync(EnrollmentContext context)
+		{
+			context.SetState(new CancelledState(), (int)EnrollmentStatus.Cancelled);
+			return Task.CompletedTask;
+		}
+
 		public Task ApproveAsync(EnrollmentContext context) => throw new Exception("Invalid");
 		public Task RejectAsync(EnrollmentContext context) => throw new Exception("Invalid");
-		public Task StartAsync(EnrollmentContext context) => throw new Exception("Invalid");
+		public Task InprocessAsync(EnrollmentContext context) => throw new Exception("Invalid");
 		public Task CompleteAsync(EnrollmentContext context) => throw new Exception("Invalid");
-		public Task CancelAsync(EnrollmentContext context) => throw new Exception("Invalid");
 	}
 }

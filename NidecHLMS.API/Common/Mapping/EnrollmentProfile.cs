@@ -8,7 +8,7 @@ namespace NidecHLMS.API.Common.Mapping
 	{
 		public EnrollmentProfile()
 		{
-			CreateMap<RegisterUserTrainingEnrollmentFormRequest, RegisterEnrollmentCommand>();
+			CreateMap<SubmitUserTrainingEnrollmentFormRequest, SubmitEnrollmentCommand>();
 		}
 	}
 }

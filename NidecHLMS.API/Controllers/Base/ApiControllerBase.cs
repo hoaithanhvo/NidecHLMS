@@ -21,7 +21,7 @@ namespace NidecHLMS.API.Controllers.Base
             _contextAccessor = contextAccessor;
         }
 
-        protected ApiResponse<T> CreateResponse<T>(T data, string? message = null, int statusCode = 200)
+        private ApiResponse<T> CreateResponse<T>(T data, string? message = null, int statusCode = 200)
         {
             return ApiResponse<T>.Ok(
                 data,
@@ -33,7 +33,7 @@ namespace NidecHLMS.API.Controllers.Base
                 GetRequestElapsed());
         }
 
-        protected ApiResponse<T> CreateErrorResponse<T>(string message, int statusCode = 400)
+		private ApiResponse<T> CreateErrorResponse<T>(string message, int statusCode = 400)
         {
             return ApiResponse<T>.Fail(
                 message,
@@ -70,5 +70,15 @@ namespace NidecHLMS.API.Controllers.Base
 
             return TimeSpan.Zero.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
         }
-    }
+
+		protected IActionResult OkResponse<T>(T data, string? message = null)
+		{
+			return Ok(CreateResponse(data, message));
+		}
+
+		protected IActionResult ErrorResponse<T>(string message, int statusCode = 400)
+		{
+			return BadRequest(CreateErrorResponse<T>(message, statusCode));
+		}
+	}
 }

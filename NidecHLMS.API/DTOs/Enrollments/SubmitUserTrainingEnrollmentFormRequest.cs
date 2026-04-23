@@ -1,6 +1,6 @@
 ﻿namespace NidecHLMS.API.DTOs.Enrollments
 {
-	public class RegisterUserTrainingEnrollmentFormRequest
+	public class SubmitUserTrainingEnrollmentFormRequest
 	{
 		public int ParticipantId { get; set; }
 		public int TrainingContentId { get; set; }

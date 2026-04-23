@@ -9,9 +9,9 @@ namespace Domain.Enrollment.States
 {
 	public class EnrolledState : IEnrollmentState
 	{
-		public Task StartAsync(EnrollmentContext context)
+		public Task InprocessAsync(EnrollmentContext context)
 		{
-			context.SetState(new InProgressState(), (int)EnrollmentStatus.Resign);
+			context.SetState(new InProgressState(), (int)EnrollmentStatus.InProgress);
 			return Task.CompletedTask;
 		}
 

@@ -17,7 +17,7 @@ namespace Domain.Enrollment.States
 		public Task EnrollAsync(EnrollmentContext context)
 			=> throw new Exception("Không thể enroll");
 
-		public Task StartAsync(EnrollmentContext context)
+		public Task InprocessAsync(EnrollmentContext context)
 			=> throw new Exception("Không thể start");
 
 		public Task CompleteAsync(EnrollmentContext context)

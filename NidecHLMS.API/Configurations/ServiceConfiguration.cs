@@ -1,5 +1,4 @@
 using Application;
-using Application.Interfaces.Common;
 using Infrastructure;
 using NidecHLMS.API.Middlewares.Exceptions;
 using Persistence;
@@ -23,8 +22,6 @@ public static class ServiceConfiguration
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddHttpContextAccessor();
-        services.AddScoped<ICurrentUserContext, CurrentUserContext>();
-
         services.AddCors(options =>
         {
             options.AddPolicy(CorsPolicyName, policy =>

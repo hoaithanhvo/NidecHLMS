@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enrollment.States
 {
-	public class ResignState : IEnrollmentState
+	public class SubmittedState : IEnrollmentState
 	{
 		public Task ApproveAsync(EnrollmentContext context)
 		{
@@ -21,13 +21,19 @@ namespace Domain.Enrollment.States
 			return Task.CompletedTask;
 		}
 
-		public Task EnrollAsync(EnrollmentContext context) => throw new Exception("Invalid");
-		public Task StartAsync(EnrollmentContext context) => throw new Exception("Invalid");
-		public Task CompleteAsync(EnrollmentContext context) => throw new Exception("Invalid");
 		public Task CancelAsync(EnrollmentContext context)
 		{
 			context.SetState(new CancelledState(), (int)EnrollmentStatus.Cancelled);
 			return Task.CompletedTask;
 		}
+
+		public Task EnrollAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot enroll when status is Submitted");
+
+		public Task InprocessAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot start when status is Submitted");
+
+		public Task CompleteAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot complete when status is Submitted");
 	}
 }

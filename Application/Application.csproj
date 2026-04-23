@@ -30,7 +30,6 @@
     <Folder Include="Features\AuditLogs\Queries\GetLogs\" />
     <Folder Include="Features\Common\Exceptions\" />
     <Folder Include="Features\Common\Interfaces\" />
-    <Folder Include="Features\Enrollments\Commands\EnrollUser\" />
     <Folder Include="Features\Enrollments\Commands\CancelEnrollment\" />
     <Folder Include="Features\Enrollments\Commands\CompleteEnrollment\" />
     <Folder Include="Features\Enrollments\Queries\GetEnrollmentById\" />
@@ -64,6 +63,7 @@
     <Folder Include="Features\Users\Commands\UpdateUser\" />
     <Folder Include="Features\Users\Queries\GetUserById\" />
     <Folder Include="Features\Users\Queries\GetUsers\" />
+    <Folder Include="Interfaces\Common\" />
   </ItemGroup>
 
   <ItemGroup>

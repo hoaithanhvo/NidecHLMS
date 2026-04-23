@@ -84,7 +84,7 @@ namespace NidecHLMS.API.Configs
 				Title = "NIDEC HLMS PROJECT",
 				Version = description.ApiVersion.ToString(),
 				Contact = new OpenApiContact() { Name = "HLMS", Email = "NCVH-SYSTEM@nidec.com" },
-				License = new OpenApiLicense() { Name = "Nidec", Url = new Uri("") }
+				License = new OpenApiLicense() { Name = "Nidec", Url = new Uri("http://10.234.1.35:8080/B600044177/IDM/tree/MDung") }
 			};
 
 			if(description.IsDeprecated)

@@ -99,7 +99,7 @@ namespace Persistence.Repositories
         {
             ArgumentNullException.ThrowIfNull(entity);
 
-            var entry = _dbContext.Entry(entity);
+			var entry = _dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
                 _dbContext.Set<T>().Attach(entity);
             entry.State = EntityState.Modified;

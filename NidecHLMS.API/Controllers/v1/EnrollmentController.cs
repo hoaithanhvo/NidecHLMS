@@ -1,4 +1,5 @@
 ﻿using Application.Features.Enrollments.Commands.ApproveEnrollment;
+using Application.Features.Enrollments.Commands.EnrollEnrollment;
 using Application.Features.Enrollments.Commands.RegisterEnrollment;
 using Application.Features.Trainings.Commands.Create;
 using Application.Features.Trainings.Queries.GetAll;
@@ -8,6 +9,7 @@ using Asp.Versioning;
 using AutoMapper;
 using Azure.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NidecHLMS.API.Controllers.Base;
 using NidecHLMS.API.DTOs.Enrollments;
@@ -30,20 +32,26 @@ namespace NidecHLMS.API.Controllers.v1
 			_mapper = mapper;
 		}
 
-		// đăng ký
 		[HttpPost]
-		public async Task<IActionResult> Register(RegisterUserTrainingEnrollmentFormRequest request)
+		//[Authorize]
+		public async Task<IActionResult> Submit(SubmitUserTrainingEnrollmentFormRequest request)
 		{
-			var command = _mapper.Map<RegisterEnrollmentCommand>(source: request);
-			var id = await _sender.Send(command);
-			return Ok(new { id });
+			var command = _mapper.Map<SubmitEnrollmentCommand>(source: request);
+			var data = await _sender.Send(command);
+			return OkResponse(data);
 		}
 
-		// admin duyệt
 		[HttpPost("{id}/approve")]
 		public async Task<IActionResult> Approve(int id)
 		{
 			await _sender.Send(new ApproveEnrollmentCommand { Id = id });
+			return Ok();
+		}
+
+		[HttpPost("{id}/enroll")]
+		public async Task<IActionResult> Enroll(int id)
+		{
+			await _sender.Send(new EnrollEnrollmentCommand { Id = id });
 			return Ok();
 		}
 

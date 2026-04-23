@@ -15,13 +15,14 @@ namespace Infrastructure.Factories
 		{
 			return statusId switch
 			{
-				(int)EnrollmentStatus.Resign => new ResignState(),
+				(int)EnrollmentStatus.Submitted => new SubmittedState(),
 				(int)EnrollmentStatus.Approved => new ApprovedState(),
 				(int)EnrollmentStatus.Rejected => new RejectedState(),
 				(int)EnrollmentStatus.Enrolled => new EnrolledState(),
 				(int)EnrollmentStatus.InProgress => new InProgressState(),
 				(int)EnrollmentStatus.Completed => new CompletedState(),
 				(int)EnrollmentStatus.Cancelled => new CancelledState(),
+				(int)EnrollmentStatus.Resigned => new Resignedtate(),
 				_ => throw new Exception("Invalid state")
 			};
 		}

@@ -11,7 +11,7 @@ namespace Domain.Enrollment.States
 		Task ApproveAsync(EnrollmentContext context);
 		Task RejectAsync(EnrollmentContext context);
 		Task EnrollAsync(EnrollmentContext context);
-		Task StartAsync(EnrollmentContext context);
+		Task InprocessAsync(EnrollmentContext context);
 		Task CompleteAsync(EnrollmentContext context);
 		Task CancelAsync(EnrollmentContext context);
 	}

@@ -8,12 +8,13 @@ namespace Domain.Enums
 {
 	public enum EnrollmentStatus
 	{
-		Resign = 1,
-		Approved = 2,
-		Rejected = 3,
-		Enrolled = 4,
-		InProgress = 5,
-		Completed = 6,
-		Cancelled = 7
+		Submitted = 17,
+		Approved = 18,
+		Rejected = 19,
+		Enrolled = 20,
+		InProgress = 21,
+		Completed = 22,
+		Cancelled = 23,
+		Resigned = 24
 	}
 }

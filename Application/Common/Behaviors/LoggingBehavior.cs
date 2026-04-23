@@ -1,7 +1,7 @@
 using MediatR;
-using Application.Interfaces.Common;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Application.Interfaces.Services;
 
 namespace Application.Common.Behaviors;
 
@@ -14,21 +14,21 @@ public class LoggingBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-    private readonly ICurrentUserContext _currentUserContext;
+    private readonly ICurrentUserService _currentUserService;
 
     public LoggingBehavior(
         ILogger<LoggingBehavior<TRequest, TResponse>> logger,
-        ICurrentUserContext currentUserContext)
+		ICurrentUserService currentUserService)
     {
         _logger = logger;
-        _currentUserContext = currentUserContext;
+		_currentUserService = currentUserService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
         var stopwatch = Stopwatch.StartNew();
-        var userId = _currentUserContext.UserId;
+        var userId = _currentUserService.GetUserId;
 
         _logger.LogInformation(
             "Handling {RequestName} (UserId: {UserId})",

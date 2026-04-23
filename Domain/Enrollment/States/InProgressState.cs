@@ -21,6 +21,6 @@ namespace Domain.Enrollment.States
 		public Task ApproveAsync(EnrollmentContext context) => throw new Exception();
 		public Task RejectAsync(EnrollmentContext context) => throw new Exception();
 		public Task EnrollAsync(EnrollmentContext context) => throw new Exception();
-		public Task StartAsync(EnrollmentContext context) => throw new Exception();
+		public Task InprocessAsync(EnrollmentContext context) => throw new Exception();
 	}
 }

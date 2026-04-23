@@ -1,11 +1,13 @@
 using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Domain.Enrollment.Factories;
+using Infrastructure.Factories;
 using Infrastructure.GrpcClient.Interceptors;
 using Infrastructure.GrpcClient.ProtosFile;
 //using Infrastructure.GrpcClient.ProtosFile;
 using Infrastructure.GrpcClient.Services;
-using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Auditing;
@@ -19,11 +21,12 @@ namespace Infrastructure
         {
             services.AddHttpClient();
             services.AddRepositories();
-			// Example services
+            // Example services
+			services.AddScoped<ICurrentUserService, CurrentUserService>();
 			services.AddScoped<GrpcClientExceptionInterceptor>();
             services.AddGrpcUserClient(configuration);
             services.AddScoped<IUserGrpcService, UserGrpcService>();
-			services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+            services.AddScoped<IEnrollmentStateFactory, EnrollmentStateFactory>();
 			return services;
         }
 

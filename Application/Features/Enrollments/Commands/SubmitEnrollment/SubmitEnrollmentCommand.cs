@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Command;
+﻿using Application.DTOs.Responses.Enrollments;
+using Application.Interfaces.Command;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Windows.Input;
 
 namespace Application.Features.Enrollments.Commands.RegisterEnrollment
 {
-	public class RegisterEnrollmentCommand : ICommand<int>
+	public class SubmitEnrollmentCommand : ICommand<RegisterEnrollmentResponse>
 	{
 		public int ParticipantId { get; set; }
 		public int TrainingContentId { get; set; }

@@ -23,9 +23,6 @@ try
     // All service registrations (API + Application + Persistence + Infrastructure)
     builder.Services.AddApiServices(builder.Configuration);
 
-	//AutoMapper
-	//builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
-
     //AutoMapper
     builder.Services.AddAutoMapper(cfg => { }, 
     typeof(Program).Assembly, 
@@ -34,13 +31,21 @@ try
 	//GRPC 
 	builder.Services.AddGrpc();
 
+	// Add JWT Authentication
+	builder.Services.AddJwtAuthentication(builder.Configuration);
+	builder.Services.AddAuthorization();
+
+	//// Add Swagger services
+	//builder.AddSwaggerServices();
+
 	// Add versioning services
 	builder.AddApiVersioningServices();
 	var app = builder.Build();
-
-    // All middleware pipeline configuration
-    app.UseApiMiddlewares();
-
+	// All middleware pipeline configuration
+	app.UseApiMiddlewares();
+	//app.UseAuthorization();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 	app.MapGrpcService<UserGrpcService>(); // 👈 BẮT BUỘC
 	app.Run();
 }

@@ -1,0 +1,39 @@
+﻿using Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.Enrollment.States
+{
+	public class SubmittedState : IEnrollmentState
+	{
+		public Task ApproveAsync(EnrollmentContext context)
+		{
+			context.SetState(new ApprovedState(), (int)EnrollmentStatus.Approved);
+			return Task.CompletedTask;
+		}
+
+		public Task RejectAsync(EnrollmentContext context)
+		{
+			context.SetState(new RejectedState(), (int)EnrollmentStatus.Rejected);
+			return Task.CompletedTask;
+		}
+
+		public Task CancelAsync(EnrollmentContext context)
+		{
+			context.SetState(new CancelledState(), (int)EnrollmentStatus.Cancelled);
+			return Task.CompletedTask;
+		}
+
+		public Task EnrollAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot enroll when status is Submitted");
+
+		public Task InprocessAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot start when status is Submitted");
+
+		public Task CompleteAsync(EnrollmentContext context)
+			=> throw new InvalidOperationException("Cannot complete when status is Submitted");
+	}
+}

@@ -1,6 +1,7 @@
 ﻿namespace NidecLocationVisualize.Api.API.Configs
 {
 	using Application.Common.Behaviors;
+	using Infrastructure.GrpcClient.ProtosFile;
 	//using Application.Features.Queries.Divisions;
 	//using Infrastructure.GrpcClient.ProtosFile;
 	using Infrastructure.Models;
@@ -8,6 +9,7 @@
 	using Microsoft.AspNetCore.Authentication.JwtBearer;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.IdentityModel.Tokens;
+	using Microsoft.OpenApi.Models;
 	using NidecHLMS.API.Configs;
 	using System.Text;
 
@@ -30,12 +32,12 @@
 				{
 					options.TokenValidationParameters = new TokenValidationParameters
 					{
-						ValidateIssuer = true,
+						ValidateIssuer = false,
 						ValidIssuer = jwt.Issuer,
-						ValidateAudience = true,
+						ValidateAudience = false,
 						ValidAudience = jwt.Audience,
 						ValidateLifetime = true,
-						ValidateIssuerSigningKey = true,
+						ValidateIssuerSigningKey = false,
 						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SecretKey)),
 						ClockSkew = TimeSpan.Zero
 					};
@@ -139,36 +141,37 @@
 		/// <param name="builder">The builder<see cref="IHostApplicationBuilder"/></param>
 		//public static void AddMediatRConfig(this IHostApplicationBuilder builder)
 		//{
-		//	builder.Services.AddMediatR(
-		//		typeof(Program).Assembly,
-		//		typeof(FilterDivisionHandle).Assembly
-		//	);
-
-		//	builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-
-		//}
-
-		//public static void AddGrpcClientService(this IHostApplicationBuilder builder)
-		//{
-		//	var grpcServerUrl = builder.Configuration["GrpcSettings:IdmServiceUrl"]
-		//						 ?? throw new Exception("Not found GRPC Setting");
-
-		//	builder.Services.AddGrpcClient<ServiceGetUser.ServiceGetUserClient>(options =>
+		//	builder.Services.AddMediatR(cfg =>
 		//	{
-		//		options.Address = new Uri(grpcServerUrl);
-		//	})
-		//	.ConfigureChannel(options =>
-		//	{
-		//		options.MaxReceiveMessageSize = 5 * 1024 * 1024;
-		//		options.MaxSendMessageSize = 2 * 1024 * 1024;
-		//	})
-		//	.ConfigurePrimaryHttpMessageHandler(() =>
-		//	{
-		//		var handler = new HttpClientHandler();
-		//		handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-		//		return handler;
+		//		cfg.RegisterServicesFromAssemblies(
+		//			typeof(Program).Assembly,
+		//			typeof(FilterDivisionHandle).Assembly
+		//		);
 		//	});
+
 		//}
+
+		public static void AddGrpcClientService(this IHostApplicationBuilder builder)
+		{
+			var grpcServerUrl = builder.Configuration["GrpcSettings:IdmServiceUrl"]
+								 ?? throw new Exception("Not found GRPC Setting");
+
+			builder.Services.AddGrpcClient<ServiceGetUser.ServiceGetUserClient>(options =>
+			{
+				options.Address = new Uri(grpcServerUrl);
+			})
+			.ConfigureChannel(options =>
+			{
+				options.MaxReceiveMessageSize = 5 * 1024 * 1024;
+				options.MaxSendMessageSize = 2 * 1024 * 1024;
+			})
+			.ConfigurePrimaryHttpMessageHandler(() =>
+			{
+				var handler = new HttpClientHandler();
+				handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+				return handler;
+			});
+		}
 
 	}
 }

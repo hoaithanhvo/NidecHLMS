@@ -75,7 +75,7 @@ public sealed class AuditLogCollector : IAuditLogCollector
             EntityName = x.EntityName,
             RecordId = ResolveRecordId(x),
             Action = x.State.ToString(),
-            ActionBy = actionBy,
+            UserAction = actionBy,
             OldData = x.OldDataJson,
             NewData = x.NewDataJson
         }).ToList();

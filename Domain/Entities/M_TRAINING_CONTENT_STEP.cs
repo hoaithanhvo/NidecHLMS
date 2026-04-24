@@ -14,5 +14,7 @@ namespace Domain.Entities
 		public int OrderNo { get; set; }	
 		public string StepType { get; set; }	
         public ICollection<M_TRAINING_CONTENT_FLOW_STEP> FlowSteps { get; set; }
+        public ICollection<M_TRAINING_CONTENT_STEP_TRANSITION> FromTransitions { get; set; }
+        public ICollection<M_TRAINING_CONTENT_STEP_TRANSITION> ToTransitions { get; set; }
 	}
 }

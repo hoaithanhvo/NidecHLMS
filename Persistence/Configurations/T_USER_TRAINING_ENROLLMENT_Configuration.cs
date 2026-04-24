@@ -19,6 +19,8 @@ namespace Persistence.Configurations
 			builder.HasOne(tute => tute.M_TrainingContentFlow).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentFlowId);
 			builder.HasOne(tute => tute.T_TrainingParticipant).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.ParticipantId);
 			builder.HasIndex(tute => tute.EnrollmentCode).IsUnique();
-        }
+
+			builder.HasOne(tute => tute.M_TrainingContentFlowSteps).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentFlowStepId);
+		}
     }
 }

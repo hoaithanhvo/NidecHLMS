@@ -21,6 +21,10 @@ namespace Persistence.Configurations
 			builder.HasOne(mtc => mtc.M_Operation).WithMany(o => o.M_TrainingContents).HasForeignKey(mtc => mtc.OperationId);
 
 			builder.HasOne(mtc => mtc.M_TrainingContentLifecycle).WithMany(o => o.M_TrainingContents).HasForeignKey(mtc => mtc.LifecycleId);
+
+			builder.HasOne(mtc => mtc.M_Status).WithMany(o => o.M_TrainingContents).HasForeignKey(mtc => mtc.StatusId);
+
+			builder.Property(x => x.StatusId).HasDefaultValue(1);
 		}
 	}
 }

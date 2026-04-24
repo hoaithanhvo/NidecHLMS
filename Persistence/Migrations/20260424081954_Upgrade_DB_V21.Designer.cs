@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424081954_Upgrade_DB_V21")]
+    partial class Upgrade_DB_V21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +37,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ActionBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("ApiName")
                         .HasColumnType("nvarchar(max)");
@@ -81,12 +87,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserAction")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserAction");
+                    b.HasIndex("ActionBy");
 
                     b.HasIndex("EntityName", "RecordId");
 
@@ -671,6 +674,12 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LifecycleId")
                         .HasColumnType("int");
 
@@ -681,11 +690,6 @@ namespace Persistence.Migrations
 
                     b.Property<int>("OperationId")
                         .HasColumnType("int");
-
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
 
                     b.Property<string>("TrainingContentName")
                         .IsRequired()
@@ -704,8 +708,6 @@ namespace Persistence.Migrations
                     b.HasIndex("LifecycleId");
 
                     b.HasIndex("OperationId");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("M_TRAINING_CONTENT", (string)null);
                 });
@@ -1676,7 +1678,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_USER", "M_User")
                         .WithMany("Log_Audits")
-                        .HasForeignKey("UserAction")
+                        .HasForeignKey("ActionBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1748,15 +1750,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
-                        .WithMany("M_TrainingContents")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("M_Operation");
-
-                    b.Navigation("M_Status");
 
                     b.Navigation("M_TrainingContentLifecycle");
                 });
@@ -2182,8 +2176,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
-                    b.Navigation("M_TrainingContents");
-
                     b.Navigation("T_TrainingParticipants");
 
                     b.Navigation("T_TrainingResults");

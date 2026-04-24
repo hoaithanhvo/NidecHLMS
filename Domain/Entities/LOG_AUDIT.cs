@@ -13,7 +13,7 @@ namespace Domain.Entities
 		// ===== WHAT =====
 		public string EntityName { get; set; } = string.Empty; // T_USER_TRAINING_ENROLLMENT
 		public int RecordId { get; set; }
-		public int ActionBy { get;	set;}
+		public int UserAction { get;	set;}
 		public string Action { get; set; } = string.Empty; // CREATE / UPDATE / DELETE
 
 		// ===== DATA =====

@@ -28,7 +28,7 @@ namespace Persistence.Configurations
             builder.Property(x => x.NewData)
                    .HasColumnType("nvarchar(max)");
 
-            builder.HasOne(x => x.M_User).WithMany(u => u.Log_Audits).HasForeignKey(x => x.ActionBy);
+            builder.HasOne(x => x.M_User).WithMany(u => u.Log_Audits).HasForeignKey(x => x.UserAction);
 
             builder.HasIndex(x => new { x.EntityName, x.RecordId });
         }

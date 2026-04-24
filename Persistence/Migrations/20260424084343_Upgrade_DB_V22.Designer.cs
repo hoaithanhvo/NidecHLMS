@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424084343_Upgrade_DB_V22")]
+    partial class Upgrade_DB_V22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +37,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ActionBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("ApiName")
                         .HasColumnType("nvarchar(max)");
@@ -81,12 +87,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserAction")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserAction");
+                    b.HasIndex("ActionBy");
 
                     b.HasIndex("EntityName", "RecordId");
 
@@ -1676,7 +1679,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.M_USER", "M_User")
                         .WithMany("Log_Audits")
-                        .HasForeignKey("UserAction")
+                        .HasForeignKey("ActionBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

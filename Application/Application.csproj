@@ -58,6 +58,7 @@
     <Folder Include="Features\TrainingFlows\Queries\GetSteps\" />
     <Folder Include="Features\Trainings\Commands\Delete\" />
     <Folder Include="Features\Trainings\Commands\Update\" />
+    <Folder Include="Features\Trainings\Queries\GetById\DTOs\" />
     <Folder Include="Features\Users\Commands\CreateUser\" />
     <Folder Include="Features\Users\Commands\AssignRole\" />
     <Folder Include="Features\Users\Commands\UpdateUser\" />
@@ -72,7 +73,7 @@
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>..\..\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

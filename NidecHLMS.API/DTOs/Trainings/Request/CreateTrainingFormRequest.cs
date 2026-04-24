@@ -2,8 +2,8 @@
 {
 	public class CreateTrainingFormRequest
 	{
-		public string ManagementNumber { get; set; }
-		public string TrainingContentName { get; set; }
+		public string ManagementNumber { get; set; } = string.Empty;
+		public string TrainingContentName { get; set; } = string.Empty;
 		public int OperationId { get; set; }
 		public int LifecycleId { get; set; }
 	}

@@ -21,7 +21,7 @@ namespace NidecHLMS.API.Controllers.Base
             _contextAccessor = contextAccessor;
         }
 
-        private ApiResponse<T> CreateResponse<T>(T data, string? message = null, int statusCode = 200)
+        protected ApiResponse<T> CreateResponse<T>(T data, string? message = null, int statusCode = 200)
         {
             return ApiResponse<T>.Ok(
                 data,

@@ -1,11 +1,19 @@
-﻿using Application.Features.Trainings.Commands.Create;
+using Application.Common.Paging;
+using Application.DTOs.Responses.Trainings;
+using Application.Features.Trainings.Commands.Create;
+using Application.Features.Trainings.Commands.Delete;
+using Application.Features.Trainings.Commands.Update;
 using Application.Features.Trainings.Queries.GetAll;
 using Application.Features.Trainings.Queries.GetById;
 using Application.Features.Trainings.Queries.GetList;
+using Application.Interfaces.Common;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using NidecHLMS.API.Controllers.Base;
 using NidecHLMS.API.DTOs.Trainings.Request;
 
@@ -17,52 +25,49 @@ namespace NidecHLMS.API.Controllers.v1
     public class TrainingController : ApiControllerBase
     {
         private readonly ISender _sender;
+        private readonly IMapper _mapper;
 
-        public TrainingController(IHttpContextAccessor contextAccessor, ISender sender)
+        public TrainingController(IHttpContextAccessor contextAccessor, ISender sender, IMapper mapper)
             : base(contextAccessor)
         {
             _sender = sender;
+            _mapper = mapper;
         }
 
-        [HttpPost]
+        //[Authorize]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(CreateTrainingFormRequest request)
         {
-            var command = new CreateTrainingCommand
-            {
-                ManagementNumber = request.ManagementNumber,
-                TrainingContentName = request.TrainingContentName,
-                OperationId = request.OperationId,
-                LifecycleId = request.LifecycleId,
-                //CreatedBy = userId,
-                //UpdatedBy = userId
-            };
+            var command = _mapper.Map<CreateTrainingCommand>(request);
+
+            var result = await _sender.Send(command);
+
+            return Created(string.Empty, CreateResponse(result, "Training created successfully.", StatusCodes.Status201Created));
+        }
+
+        [HttpPut("Update/{id:int}")]
+        public async Task<IActionResult> Update(int id, UpdateTrainingFormRequest request)
+        {
+            var command = _mapper.Map<UpdateTrainingCommand>(request);
+            command.Id = id;
 
             var result = await _sender.Send(command);
             return OkResponse(result, "Training created successfully.");
         }
 
-        [HttpGet("GetTrainingContentByKeyWord")]
+        [HttpGet("GetByKeyWord")]
         public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentFormRequest request)
         {
-            var query = new GetTrainingListQuery
-            {
-                PageIndex = request.Paging.PageIndex,
-                PageSize = request.Paging.PageSize,
-                Keyword = request.Keyword
-            };
+            var query = _mapper.Map<GetTrainingListQuery>(request);
 
             var result = await _sender.Send(query);
             return OkResponse(result, "Training content retrieved successfully.");
         }
 
-        [HttpGet("GetAllTrainingContent")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] GetAllTrainingContentFormRequest request)
         {
-            var query = new GetAllTrainingQuery
-            {
-                PageIndex = request.Paging.PageIndex,
-                PageSize = request.Paging.PageSize
-            };
+            var query = _mapper.Map<GetAllTrainingQuery>(request);
 
             var result = await _sender.Send(query);
             return OkResponse(result, "All training content retrieved successfully.");
@@ -72,9 +77,21 @@ namespace NidecHLMS.API.Controllers.v1
         public async Task<IActionResult> GetTrainingContentById(int id)
         {
             var query = new GetTrainingByIdQuery { Id = id };
+
             var result = await _sender.Send(query);
 
             return OkResponse(result, "Training content detail retrieved successfully.");
+        }
+
+        [Authorize]
+        [HttpGet("debug-auth")]
+        public IActionResult Debug()
+        {
+            return Ok(new
+            {
+                isAuth = User.Identity?.IsAuthenticated,
+                claims = User.Claims.Select(x => new { x.Type, x.Value })
+            });
         }
     }
 }

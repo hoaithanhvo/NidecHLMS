@@ -19,11 +19,11 @@ namespace Domain.Entities
 		public int StatusId  { get; set; }
 		
 		public ICollection<M_TRAINING_DOCUMENT> M_TrainingDocuments { get; set; }
+		public M_STATUS? M_Status { get; set; }
 		public M_OPERATION M_Operation { get; set; }	
 		public M_TRAINING_CONTENT_LIFECYCLE M_TrainingContentLifecycle { get; set; }
 		public ICollection<M_TRAINING_CONTENT_FLOW> T_TrainingContentFlows { get; set; }
 		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
 
-		public M_STATUS M_Status { get; set; }
 	}
 }

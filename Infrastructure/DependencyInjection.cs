@@ -5,7 +5,6 @@ using Domain.Enrollment.Factories;
 using Infrastructure.Factories;
 using Infrastructure.GrpcClient.Interceptors;
 using Infrastructure.GrpcClient.ProtosFile;
-//using Infrastructure.GrpcClient.ProtosFile;
 using Infrastructure.GrpcClient.Services;
 using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
@@ -17,23 +16,32 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddHttpClient();
+
             services.AddRepositories();
-            // Example services
-			services.AddScoped<ICurrentUserService, CurrentUserService>();
-			services.AddScoped<GrpcClientExceptionInterceptor>();
-            services.AddGrpcUserClient(configuration);
-            services.AddScoped<IUserGrpcService, UserGrpcService>();
+            services.AddExternalServices(configuration);
+            services.AddGrpcServices(configuration);
+            services.AddCaching();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IEnrollmentStateFactory, EnrollmentStateFactory>();
-			return services;
+            return services;
         }
 
-        private static IServiceCollection AddGrpcUserClient(this IServiceCollection services, IConfiguration configuration)
+        private static void AddGrpcServices(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            var grpcServerUrl = configuration["GrpcSettings:UserServiceUrl"]
-                ?? throw new InvalidOperationException("GrpcSettings:UserServiceUrl is not configured.");
+            services.AddScoped<GrpcClientExceptionInterceptor>();
+
+            var grpcServerUrl =
+                configuration["GrpcSettings:UserServiceUrl"]
+                ?? configuration["GrpcSettings:IdmServiceUrl"]
+                ?? throw new InvalidOperationException(
+                    "gRPC user service URL is not configured. Set either 'GrpcSettings:UserServiceUrl' or legacy 'GrpcSettings:IdmServiceUrl'.");
 
             services.AddGrpcClient<ServiceGetUser.ServiceGetUserClient>(options =>
             {
@@ -51,15 +59,43 @@ namespace Infrastructure
                     HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             });
 
-            return services;
+            services.AddScoped<IUserGrpcService, UserGrpcService>();
         }
         // Repositories 
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(ICommandRepository<,>), typeof(GenericRepository<,>));
             services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
-            services.AddScoped<IAuditLogCollector, AuditLogCollector>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuditLogCollector, AuditLogCollector>();
         }
+
+        private static void AddExternalServices(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var idmBaseUrl = configuration["IDM:BaseUrl"];
+            if (string.IsNullOrWhiteSpace(idmBaseUrl))
+                throw new InvalidOperationException("IDM:BaseUrl is not configured.");
+
+            services.AddHttpClient<IUserRestApiService, UserRestApiService>(client =>
+            {
+                client.BaseAddress = new Uri(EnsureTrailingSlash(idmBaseUrl));
+            });
+
+            services.AddHttpClient<ITokenManager, TokenManager>(client =>
+            {
+                client.BaseAddress = new Uri(EnsureTrailingSlash(idmBaseUrl));
+            });
+        }
+
+        private static void AddCaching(this IServiceCollection services)
+        {
+            services.AddMemoryCache();
+            services.AddSingleton<ICacheService, CacheService>();
+        }
+
+        private static string EnsureTrailingSlash(string url)
+            => url.EndsWith("/", StringComparison.Ordinal) ? url : $"{url}/";
     }
 }

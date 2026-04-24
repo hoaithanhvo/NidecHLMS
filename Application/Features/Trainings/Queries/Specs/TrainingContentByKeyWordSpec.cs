@@ -13,6 +13,7 @@ namespace Application.Features.Trainings.Queries.Specs
         {
             AddInclude(x => x.M_Operation);
             AddInclude(x => x.M_TrainingContentLifecycle);
+            AddInclude(x => x.M_Status);
             AddInclude(x => x.M_TrainingDocuments);
 
             ApplyOrderBy(x => x.Id);
@@ -24,14 +25,16 @@ namespace Application.Features.Trainings.Queries.Specs
         }
         private static Expression<Func<M_TRAINING_CONTENT, bool>> BuildCriteria(GetTrainingListQuery query)
         {
-            if (string.IsNullOrWhiteSpace(query.Keyword))
-                return x => true;
-
-            var keyword = query.Keyword.Trim();
+            var keyword = query.Keyword?.Trim();
 
             return x =>
-                x.ManagementNumber.Contains(keyword) ||
-                x.TrainingContentName.Contains(keyword);
+                (string.IsNullOrEmpty(keyword) ||
+                 x.ManagementNumber.Contains(keyword) ||
+                 x.TrainingContentName.Contains(keyword))
+
+                && x.M_Status != null
+                && x.M_Status.StatusName == "ACTIVE"
+                && x.M_Status.Type == "root";
         }
     }
 }

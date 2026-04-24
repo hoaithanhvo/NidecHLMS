@@ -1,6 +1,5 @@
 using Application.Mapping;
 using FluentValidation;
-using Infrastructure.GrpcClient.Services;
 using Microsoft.Extensions.DependencyInjection;
 using NidecHLMS.API.Configurations;
 using NidecLocationVisualize.Api.API.Configs;
@@ -24,29 +23,49 @@ try
     builder.Services.AddApiServices(builder.Configuration);
 
     //AutoMapper
+    //builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
+
+    // JWT swagger security
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Description = "Enter 'Bearer {token}'"
+        });
+
+        c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+    });
+
+    //AutoMapper
     builder.Services.AddAutoMapper(cfg => { }, 
     typeof(Program).Assembly, 
     typeof(TrainingMappingProfile).Assembly);
 
-	//GRPC 
-	builder.Services.AddGrpc();
-
-	// Add JWT Authentication
-	builder.Services.AddJwtAuthentication(builder.Configuration);
-	builder.Services.AddAuthorization();
-
-	//// Add Swagger services
-	//builder.AddSwaggerServices();
-
 	// Add versioning services
 	builder.AddApiVersioningServices();
 	var app = builder.Build();
-	// All middleware pipeline configuration
-	app.UseApiMiddlewares();
-	//app.UseAuthorization();
-	app.UseSwagger();
-	app.UseSwaggerUI();
-	app.MapGrpcService<UserGrpcService>(); // 👈 BẮT BUỘC
+
+    // All middleware pipeline configuration
+    app.UseApiMiddlewares();
+
 	app.Run();
 }
 catch (Exception ex) when (ex is not HostAbortedException)

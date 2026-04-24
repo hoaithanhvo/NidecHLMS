@@ -17,8 +17,10 @@ public sealed class AuditLogCollector : IAuditLogCollector
         _dbContext = dbContext;
     }
 
-    public void Capture(string? userId)
+    public void Capture(string? userId, string? apiName)
     {
+        var normalizedApiName = string.IsNullOrWhiteSpace(apiName) ? null : apiName.Trim();
+
         var entries = _dbContext.ChangeTracker.Entries()
             .Where(e => e.Entity is not LOG_AUDIT &&
                         e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
@@ -59,7 +61,8 @@ public sealed class AuditLogCollector : IAuditLogCollector
                 EntityName = entry.Entity.GetType().Name,
                 OldDataJson = oldValues.Any() ? JsonSerializer.Serialize(oldValues) : null,
                 NewDataJson = newValues.Any() ? JsonSerializer.Serialize(newValues) : null,
-                UserId = userId
+                UserId = userId,
+                ApiName = normalizedApiName
             });
         }
     }
@@ -68,19 +71,20 @@ public sealed class AuditLogCollector : IAuditLogCollector
     {
         if (_pending.Count == 0) return 0;
 
-        var actionBy = await ResolveActionByAsync(_pending[0].UserId, cancellationToken);
+        var userAction = await ResolveuserActionAsync(_pending[0].UserId, cancellationToken);
 
         var entities = _pending.Select(x => new LOG_AUDIT
         {
             EntityName = x.EntityName,
             RecordId = ResolveRecordId(x),
             Action = x.State.ToString(),
-            UserAction = actionBy,
+            UserAction = userAction,
+            ApiName = x.ApiName,
             OldData = x.OldDataJson,
             NewData = x.NewDataJson
         }).ToList();
 
-        ApplyBaseAuditFields(entities, _pending, actionBy);
+        ApplyBaseAuditFields(entities, _pending, userAction);
         await _dbContext.Set<LOG_AUDIT>().AddRangeAsync(entities, cancellationToken);
         _pending.Clear();
         return entities.Count;
@@ -111,22 +115,23 @@ public sealed class AuditLogCollector : IAuditLogCollector
         public string? OldDataJson { get; init; }
         public string? NewDataJson { get; init; }
         public string? UserId { get; init; }
+        public string? ApiName { get; init; }
     }
 
     private static void ApplyBaseAuditFields(
         IReadOnlyList<LOG_AUDIT> entities,
         IReadOnlyList<PendingAuditLog> pending,
-        int actionBy)
+        int userAction)
     {
         var createdByProp = typeof(LOG_AUDIT).GetProperty("CreatedBy");
         var createdDateProp = typeof(LOG_AUDIT).GetProperty("CreatedDate");
         var updatedByProp = typeof(LOG_AUDIT).GetProperty("UpdatedBy");
         var updatedDateProp = typeof(LOG_AUDIT).GetProperty("UpdatedDate");
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         for (var i = 0; i < entities.Count; i++)
         {
-            var user = pending[i].UserId ?? actionBy.ToString();
+            var user = pending[i].UserId ?? userAction.ToString();
             createdByProp?.SetValue(entities[i], user);
             updatedByProp?.SetValue(entities[i], user);
             createdDateProp?.SetValue(entities[i], now);
@@ -134,7 +139,7 @@ public sealed class AuditLogCollector : IAuditLogCollector
         }
     }
 
-    private async Task<int> ResolveActionByAsync(string? userId, CancellationToken cancellationToken)
+    private async Task<int> ResolveuserActionAsync(string? userId, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(userId))
             throw new InvalidOperationException("Audit user context is missing.");

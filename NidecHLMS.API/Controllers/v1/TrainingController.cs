@@ -83,6 +83,16 @@ namespace NidecHLMS.API.Controllers.v1
             return OkResponse(result, "Training content detail retrieved successfully.");
         }
 
+        [HttpPatch("Delete/{id:int}")]
+        public async Task<IActionResult> SoftDelete(int id)
+        {
+            var command = new DeleteTrainingCommand { Id = id };
+
+            var result = await _sender.Send(command);
+
+            return OkResponse(result, "Training deleted (soft) successfully.");
+        }
+
         [Authorize]
         [HttpGet("debug-auth")]
         public IActionResult Debug()

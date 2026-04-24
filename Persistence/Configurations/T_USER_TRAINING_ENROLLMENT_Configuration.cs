@@ -20,7 +20,7 @@ namespace Persistence.Configurations
 			builder.HasOne(tute => tute.T_TrainingParticipant).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.ParticipantId);
 			builder.HasIndex(tute => tute.EnrollmentCode).IsUnique();
 
-			builder.HasOne(tute => tute.M_TrainingContentFlowSteps).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentFlowStepId);
+			builder.HasOne(tute => tute.M_TrainingContentStep).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentStepId);
 		}
     }
 }

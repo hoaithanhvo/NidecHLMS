@@ -1,4 +1,5 @@
-﻿using Application.Features.Enrollments.Commands.RegisterEnrollment;
+﻿using Application.Features.Enrollments.Commands.ExecuteEnrollment;
+using Application.Features.Enrollments.Commands.RegisterEnrollment;
 using AutoMapper;
 using NidecHLMS.API.DTOs.Enrollments;
 
@@ -9,6 +10,7 @@ namespace NidecHLMS.API.Common.Mapping
 		public EnrollmentProfile()
 		{
 			CreateMap<SubmitUserTrainingEnrollmentFormRequest, SubmitEnrollmentCommand>();
+			CreateMap<ExecuteEnrollmentActionFormRequest, ExecuteEnrollmentActionCommand>();
 		}
 	}
 }

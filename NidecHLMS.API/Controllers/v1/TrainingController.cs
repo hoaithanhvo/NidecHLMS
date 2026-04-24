@@ -25,7 +25,7 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTrainingFormRequest request)
+        public async Task<IActionResult> Create(CreateTrainingFormRequest request, CancellationToken ct)
         {
             var command = new CreateTrainingCommand
             {
@@ -42,7 +42,7 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpGet("GetTrainingContentByKeyWord")]
-        public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentFormRequest request)
+        public async Task<IActionResult> GetAllTraining([FromQuery] GetTrainingContentFormRequest request,CancellationToken ct)
         {
             var query = new GetTrainingListQuery
             {
@@ -56,7 +56,7 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpGet("GetAllTrainingContent")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllTrainingContentFormRequest request)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllTrainingContentFormRequest request, CancellationToken ct)
         {
             var query = new GetAllTrainingQuery
             {
@@ -69,7 +69,7 @@ namespace NidecHLMS.API.Controllers.v1
         }
 
         [HttpGet("GetById/{id:int}")]
-        public async Task<IActionResult> GetTrainingContentById(int id)
+        public async Task<IActionResult> GetTrainingContentById(int id, CancellationToken ct)
         {
             var query = new GetTrainingByIdQuery { Id = id };
             var result = await _sender.Send(query);

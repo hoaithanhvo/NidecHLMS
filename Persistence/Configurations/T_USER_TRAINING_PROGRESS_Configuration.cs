@@ -17,7 +17,7 @@ namespace Persistence.Configurations
 			builder.ToTable("T_USER_TRAINING_PROGRESS");
 			builder.HasOne(tutp => tutp.M_Status).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.StatusId);
 			builder.HasOne(tutp => tutp.T_UserTrainingEnrollment).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.UserTrainingEnrollmentId);
-			builder.HasOne(tutp => tutp.M_TrainingContentFlowStep).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.TrainingContentFlowStepId);
+			builder.HasOne(tutp => tutp.M_TrainingContentStep).WithMany(u => u.T_UserTrainingProgress).HasForeignKey(tutp => tutp.TrainingContentStepId);
 		}
 	}
 }

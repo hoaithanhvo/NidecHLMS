@@ -1,5 +1,4 @@
-﻿using Application.Features.Enrollments.Commands.ApproveEnrollment;
-using Application.Features.Enrollments.Commands.EnrollEnrollment;
+﻿using Application.Features.Enrollments.Commands.ExecuteEnrollment;
 using Application.Features.Enrollments.Commands.RegisterEnrollment;
 using Application.Features.Trainings.Commands.Create;
 using Application.Features.Trainings.Queries.GetAll;
@@ -32,51 +31,27 @@ namespace NidecHLMS.API.Controllers.v1
 			_mapper = mapper;
 		}
 
-		[HttpPost]
+		[HttpPost("Create")]
 		//[Authorize]
-		public async Task<IActionResult> Submit(SubmitUserTrainingEnrollmentFormRequest request)
+		public async Task<IActionResult> Submit(SubmitUserTrainingEnrollmentFormRequest request ,CancellationToken ct)
 		{
 			var command = _mapper.Map<SubmitEnrollmentCommand>(source: request);
 			var data = await _sender.Send(command);
 			return OkResponse(data);
 		}
 
-		[HttpPost("{id}/approve")]
-		public async Task<IActionResult> Approve(int id)
+		[HttpPost("EnrollmentId/{id}/Execute")]
+		public async Task<IActionResult> Execute(int id, ExecuteEnrollmentActionFormRequest request  ,CancellationToken ct)
 		{
-			await _sender.Send(new ApproveEnrollmentCommand { Id = id });
+			//var command = _mapper.Map<ExecuteEnrollmentActionCommand>(source: request);
+
+			var command = new ExecuteEnrollmentActionCommand
+			{
+				EnrollmentId = id,
+				ActionCode = request.ActionCode,
+			};
+			await _sender.Send(command);
 			return Ok();
 		}
-
-		[HttpPost("{id}/enroll")]
-		public async Task<IActionResult> Enroll(int id)
-		{
-			await _sender.Send(new EnrollEnrollmentCommand { Id = id });
-			return Ok();
-		}
-
-		//// reject
-		//[HttpPost("{id}/reject")]
-		//public async Task<IActionResult> Reject(int id)
-		//{
-		//	await _sender.Send(new RejectEnrollmentCommand { Id = id });
-		//	return Ok();
-		//}
-
-		//// start learning
-		//[HttpPost("{id}/start")]
-		//public async Task<IActionResult> Start(int id)
-		//{
-		//	await _sender.Send(new StartEnrollmentCommand { Id = id });
-		//	return Ok();
-		//}
-
-		//// complete
-		//[HttpPost("{id}/complete")]
-		//public async Task<IActionResult> Complete(int id)
-		//{
-		//	await _sender.Send(new CompleteEnrollmentCommand { Id = id });
-		//	return Ok();
-		//}
 	}
 }

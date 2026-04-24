@@ -1,6 +1,8 @@
 ﻿using Application.Common.DTOs;
 using Application.DTOs.Responses.Enrollments;
+using Application.Features.Enrollments.Commands.SubmitEnrollment;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -18,55 +20,62 @@ namespace Application.Features.Enrollments.Commands.RegisterEnrollment
 	public class SubmitEnrollmentHandler
 	: IRequestHandler<SubmitEnrollmentCommand, RegisterEnrollmentResponse>
 	{
-		private readonly IMapper _mapper;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IWorkflowService _workflow;
+		private readonly IMapper _mapper;
 
-		public SubmitEnrollmentHandler(IUnitOfWork unitOfWork, IMapper mapper)
+		public SubmitEnrollmentHandler(IUnitOfWork unitOfWork, IMapper mapper, IWorkflowService workflow)
 		{
-			_mapper = mapper;
 			_unitOfWork = unitOfWork;
+			_workflow = workflow;
+			_mapper = mapper;
 
 		}
 
 		public async Task<RegisterEnrollmentResponse> Handle(SubmitEnrollmentCommand request, CancellationToken ct)
 		{
-			var enrollmentRepo = _unitOfWork.GenericRepository<T_USER_TRAINING_ENROLLMENT, int>();
+			var repo = _unitOfWork
+			   .GenericRepository<T_USER_TRAINING_ENROLLMENT, int>();
 
-			// 1. Map Enrollment (Parent)
-			var enrollment = _mapper.Map<T_USER_TRAINING_ENROLLMENT>(request);
 
-			enrollment.StatusId = (int)EnrollmentStatus.Submitted;
-			enrollment.CreatedBy = "B600044177";
-			enrollment.CreatedDate = DateTime.Now;
-			enrollment.UpdatedBy = "B600044177";
-			enrollment.UpdatedDate = DateTime.Now;
+			
 
-			// 2. Create Progress (Child - attach vào navigation)
-			enrollment.T_UserTrainingProgress = new List<T_USER_TRAINING_PROGRESS>
-			{
-				new T_USER_TRAINING_PROGRESS
-				{
-					StatusId = (int)EnrollmentStatus.Submitted,
-					ActionDate = DateTime.UtcNow,
-					TrainingContentFlowStepId = 6,
-					CreatedBy = enrollment.CreatedBy,
-					CreatedDate = DateTime.UtcNow,
-					UpdatedBy = enrollment.UpdatedBy,
-					UpdatedDate	= DateTime.UtcNow,
-				}
-			};
+			// =====================================================
+			// 1. MAP REQUEST → ENTITY
+			// =====================================================
+			var entity = _mapper.Map<T_USER_TRAINING_ENROLLMENT>(request);
 
-			// 3. ONLY ONE CALL → EF handles both tables
-			await enrollmentRepo.CreateAsync(enrollment, ct);
 
-			// 4. TransactionBehavior sẽ tự:
-			//    - BeginTransaction
-			//    - SaveChanges (1 lần)
-			//    - Commit
-			//    - Audit saves
-			//    - Rollback nếu lỗi
+			// check duplicate
+			var exists = await repo.ContainsAsync(
+				new SubmitEnrollmentSpec(entity.EnrollmentCode), ct);
 
-			return _mapper.Map<RegisterEnrollmentResponse>(enrollment);
+			if(exists)
+				throw new Exception("EnrollmentCode already exists");
+
+			// =====================================================
+			// 2. DOMAIN LOGIC (Submit)
+			// =====================================================
+			entity.StatusId = (int)EnrollmentStatus.Submitted;
+			entity.CreatedBy = "B600044177"; // TODO: lấy từ IUserContext
+			entity.CreatedDate = DateTime.UtcNow;
+			entity.UpdatedBy = entity.CreatedBy;
+			entity.UpdatedDate = DateTime.UtcNow;
+
+			// =====================================================
+			// 3. INIT WORKFLOW (🔥 QUAN TRỌNG)
+			// =====================================================
+			await _workflow.InitializeAsync(entity, ct);
+
+			// =====================================================
+			// 4. SAVE (TransactionBehavior sẽ commit)
+			// =====================================================
+			await repo.CreateAsync(entity, ct);
+
+			// =====================================================
+			// 5. RESPONSE
+			// =====================================================
+			return _mapper.Map<RegisterEnrollmentResponse>(entity);
 		}
 	}
 }

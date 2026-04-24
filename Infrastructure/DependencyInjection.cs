@@ -1,6 +1,7 @@
 using Application.Interfaces.Persistence;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Service.WorkflowService;
 using Domain.Enrollment.Factories;
 using Infrastructure.Factories;
 using Infrastructure.GrpcClient.Interceptors;
@@ -60,6 +61,7 @@ namespace Infrastructure
             services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
             services.AddScoped<IAuditLogCollector, AuditLogCollector>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IWorkflowService, WorkflowService>();
         }
     }
 }

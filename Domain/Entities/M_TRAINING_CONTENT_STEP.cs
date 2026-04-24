@@ -16,5 +16,7 @@ namespace Domain.Entities
         public ICollection<M_TRAINING_CONTENT_FLOW_STEP> FlowSteps { get; set; }
         public ICollection<M_TRAINING_CONTENT_STEP_TRANSITION> FromTransitions { get; set; }
         public ICollection<M_TRAINING_CONTENT_STEP_TRANSITION> ToTransitions { get; set; }
+        public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
+        public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
 	}
 }

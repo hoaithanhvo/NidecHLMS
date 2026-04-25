@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260425032504_Upgrade_DB_V27")]
+    partial class Upgrade_DB_V27
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -874,11 +877,6 @@ namespace Persistence.Migrations
                     b.Property<int>("OrderNo")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<string>("StepCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -899,8 +897,6 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("M_TRAINING_CONTENT_STEP", (string)null);
                 });
@@ -1607,7 +1603,7 @@ namespace Persistence.Migrations
                     b.ToTable("T_USER_TAG", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT", b =>
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1674,7 +1670,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TrainingContentStepId");
 
-                    b.ToTable("T_USER_TRAINING_ENROLLMENT", (string)null);
+                    b.ToTable("T_USER_TRAINING_ENROLLMENT2", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
@@ -1698,6 +1694,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TrainingContentStepId")
                         .HasColumnType("int");
 
@@ -1712,6 +1711,8 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("TrainingContentStepId");
 
@@ -1839,17 +1840,6 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingContentStep");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_STEP", b =>
-                {
-                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
-                        .WithMany("M_TrainingContentSteps")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("M_Status");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_STEP_TRANSITION", b =>
                 {
                     b.HasOne("Domain.Entities.M_WORKFLOW_ACTION", "M_WorkflowAction")
@@ -1946,7 +1936,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.T_SKILLMAP_RESULT", b =>
                 {
-                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT", "T_UserTrainingEnrollment")
+                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", "T_UserTrainingEnrollment")
                         .WithMany("T_SkillmapResults")
                         .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1965,7 +1955,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.T_TRAINING_FILE", b =>
                 {
-                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT", "T_UserTrainingEnrollment")
+                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", "T_UserTrainingEnrollment")
                         .WithMany("T_TrainingFiles")
                         .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2102,7 +2092,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT", "T_UserTrainingEnrollment")
+                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", "T_UserTrainingEnrollment")
                         .WithMany("T_UserTags")
                         .HasForeignKey("UserTrainingEnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2115,7 +2105,7 @@ namespace Persistence.Migrations
                     b.Navigation("T_UserTrainingEnrollment");
                 });
 
-            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT", b =>
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", b =>
                 {
                     b.HasOne("Domain.Entities.T_TRAINING_PARTICIPANT", "T_TrainingParticipant")
                         .WithMany("T_UserTrainingEnrollments")
@@ -2168,17 +2158,25 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
                 {
+                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
+                        .WithMany("T_UserTrainingProgress")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("TrainingContentStepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT", "T_UserTrainingEnrollment")
+                    b.HasOne("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", "T_UserTrainingEnrollment")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("UserTrainingEnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("M_Status");
 
                     b.Navigation("M_TrainingContentStep");
 
@@ -2249,8 +2247,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
-                    b.Navigation("M_TrainingContentSteps");
-
                     b.Navigation("M_TrainingContents");
 
                     b.Navigation("T_TrainingParticipants");
@@ -2258,6 +2254,8 @@ namespace Persistence.Migrations
                     b.Navigation("T_TrainingResults");
 
                     b.Navigation("T_UserTrainingEnrollments");
+
+                    b.Navigation("T_UserTrainingProgress");
 
                     b.Navigation("Users");
                 });
@@ -2345,7 +2343,7 @@ namespace Persistence.Migrations
                     b.Navigation("T_TrainingResults");
                 });
 
-            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT", b =>
+            modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_ENROLLMENT2", b =>
                 {
                     b.Navigation("T_SkillmapResults");
 

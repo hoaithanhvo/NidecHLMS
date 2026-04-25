@@ -19,11 +19,9 @@ namespace Domain.Entities
 		public bool Execute { get; set; }
 		public bool View { get; set; }
 		public ICollection<T_TRAINING_RESULT>? T_TrainingResults { get; set; }
-		public ICollection<T_USER_TRAINING_PROGRESS> T_UserTrainingProgress { get; set; }
 		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
 		public ICollection<T_TRAINING_PARTICIPANT> T_TrainingParticipants { get; set; }
 		public ICollection<M_TRAINING_CONTENT> M_TrainingContents { get; set; }
-		
-
+		public ICollection<M_TRAINING_CONTENT_STEP> M_TrainingContentSteps { get; set; }
 	}
 }

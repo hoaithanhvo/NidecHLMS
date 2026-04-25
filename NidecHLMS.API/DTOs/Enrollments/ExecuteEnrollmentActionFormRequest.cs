@@ -3,6 +3,6 @@
 	public class ExecuteEnrollmentActionFormRequest
 	{
 		//public int EnrollmentId { get; set; }
-		public string ActionCode { get; set; }
+		public int ActionCode { get; set; }
 	}
 }

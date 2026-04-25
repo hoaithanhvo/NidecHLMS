@@ -62,6 +62,7 @@
     <Folder Include="Features\Users\Commands\UpdateUser\" />
     <Folder Include="Features\Users\Queries\GetUserById\" />
     <Folder Include="Features\Users\Queries\GetUsers\" />
+    <Folder Include="Features\WorkflowAction\Commands\" />
     <Folder Include="Interfaces\Common\" />
     <Folder Include="Service\StatusService\NewFolder\" />
   </ItemGroup>
@@ -72,7 +73,7 @@
 
   <ItemGroup>
     <Reference Include="NidecSystemShared">
-      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
+      <HintPath>..\..\NidecSystemShared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

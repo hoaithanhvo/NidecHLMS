@@ -18,7 +18,7 @@ namespace Domain.Entities
 		public int ToStepId { get; set; }
 
 		// ===== Action =====
-		public string ActionCode { get; set; } = string.Empty;
+		public int ActionCode { get; set; }
 		// NEXT, PASS, FAIL, SKIP
 
 		// ===== Condition (optional) =====
@@ -31,8 +31,8 @@ namespace Domain.Entities
 
 		// ===== Navigation =====
 		public M_TRAINING_CONTENT_STEP FromStep { get; set; }
-
 		public M_TRAINING_CONTENT_STEP ToStep { get; set; }
 		public M_TRAINING_CONTENT_FLOW M_TrainingContentFlow { get; set; }
+		public M_WORKFLOW_ACTION M_WorkflowAction { get; set; }
 	}
 }

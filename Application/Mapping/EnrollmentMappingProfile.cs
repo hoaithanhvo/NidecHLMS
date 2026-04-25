@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Responses.Enrollments;
+﻿using Application.Common.DTOs;
+using Application.DTOs.Responses.Enrollments;
 using Application.DTOs.Responses.Trainings;
 using Application.Features.Enrollments.Commands.RegisterEnrollment;
 using AutoMapper;
@@ -19,6 +20,8 @@ namespace Application.Mapping
 			CreateMap<SubmitEnrollmentCommand, T_USER_TRAINING_PROGRESS>();
 
 			CreateMap<T_USER_TRAINING_ENROLLMENT, RegisterEnrollmentResponse>().ForMember(x=>x.EnrollmentCode, o=>o.MapFrom(s=>s.EnrollmentCode));
+
+			CreateMap<T_USER_TRAINING_ENROLLMENT, EnrollmentDTO>();
 		}
 	}
 }

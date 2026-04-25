@@ -38,8 +38,6 @@ namespace Application.Features.Enrollments.Commands.RegisterEnrollment
 			   .GenericRepository<T_USER_TRAINING_ENROLLMENT, int>();
 
 
-			
-
 			// =====================================================
 			// 1. MAP REQUEST → ENTITY
 			// =====================================================
@@ -54,26 +52,17 @@ namespace Application.Features.Enrollments.Commands.RegisterEnrollment
 				throw new Exception("EnrollmentCode already exists");
 
 			// =====================================================
-			// 2. DOMAIN LOGIC (Submit)
-			// =====================================================
-			entity.StatusId = (int)EnrollmentStatus.Submitted;
-			entity.CreatedBy = "B600044177"; // TODO: lấy từ IUserContext
-			entity.CreatedDate = DateTime.UtcNow;
-			entity.UpdatedBy = entity.CreatedBy;
-			entity.UpdatedDate = DateTime.UtcNow;
-
-			// =====================================================
-			// 3. INIT WORKFLOW (🔥 QUAN TRỌNG)
+			// 2. INIT WORKFLOW (🔥 QUAN TRỌNG)
 			// =====================================================
 			await _workflow.InitializeAsync(entity, ct);
 
 			// =====================================================
-			// 4. SAVE (TransactionBehavior sẽ commit)
+			// 3. SAVE (TransactionBehavior sẽ commit)
 			// =====================================================
 			await repo.CreateAsync(entity, ct);
 
 			// =====================================================
-			// 5. RESPONSE
+			// 4. RESPONSE
 			// =====================================================
 			return _mapper.Map<RegisterEnrollmentResponse>(entity);
 		}

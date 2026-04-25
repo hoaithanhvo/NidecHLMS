@@ -15,6 +15,10 @@ namespace Persistence.Configurations
 		public void Configure(EntityTypeBuilder<M_TRAINING_CONTENT_STEP> builder)
 		{
 			builder.ToTable("M_TRAINING_CONTENT_STEP");
+
+			builder.HasOne(mtcs=>mtcs.M_Status).WithMany(ms=>ms.M_TrainingContentSteps).HasForeignKey(mtcs=>mtcs.StatusId).OnDelete(DeleteBehavior.Restrict);
+
+			builder.Property(mtcs => mtcs.StatusId).HasDefaultValue(1);
 		}
 	}
 }

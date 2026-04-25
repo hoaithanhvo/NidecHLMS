@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Enrollments.Commands.ExecuteEnrollment
+namespace Application.Features.WorkflowAction.Queries.GetAvailable
 {
-	public class EnrollmentWithProgressSpec
+	public class GetEnrollmentWithProgressSpec
 	: BaseSpecification<T_USER_TRAINING_ENROLLMENT>
 	{
-		public EnrollmentWithProgressSpec(int id)
+		public GetEnrollmentWithProgressSpec(int id)
 			: base(x => x.Id == id)
 		{
 			AddInclude(x => x.T_UserTrainingProgress);
-			AddInclude(x => x.M_Status);
 		}
 	}
 }

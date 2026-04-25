@@ -12,6 +12,9 @@ namespace Domain.Specifications
 		public FirstFlowStepSpec(int flowId)
 			: base(x => x.TrainingContentFlowId == flowId)
 		{
+			AddInclude(x => x.TrainingContentFlow);
+			AddInclude(x => x.TrainingContentStep);
+			AddInclude(x => x.TrainingContentStep.M_Status);
 			ApplyOrderBy(x => x.OrderNo);
 		}
 	}

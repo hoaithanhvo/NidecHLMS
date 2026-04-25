@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260425011229_Upgrade_DB_V26")]
+    partial class Upgrade_DB_V26
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -683,7 +686,9 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("TrainingContentName")
                         .IsRequired()
@@ -874,11 +879,6 @@ namespace Persistence.Migrations
                     b.Property<int>("OrderNo")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<string>("StepCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -899,8 +899,6 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("M_TRAINING_CONTENT_STEP", (string)null);
                 });
@@ -1641,9 +1639,6 @@ namespace Persistence.Migrations
                     b.Property<int>("TrainingContentFlowId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainingContentFlowStepId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TrainingContentId")
                         .HasColumnType("int");
 
@@ -1667,8 +1662,6 @@ namespace Persistence.Migrations
                     b.HasIndex("StatusId");
 
                     b.HasIndex("TrainingContentFlowId");
-
-                    b.HasIndex("TrainingContentFlowStepId");
 
                     b.HasIndex("TrainingContentId");
 
@@ -1698,6 +1691,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime?>("DeleteDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TrainingContentStepId")
                         .HasColumnType("int");
 
@@ -1712,6 +1708,8 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("TrainingContentStepId");
 
@@ -1837,17 +1835,6 @@ namespace Persistence.Migrations
                     b.Navigation("TrainingContentFlow");
 
                     b.Navigation("TrainingContentStep");
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_STEP", b =>
-                {
-                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
-                        .WithMany("M_TrainingContentSteps")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("M_Status");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_STEP_TRANSITION", b =>
@@ -2135,12 +2122,6 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", "M_TrainingContentFlowStep")
-                        .WithMany("T_UserTrainingEnrollments")
-                        .HasForeignKey("TrainingContentFlowStepId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT", "M_TrainingContent")
                         .WithMany("T_UserTrainingEnrollments")
                         .HasForeignKey("TrainingContentId")
@@ -2159,8 +2140,6 @@ namespace Persistence.Migrations
 
                     b.Navigation("M_TrainingContentFlow");
 
-                    b.Navigation("M_TrainingContentFlowStep");
-
                     b.Navigation("M_TrainingContentStep");
 
                     b.Navigation("T_TrainingParticipant");
@@ -2168,6 +2147,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.T_USER_TRAINING_PROGRESS", b =>
                 {
+                    b.HasOne("Domain.Entities.M_STATUS", "M_Status")
+                        .WithMany("T_UserTrainingProgress")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
                         .WithMany("T_UserTrainingProgress")
                         .HasForeignKey("TrainingContentStepId")
@@ -2179,6 +2164,8 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserTrainingEnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("M_Status");
 
                     b.Navigation("M_TrainingContentStep");
 
@@ -2249,8 +2236,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.M_STATUS", b =>
                 {
-                    b.Navigation("M_TrainingContentSteps");
-
                     b.Navigation("M_TrainingContents");
 
                     b.Navigation("T_TrainingParticipants");
@@ -2258,6 +2243,8 @@ namespace Persistence.Migrations
                     b.Navigation("T_TrainingResults");
 
                     b.Navigation("T_UserTrainingEnrollments");
+
+                    b.Navigation("T_UserTrainingProgress");
 
                     b.Navigation("Users");
                 });
@@ -2290,8 +2277,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_FLOW_STEP", b =>
                 {
                     b.Navigation("T_TrainingFiles");
-
-                    b.Navigation("T_UserTrainingEnrollments");
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TRAINING_CONTENT_LIFECYCLE", b =>

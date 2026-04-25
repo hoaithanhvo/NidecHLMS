@@ -12,6 +12,7 @@ namespace Application.Features.Enrollments.Commands.SubmitEnrollment
 	{
 		public SubmitEnrollmentSpec(string enrollmentCode) : base(x => x.EnrollmentCode == enrollmentCode)
 		{
+			
 		}
 	}
 }

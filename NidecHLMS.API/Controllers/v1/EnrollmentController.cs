@@ -4,6 +4,7 @@ using Application.Features.Trainings.Commands.Create;
 using Application.Features.Trainings.Queries.GetAll;
 using Application.Features.Trainings.Queries.GetById;
 using Application.Features.Trainings.Queries.GetList;
+using Application.Features.WorkflowAction.Queries.GetAvailable;
 using Asp.Versioning;
 using AutoMapper;
 using Azure.Core;
@@ -36,22 +37,31 @@ namespace NidecHLMS.API.Controllers.v1
 		public async Task<IActionResult> Submit(SubmitUserTrainingEnrollmentFormRequest request ,CancellationToken ct)
 		{
 			var command = _mapper.Map<SubmitEnrollmentCommand>(source: request);
-			var data = await _sender.Send(command);
-			return OkResponse(data);
+			var respone = await _sender.Send(command);
+			return OkResponse(respone);
 		}
 
-		[HttpPost("EnrollmentId/{id}/Execute")]
-		public async Task<IActionResult> Execute(int id, ExecuteEnrollmentActionFormRequest request  ,CancellationToken ct)
+		[HttpPost("{id}/{actionId}/Execute")]
+		public async Task<IActionResult> Execute(int id,int actionId ,CancellationToken ct)
 		{
-			//var command = _mapper.Map<ExecuteEnrollmentActionCommand>(source: request);
-
 			var command = new ExecuteEnrollmentActionCommand
 			{
 				EnrollmentId = id,
-				ActionCode = request.ActionCode,
+				ActionCode = actionId,
 			};
-			await _sender.Send(command);
-			return Ok();
+			var respone = await _sender.Send(command);
+			return OkResponse(respone);
+		}
+
+		[HttpGet("{id}/WorkFlowActionAvailibles")]
+		public async Task<IActionResult> GetAction(int id)
+		{
+			var query = new GetAvailableActionsQuery
+			{
+				EnrollmentId = id,
+			};
+			var respone = await _sender.Send(query);
+			return OkResponse(respone);
 		}
 	}
 }

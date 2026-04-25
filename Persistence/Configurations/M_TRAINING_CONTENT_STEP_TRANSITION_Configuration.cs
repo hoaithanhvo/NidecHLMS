@@ -21,6 +21,8 @@ namespace Persistence.Configurations
 
 			builder.HasOne(x => x.M_TrainingContentFlow).WithMany(mtcs => mtcs.M_TrainingContentStepTransitions).HasForeignKey(x => x.TrainingContentFlowId).OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasOne(x => x.M_WorkflowAction).WithMany(mtcs => mtcs.M_TrainingContentStepTransitions).HasForeignKey(x => x.ActionCode).OnDelete(DeleteBehavior.Restrict);
+
 			// ===== Constraints =====
 
 			builder.Property(x => x.ActionCode)
@@ -34,16 +36,16 @@ namespace Persistence.Configurations
 				.HasMaxLength(100);
 
 			builder.HasIndex(x => new { x.FromStepId, x.ActionCode, x.TrainingContentFlowId })
-	.HasDatabaseName("IX_Transition_FromStep_Action_Flow");
+			.HasDatabaseName("IX_Transition_FromStep_Action_Flow");
 
 
 			builder.HasIndex(x => new { x.FromStepId, x.ActionCode, x.ToStepId, x.TrainingContentFlowId })
-	.IsUnique()
-	.HasFilter("[TrainingContentFlowId] IS NOT NULL");
+				.IsUnique()
+				.HasFilter("[TrainingContentFlowId] IS NOT NULL");
 
 			builder.HasIndex(x => new { x.FromStepId, x.ActionCode, x.ToStepId })
-	.IsUnique()
-	.HasFilter("[TrainingContentFlowId] IS NULL");
+				.IsUnique()
+				.HasFilter("[TrainingContentFlowId] IS NULL");
 		}
 	}
 }

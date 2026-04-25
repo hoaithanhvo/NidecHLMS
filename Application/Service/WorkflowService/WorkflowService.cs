@@ -1,6 +1,9 @@
-﻿using Application.Features.Trainings.Queries.GetTransittion;
+﻿using Application.Common.DTOs;
+using Application.Features.Enrollments.Commands.ExecuteEnrollment;
+using Application.Features.Trainings.Queries.GetTransittion;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Specifications;
 using System;
@@ -15,13 +18,15 @@ namespace Application.Service.WorkflowService
 	{
 		private readonly IGenericRepository<M_TRAINING_CONTENT_STEP_TRANSITION, int> _transitionRepo;
 		private readonly IGenericRepository<M_TRAINING_CONTENT_FLOW_STEP, int> _flowStepRepo;
+		private readonly IMapper _mapper;
 
-		public WorkflowService(
+		public WorkflowService(IGenericRepository<M_TRAINING_CONTENT_FLOW_STEP, int> flowstepRepo,
 			IGenericRepository<M_TRAINING_CONTENT_STEP_TRANSITION, int> transitionRepo,
-			IGenericRepository<M_TRAINING_CONTENT_FLOW_STEP, int> flowStepRepo)
+			IGenericRepository<M_TRAINING_CONTENT_FLOW_STEP, int> flowStepRepo,IMapper mapper)
 		{
 			_transitionRepo = transitionRepo;
 			_flowStepRepo = flowStepRepo;
+			_mapper = mapper;
 		}
 
 		// =========================================================
@@ -41,20 +46,17 @@ namespace Application.Service.WorkflowService
 				throw new Exception("Flow has no steps");
 
 			// set current step
-			entity.TrainingContentStepId = firstStep.Id;
+			entity.TrainingContentFlowStepId = firstStep.Id;
+			entity.TrainingContentStepId = firstStep.TrainingContentStepId;
+			entity.StatusId = firstStep.TrainingContentStep.StatusId;
 
 			// create first progress
 			entity.T_UserTrainingProgress = new List<T_USER_TRAINING_PROGRESS>
 			{
 				new T_USER_TRAINING_PROGRESS
 				{
-					TrainingContentStepId = firstStep.Id,
-					StatusId = entity.StatusId,
+					TrainingContentStepId = firstStep.TrainingContentStepId,
 					ActionDate = DateTime.UtcNow,
-					CreatedBy = entity.CreatedBy,
-					CreatedDate = DateTime.UtcNow,
-					UpdatedBy = entity.CreatedBy,
-					UpdatedDate = DateTime.UtcNow
 				}
 			};
 		}
@@ -64,28 +66,35 @@ namespace Application.Service.WorkflowService
 		// =========================================================
 		public async Task ExecuteAsync(
 			T_USER_TRAINING_ENROLLMENT entity,
-			string actionCode,
+			int actionCode,
 			CancellationToken ct)
 		{
 			// 1. get current step từ progress
-			var currentFlowStepId = entity.T_UserTrainingProgress
-				.OrderByDescending(x => x.ActionDate)
-				.FirstOrDefault()?.TrainingContentStepId;
+			//var currentFlowStepId = entity.T_UserTrainingProgress
+			//	.OrderByDescending(x => x.ActionDate)
+			//	.FirstOrDefault()?.TrainingContentStepId;
 
-			if(currentFlowStepId == null)
-				throw new Exception("No current step");
+			//if(currentFlowStepId == null)
+			//	throw new Exception("No current step");
 
-			var currentFlowStep = await _flowStepRepo.GetByIdAsync(currentFlowStepId.Value, ct);
+			var currentFlowStep = await _flowStepRepo.GetByIdAsync(entity.TrainingContentFlowStepId, ct);
 
 			var currentStepId = currentFlowStep.TrainingContentStepId;
 
 			// 2. tìm transition
-			var spec = new GetTransitionSpec(
+			var specTransition = new TransitionSpec(
 				currentStepId,
 				actionCode,
 				entity.TrainingContentFlowId);
 
-			var transition = await _transitionRepo.GetAsync(spec, ct);
+			var transition = await _transitionRepo.GetAsync(specTransition, ct);
+
+
+			//2.1 tìm workflowstep
+			var specFlowstep = new WorkflowStepSpec(entity.TrainingContentFlowId, transition.ToStepId);
+
+			var flowStep = await _flowStepRepo.GetAsync(specFlowstep, ct);
+
 
 			if(transition == null)
 				throw new Exception($"No transition for action {actionCode}");
@@ -95,17 +104,14 @@ namespace Application.Service.WorkflowService
 
 			// 4. update step
 			entity.TrainingContentStepId = transition.ToStepId;
+			entity.TrainingContentFlowStepId = flowStep.Id;
+			entity.StatusId = flowStep.TrainingContentStep.StatusId;
 
 			// 5. log progress (QUAN TRỌNG)
 			entity.T_UserTrainingProgress.Add(new T_USER_TRAINING_PROGRESS
 			{
 				TrainingContentStepId = transition.ToStepId,
-				StatusId = entity.StatusId,
-				ActionDate = DateTime.UtcNow,
-				CreatedBy = entity.UpdatedBy,
-				CreatedDate = DateTime.UtcNow,
-				UpdatedBy = entity.UpdatedBy,
-				UpdatedDate = DateTime.UtcNow
+				ActionDate = DateTime.Now,
 			});
 
 			// 6. side effect (optional)
@@ -115,28 +121,32 @@ namespace Application.Service.WorkflowService
 		// =========================================================
 		// 🔥 3. GET AVAILABLE ACTIONS (FE dùng)
 		// =========================================================
-		public async Task<List<string>> GetAvailableActionsAsync(
+		public async Task<List<WorkflowActionDTO>> GetAvailableActionsAsync(
 			T_USER_TRAINING_ENROLLMENT entity,
 			CancellationToken ct)
 		{
-			var currentStepId = entity.T_UserTrainingProgress
-				.OrderByDescending(x => x.ActionDate)
-				.FirstOrDefault()?.TrainingContentStepId;
+			//// Join sang progress để lấy action mới nhất.
+			//var contentStepId = entity.T_UserTrainingProgress
+			//	.OrderByDescending(x => x.ActionDate)
+			//	.FirstOrDefault()?.TrainingContentStepId;
 
-			if(currentStepId == null)
-				return new List<string>();
+			//if(contentStepId == null)
+			//	return new();
+
+			var flowStep = await _flowStepRepo.GetByIdAsync(entity.TrainingContentFlowStepId, ct);
+
+			var stepId = flowStep.TrainingContentStepId;
 
 			var transitions = await _transitionRepo.ToListAsync(
-				new GetTransitionSpec(
-					currentStepId.Value,
-					null, // lấy tất cả action
+				new TransitionSpec(
+					stepId,
+					null,
 					entity.TrainingContentFlowId),
 				ct);
 
-			return transitions
-				.Select(x => x.ActionCode)
-				.Distinct()
-				.ToList();
+			var result = _mapper.Map<List<WorkflowActionDTO>>(transitions);
+
+			return result;
 		}
 	}
 }

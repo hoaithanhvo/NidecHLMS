@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.DTOs;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,13 @@ namespace Application.Interfaces.Services
 		/// </summary>
 		Task ExecuteAsync(
 			T_USER_TRAINING_ENROLLMENT entity,
-			string actionCode,
+			int actionCode,
 			CancellationToken ct);
 
 		/// <summary>
 		/// Lấy danh sách action có thể thực hiện tại step hiện tại
 		/// </summary>
-		Task<List<string>> GetAvailableActionsAsync(
+		Task<List<WorkflowActionDTO>> GetAvailableActionsAsync(
 			T_USER_TRAINING_ENROLLMENT entity,
 			CancellationToken ct);
 	}

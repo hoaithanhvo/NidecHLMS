@@ -21,6 +21,11 @@ namespace Persistence.Configurations
 			builder.HasIndex(tute => tute.EnrollmentCode).IsUnique();
 
 			builder.HasOne(tute => tute.M_TrainingContentStep).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentStepId);
+
+			builder.HasOne(tute => tute.M_TrainingContentFlowStep).WithMany(u => u.T_UserTrainingEnrollments).HasForeignKey(tute => tute.TrainingContentFlowStepId).OnDelete(DeleteBehavior.Restrict);
+
+
+
 		}
-    }
+	}
 }

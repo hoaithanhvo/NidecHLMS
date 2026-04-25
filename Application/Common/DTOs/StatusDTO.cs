@@ -8,7 +8,9 @@ namespace Application.Common.DTOs
 {
     public class StatusDTO
     {
-        public string StatusName { get; set; } = string.Empty;
-        public string Color { get; set; } = string.Empty;
-    }
+        public string StatusName { get; set; }
+        public string Color { get; set; }
+		public string Description { get; set; }
+		public string Type { get; set; }
+	}
 }

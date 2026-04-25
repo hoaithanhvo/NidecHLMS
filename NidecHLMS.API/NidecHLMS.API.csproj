@@ -34,4 +34,10 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NidecSystemShared">
+      <HintPath>..\..\..\..\..\NidecSystemShared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

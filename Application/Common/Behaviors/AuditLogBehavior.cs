@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Command;
+using Application.Interfaces.Common;
 using Application.Interfaces.Persistence;
 using Application.Interfaces.Services;
 using MediatR;
@@ -8,14 +9,17 @@ namespace Application.Common.Behaviors
     public class AuditBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly IAuditLogCollector _auditLogCollector;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IAuditableEntityStamper _auditableEntityStamper;
+        private readonly ICurrentUserContext _currentUserContext;
 
         public AuditBehavior(
             IAuditLogCollector auditLogCollector,
-			ICurrentUserService currentUserService)
+            IAuditableEntityStamper auditableEntityStamper,
+            ICurrentUserContext currentUserContext)
         {
             _auditLogCollector = auditLogCollector;
-			_currentUserService = currentUserService;
+            _auditableEntityStamper = auditableEntityStamper;
+            _currentUserContext = currentUserContext;
         }
 
         public async Task<TResponse> Handle(
@@ -25,11 +29,15 @@ namespace Application.Common.Behaviors
         {
             var response = await next();
 
-			// ✅ chỉ audit command
-			if(request is ICommand<TResponse>)
-			{
-				_auditLogCollector.Capture(_currentUserService.GetUserId);
-			}
+            if (request is ICommand<TResponse>)
+            {
+                var actor = _currentUserContext.UserId;
+                if (string.IsNullOrWhiteSpace(actor))
+                    throw new InvalidOperationException("Audit user context is missing.");
+
+                _auditableEntityStamper.StampAuditableEntities(actor);
+                _auditLogCollector.Capture(actor, _currentUserContext.RequestPath);
+            }
 
 			return response;
         }

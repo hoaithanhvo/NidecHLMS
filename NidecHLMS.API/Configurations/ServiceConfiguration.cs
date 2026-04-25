@@ -1,5 +1,9 @@
+using System.Text;
 using Application;
+using Application.Interfaces.Common;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using NidecHLMS.API.Middlewares.Exceptions;
 using Persistence;
 
@@ -14,14 +18,45 @@ public static class ServiceConfiguration
         IConfiguration configuration)
     {
         services.AddControllers();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
+        // HTTP CONTEXT + USER
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserContext, CurrentUserContext>();
+
+        // JWT AUTH
+        var jwt = configuration.GetSection("JwtOptions");
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+
+                    ValidIssuer = jwt["Issuer"],
+                    ValidAudience = jwt["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwt["SecretKey"]!)
+                    ),
+
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        services.AddAuthorization();
+
+        // GRPC
         services.AddGrpc(options =>
         {
             options.EnableDetailedErrors = true;
             options.Interceptors.Add<GrpcExceptionMiddleware>();
         });
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        services.AddHttpContextAccessor();
+
         services.AddCors(options =>
         {
             options.AddPolicy(CorsPolicyName, policy =>
@@ -42,9 +77,9 @@ public static class ServiceConfiguration
             });
         });
 
-        // Each layer reads its own config internally, now we pass IConfiguration
-        services.AddApplication();
-        services.AddPersistence(configuration);      
+        // LAYERS
+        services.AddApplication();       
+        services.AddPersistence(configuration);
         services.AddInfrastructure(configuration);
 
         return services;

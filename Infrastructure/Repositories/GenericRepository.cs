@@ -294,7 +294,7 @@ namespace Persistence.Repositories
                 metadata.StatusProperty.SetValue(entity, status);
 
             if (metadata.UpdatedDateProperty?.CanWrite == true)
-                metadata.UpdatedDateProperty.SetValue(entity, DateTime.UtcNow);
+                metadata.UpdatedDateProperty.SetValue(entity, DateTime.Now);
         }
 
         private sealed record EntityGraphMetadata(

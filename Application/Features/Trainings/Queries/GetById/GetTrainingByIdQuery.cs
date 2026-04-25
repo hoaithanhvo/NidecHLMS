@@ -1,9 +1,9 @@
-﻿using Application.Features.Trainings.Queries.GetById.DTOs;
+﻿using Application.DTOs.Responses.Trainings;
 using MediatR;
 
 namespace Application.Features.Trainings.Queries.GetById
 {
-	public class GetTrainingByIdQuery : IRequest<TrainingContentByIdDTO>
+	public class GetTrainingByIdQuery : IRequest<TrainingListResponse>
     {
 		public int Id { get; set; }
 	}

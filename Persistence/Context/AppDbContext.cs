@@ -1,9 +1,11 @@
+﻿using Application.Interfaces.Persistence;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using NidecSystemShared.Interfaces;
 
 namespace Persistence.Context
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : DbContext, IAuditableEntityStamper
     {
 		public AppDbContext(DbContextOptions<AppDbContext> options)
 	: base(options)
@@ -57,5 +59,47 @@ namespace Persistence.Context
 		{
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 		}
-	}
+        /// <summary>
+		/// Auto config Created, UpdatedBy, CreatedDate, UpdatedDate
+		/// called from UnitOfWork
+        /// </summary>
+        public void StampAuditableEntities(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new InvalidOperationException("Audit stamping requires a non-empty user id.");
+
+            var now = DateTime.Now; 
+
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is IAuditAbleEntity<string> auditableEntity)
+                {
+                    var createdDateProp = entry.Entity.GetType().GetProperty("CreatedDate");
+                    var updatedDateProp = entry.Entity.GetType().GetProperty("UpdatedDate");
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditableEntity.CreatedBy = userId;
+                            auditableEntity.UpdatedBy = userId;
+                            createdDateProp?.SetValue(entry.Entity, now);
+                            updatedDateProp?.SetValue(entry.Entity, now);
+                            break;
+
+                        case EntityState.Modified:
+                            auditableEntity.UpdatedBy = userId;
+                            updatedDateProp?.SetValue(entry.Entity, now);
+
+                            var createdByProperty = entry.Metadata.FindProperty("CreatedBy");
+                            var createdDateProperty = entry.Metadata.FindProperty("CreatedDate");
+                            if (createdByProperty != null)
+                                entry.Property("CreatedBy").IsModified = false;
+                            if (createdDateProperty != null)
+                                entry.Property("CreatedDate").IsModified = false;
+                            break;
+                    }
+                }
+            }
+        }
+    }
 }

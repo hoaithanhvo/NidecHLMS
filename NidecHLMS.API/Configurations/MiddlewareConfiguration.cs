@@ -29,6 +29,7 @@ namespace NidecHLMS.API.Configurations
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 

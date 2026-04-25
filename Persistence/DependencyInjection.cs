@@ -13,6 +13,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContextSetup(configuration);
+        services.AddScoped<IAuditableEntityStamper>(sp => sp.GetRequiredService<AppDbContext>());
         return services;
     }
 

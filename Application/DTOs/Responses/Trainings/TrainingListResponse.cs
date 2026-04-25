@@ -14,6 +14,7 @@ namespace Application.DTOs.Responses.Trainings
 		public string TrainingContentName { get; set; }
 		public OperationDTO Operation { get; set; }
 		public TrainingContentLifeCycleDTO Lifecycle { get; set; }
+		public StatusDTO Status { get; set; }
 		public string UpdatedBy { get; set; } = string.Empty;
 		public string CreatedBy { get; set; } = string.Empty;
 	}

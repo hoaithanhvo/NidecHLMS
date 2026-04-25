@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
-using Application.Features.Trainings.Queries.GetById.DTOs;
+using Application.DTOs.Responses.Trainings;
+using Application.Features.Trainings.Queries.Specs;
 using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Application.Features.Trainings.Queries.GetById
 {
-	public class GetTrainingByIdHandler : IRequestHandler<GetTrainingByIdQuery, TrainingContentByIdDTO>
+	public class GetTrainingByIdHandler : IRequestHandler<GetTrainingByIdQuery, TrainingListResponse>
 	{
 		private readonly IGenericRepository<M_TRAINING_CONTENT, int> _repository;
 		private readonly IMapper _mapper;
@@ -20,7 +21,7 @@ namespace Application.Features.Trainings.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<TrainingContentByIdDTO> Handle(GetTrainingByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TrainingListResponse> Handle(GetTrainingByIdQuery request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetAsync(
                 new GetTrainningByIdSpec(request.Id), cancellationToken);
@@ -28,7 +29,7 @@ namespace Application.Features.Trainings.Queries.GetById
             if (entity == null)
                 throw new NotFoundException(nameof(M_TRAINING_CONTENT), request.Id);
 
-            return _mapper.Map<TrainingContentByIdDTO>(entity);
+            return _mapper.Map<TrainingListResponse>(entity);
         }
     }
 }

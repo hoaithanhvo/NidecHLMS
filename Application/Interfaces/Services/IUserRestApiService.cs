@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Services
 {
-    public interface IUserGrpcService
+    public interface IUserRestApiService
     {
         Task<UserResponse> GetUser(string userId);
         Task<List<UserResponse>> GetUsers(List<string> userIds);

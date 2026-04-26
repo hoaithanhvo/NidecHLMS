@@ -28,7 +28,9 @@ namespace Domain.Entities
 		// ===== Rule =====
 		public bool IsDefault { get; set; } = false;
 		public bool IsActive { get; set; } = true;
-
+		public int StatusId { get; set; }
+		public M_STATUS M_Status { get; set; }
+		
 		// ===== Navigation =====
 		public M_TRAINING_CONTENT_STEP FromStep { get; set; }
 		public M_TRAINING_CONTENT_STEP ToStep { get; set; }

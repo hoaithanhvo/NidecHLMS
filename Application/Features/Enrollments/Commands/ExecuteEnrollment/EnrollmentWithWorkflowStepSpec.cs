@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Enrollments.Commands.ExecuteEnrollment
 {
-	public class WorkflowStepSpec : BaseSpecification<M_TRAINING_CONTENT_FLOW_STEP>
+	public class EnrollmentWithWorkflowStepSpec : BaseSpecification<M_TRAINING_CONTENT_FLOW_STEP>
 	{
-		public WorkflowStepSpec(int contentFlowId, int contentStepId)
+		public EnrollmentWithWorkflowStepSpec(int contentFlowId, int contentStepId)
 		{
 			AddInclude(x => x.TrainingContentStep);
-			AddInclude(x => x.TrainingContentStep.M_Status);
+			//AddInclude(x => x.M_Status);
 
 			Criteria = x => x.TrainingContentFlowId == contentFlowId && x.TrainingContentStepId == contentStepId;
 		}

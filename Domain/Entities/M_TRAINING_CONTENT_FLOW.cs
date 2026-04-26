@@ -30,6 +30,7 @@ namespace Domain.Entities
 		public ICollection<T_USER_TRAINING_ENROLLMENT> T_UserTrainingEnrollments { get; set; }
         public ICollection<T_TRAINING_FILE> T_TrainingFiles { get; set; }
         public ICollection<M_TRAINING_CONTENT_STEP_TRANSITION> M_TrainingContentStepTransitions { get; set; }
+        public ICollection<M_STEP_REQUIREMENT> M_StepRequirements { get; set; }
 
     }
 }

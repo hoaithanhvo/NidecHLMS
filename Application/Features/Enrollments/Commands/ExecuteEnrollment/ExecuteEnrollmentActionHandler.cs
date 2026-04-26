@@ -37,34 +37,34 @@ namespace Application.Features.Enrollments.Commands.ExecuteEnrollment
 				.GenericRepository<T_USER_TRAINING_ENROLLMENT, int>();
 
 			// 1. LOAD ENTITY (with progress history)
-			var entity = await repo.GetAsync(
+			var enrollmentCurrent = await repo.GetAsync(
 				new EnrollmentWithProgressSpec(request.EnrollmentId),
 				ct);
 
-			if(entity == null)
+			if(enrollmentCurrent == null)
 				throw new Exception("Enrollment not found");
 
-			if(entity.T_UserTrainingProgress == null)
+			if(enrollmentCurrent.T_UserTrainingProgress == null)
 				throw new Exception("Progress not initialized");
 
-			var fromStepId = entity.TrainingContentStepId;
+			var fromStepId = enrollmentCurrent.TrainingContentStepId;
 
 			// 2. EXECUTE WORKFLOW ENGINE (DB-driven)
-			await _workflow.ExecuteAsync(entity, request.ActionCode, ct);
+			await _workflow.ExecuteAsync(enrollmentCurrent, request.ActionCode, ct);
 
-			var toStepId = entity.TrainingContentStepId;
+			var toStepId = enrollmentCurrent.TrainingContentStepId;
 
 			// 3. SAVE (UnitOfWork handles transaction)
-			await repo.UpdateAsync(entity, ct);
+			await repo.UpdateAsync(enrollmentCurrent, ct);
 
 			// 4. RESPONSE
 			return new ExecuteEnrollmentActionResponse
 			{
-				EnrollmentId = entity.Id,
+				EnrollmentId = enrollmentCurrent.Id,
 				FromStepId = fromStepId,
 				ToStepId = toStepId,
 				ActionCode = request.ActionCode,
-				StatusId = _mapper.Map<StatusDTO>(entity.M_Status)
+				StatusId = _mapper.Map<StatusDTO>(enrollmentCurrent.M_Status)
 			};
 		}
 	}

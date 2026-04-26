@@ -13,6 +13,7 @@ namespace Application.Features.Trainings.Queries.GetTransittion
 	{
 		public TransitionSpec(int stepId, int? action, int? flowId, bool onlyFlow = false, bool onlyGlobal = false) : base(null)
 		{
+			AddInclude(x => x.M_Status);
 			AddInclude(x => x.M_WorkflowAction);
 			if(onlyFlow)
 			{

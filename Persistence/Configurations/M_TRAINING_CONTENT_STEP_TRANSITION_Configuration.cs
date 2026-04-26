@@ -23,6 +23,10 @@ namespace Persistence.Configurations
 
 			builder.HasOne(x => x.M_WorkflowAction).WithMany(mtcs => mtcs.M_TrainingContentStepTransitions).HasForeignKey(x => x.ActionCode).OnDelete(DeleteBehavior.Restrict);
 
+			builder.HasOne(x => x.M_Status).WithMany(mtcs => mtcs.M_TrainingContentStepTransitions).HasForeignKey(x => x.StatusId).OnDelete(DeleteBehavior.Restrict);
+
+			builder.Property(x => x.StatusId).HasDefaultValue(1);
+
 			// ===== Constraints =====
 
 			builder.Property(x => x.ActionCode)

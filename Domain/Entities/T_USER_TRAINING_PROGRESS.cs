@@ -12,8 +12,8 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int UserTrainingEnrollmentId { get; set; }
         public int TrainingContentStepId { get; set; }
-        public DateTime ActionDate { get; set; }
-        public DateTime? DeleteDate { get; set; }
+        public int StatusId { get; set; }
+        public M_STATUS M_Status { get; set; }
         public M_TRAINING_CONTENT_STEP M_TrainingContentStep { get; set; }
         public T_USER_TRAINING_ENROLLMENT T_UserTrainingEnrollment { get; set; }
 	}

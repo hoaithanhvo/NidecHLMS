@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Exceptions;
 using Application.DTOs.Responses.Enrollments;
 using Application.Features.Enrollments.Commands.SubmitEnrollment;
 using Application.Interfaces.Repositories;
@@ -6,6 +7,7 @@ using Application.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -49,7 +51,9 @@ namespace Application.Features.Enrollments.Commands.RegisterEnrollment
 				new SubmitEnrollmentSpec(entity.EnrollmentCode), ct);
 
 			if(exists)
-				throw new Exception("EnrollmentCode already exists");
+			{
+				throw new ConflictException("EnrollmentCode already exists");
+			}	
 
 			// =====================================================
 			// 2. INIT WORKFLOW (🔥 QUAN TRỌNG)

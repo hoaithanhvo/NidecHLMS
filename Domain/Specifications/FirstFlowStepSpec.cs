@@ -14,7 +14,6 @@ namespace Domain.Specifications
 		{
 			AddInclude(x => x.TrainingContentFlow);
 			AddInclude(x => x.TrainingContentStep);
-			AddInclude(x => x.TrainingContentStep.M_Status);
 			ApplyOrderBy(x => x.OrderNo);
 		}
 	}

@@ -97,8 +97,10 @@ namespace NidecHLMS.API.Middlewares.Exceptions
              ForbiddenAccessException e => (403, e.Message, null),
              // 401 Unauthorized
              UnauthorizedException e => (401, e.Message, null),
-             // 500 Internal Error Server
-             _ => (500, "An unexpected error occurred. Please contact support.", null)
+			 // 400 BusinessLogic
+			 BusinessException e => (400,e.Message,null),
+			 // 500 Internal Error Server
+			 _ => (500, "An unexpected error occurred. Please contact support.", null)
          };
     }
 }

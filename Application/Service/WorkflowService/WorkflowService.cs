@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Exceptions;
 using Application.Features.Enrollments.Commands.ExecuteEnrollment;
 using Application.Features.Trainings.Queries.GetTransittion;
 using Application.Interfaces.Repositories;
@@ -36,27 +37,30 @@ namespace Application.Service.WorkflowService
 			T_USER_TRAINING_ENROLLMENT entity,
 			CancellationToken ct)
 		{
-			// lấy step đầu tiên theo OrderNo
+			// Get first step
 			var firstStep = (await _flowStepRepo.ToListAsync(
 				new FirstFlowStepSpec(entity.TrainingContentFlowId), ct))
 				.OrderBy(x => x.OrderNo)
 				.FirstOrDefault();
 
+			// Get Stautus of first step.
+			var fisrtStatus = await _transitionRepo.GetAsync(new EnrollmentWithTransitionSpec(firstStep.TrainingContentStep));
+
 			if(firstStep == null)
 				throw new Exception("Flow has no steps");
 
-			// set current step
+			// Set current step
 			entity.TrainingContentFlowStepId = firstStep.Id;
 			entity.TrainingContentStepId = firstStep.TrainingContentStepId;
-			entity.StatusId = firstStep.TrainingContentStep.StatusId;
+			entity.StatusId = fisrtStatus.StatusId;
 
-			// create first progress
+			// Create first progress
 			entity.T_UserTrainingProgress = new List<T_USER_TRAINING_PROGRESS>
 			{
 				new T_USER_TRAINING_PROGRESS
 				{
 					TrainingContentStepId = firstStep.TrainingContentStepId,
-					ActionDate = DateTime.UtcNow,
+					StatusId =  fisrtStatus.StatusId
 				}
 			};
 		}
@@ -69,14 +73,6 @@ namespace Application.Service.WorkflowService
 			int actionCode,
 			CancellationToken ct)
 		{
-			// 1. get current step từ progress
-			//var currentFlowStepId = entity.T_UserTrainingProgress
-			//	.OrderByDescending(x => x.ActionDate)
-			//	.FirstOrDefault()?.TrainingContentStepId;
-
-			//if(currentFlowStepId == null)
-			//	throw new Exception("No current step");
-
 			var currentFlowStep = await _flowStepRepo.GetByIdAsync(entity.TrainingContentFlowStepId, ct);
 
 			var currentStepId = currentFlowStep.TrainingContentStepId;
@@ -89,33 +85,31 @@ namespace Application.Service.WorkflowService
 
 			var transition = await _transitionRepo.GetAsync(specTransition, ct);
 
+			// Check trasition valid.
+			if(transition == null)
+			{
+				throw new BusinessException("The request to change is invalid with the current process.");
+			}
 
-			//2.1 tìm workflowstep
-			var specFlowstep = new WorkflowStepSpec(entity.TrainingContentFlowId, transition.ToStepId);
+			//3 Tìm workflowstep
+			var specFlowstep = new EnrollmentWithWorkflowStepSpec(entity.TrainingContentFlowId, transition.ToStepId);
 
 			var flowStep = await _flowStepRepo.GetAsync(specFlowstep, ct);
-
 
 			if(transition == null)
 				throw new Exception($"No transition for action {actionCode}");
 
-			// 3. check condition (optional)
-			// TODO: plug ConditionEngine
-
 			// 4. update step
 			entity.TrainingContentStepId = transition.ToStepId;
 			entity.TrainingContentFlowStepId = flowStep.Id;
-			entity.StatusId = flowStep.TrainingContentStep.StatusId;
+			entity.M_Status = transition.M_Status;
 
 			// 5. log progress (QUAN TRỌNG)
 			entity.T_UserTrainingProgress.Add(new T_USER_TRAINING_PROGRESS
 			{
 				TrainingContentStepId = transition.ToStepId,
-				ActionDate = DateTime.Now,
+				StatusId = transition.StatusId
 			});
-
-			// 6. side effect (optional)
-			// TODO: ActionEngine
 		}
 
 		// =========================================================
@@ -125,14 +119,6 @@ namespace Application.Service.WorkflowService
 			T_USER_TRAINING_ENROLLMENT entity,
 			CancellationToken ct)
 		{
-			//// Join sang progress để lấy action mới nhất.
-			//var contentStepId = entity.T_UserTrainingProgress
-			//	.OrderByDescending(x => x.ActionDate)
-			//	.FirstOrDefault()?.TrainingContentStepId;
-
-			//if(contentStepId == null)
-			//	return new();
-
 			var flowStep = await _flowStepRepo.GetByIdAsync(entity.TrainingContentFlowStepId, ct);
 
 			var stepId = flowStep.TrainingContentStepId;
@@ -143,7 +129,6 @@ namespace Application.Service.WorkflowService
 					null,
 					entity.TrainingContentFlowId),
 				ct);
-
 			var result = _mapper.Map<List<WorkflowActionDTO>>(transitions);
 
 			return result;

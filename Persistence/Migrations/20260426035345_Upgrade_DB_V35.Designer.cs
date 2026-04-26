@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,11 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260426035345_Upgrade_DB_V35")]
+    partial class Upgrade_DB_V35
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,60 +318,6 @@ namespace Persistence.Migrations
                     b.ToTable("M_PERMISSION", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_REQUIREMENT_TYPE", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("DisplayOrder")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.ToTable("M_REQUIREMENT_TYPE", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.M_ROLE", b =>
                 {
                     b.Property<int>("Id")
@@ -656,89 +605,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("M_STATUS", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.M_STEP_REQUIREMENT", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DefaultValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FileType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsMultiple")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsReadOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRequired")
-                        .HasColumnType("bit");
-
-                    b.Property<long?>("MaxFileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal?>("MaxValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MinValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Placeholder")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequirementCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequirementName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequirementTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TrainingContentFlowId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrainingContentStepId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ValidationRegex")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RequirementTypeId");
-
-                    b.HasIndex("TrainingContentFlowId");
-
-                    b.HasIndex("TrainingContentStepId");
-
-                    b.ToTable("M_STEP_REQUIREMENT", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.M_TAG", b =>
@@ -1911,32 +1777,6 @@ namespace Persistence.Migrations
                     b.Navigation("M_SkillmapTemplate");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_STEP_REQUIREMENT", b =>
-                {
-                    b.HasOne("Domain.Entities.M_REQUIREMENT_TYPE", "M_RequirementType")
-                        .WithMany("M_StepRequirements")
-                        .HasForeignKey("RequirementTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_FLOW", "M_TrainingContentFlow")
-                        .WithMany("M_StepRequirements")
-                        .HasForeignKey("TrainingContentFlowId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Entities.M_TRAINING_CONTENT_STEP", "M_TrainingContentStep")
-                        .WithMany("M_StepRequirements")
-                        .HasForeignKey("TrainingContentStepId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("M_RequirementType");
-
-                    b.Navigation("M_TrainingContentFlow");
-
-                    b.Navigation("M_TrainingContentStep");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_TAG", b =>
                 {
                     b.HasOne("Domain.Entities.M_LEVEL", null)
@@ -2383,11 +2223,6 @@ namespace Persistence.Migrations
                     b.Navigation("RolePermissions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.M_REQUIREMENT_TYPE", b =>
-                {
-                    b.Navigation("M_StepRequirements");
-                });
-
             modelBuilder.Entity("Domain.Entities.M_ROLE", b =>
                 {
                     b.Navigation("RolePermissions");
@@ -2454,8 +2289,6 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("FlowSteps");
 
-                    b.Navigation("M_StepRequirements");
-
                     b.Navigation("M_TrainingContentStepTransitions");
 
                     b.Navigation("T_TrainingFiles");
@@ -2480,8 +2313,6 @@ namespace Persistence.Migrations
                     b.Navigation("FlowSteps");
 
                     b.Navigation("FromTransitions");
-
-                    b.Navigation("M_StepRequirements");
 
                     b.Navigation("T_UserTrainingEnrollments");
 
